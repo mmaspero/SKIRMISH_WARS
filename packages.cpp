@@ -65,6 +65,7 @@ youStart::youStart()
 iStart::iStart()
 {
 	type = I_START;
+
 }
 
 pass::pass()
