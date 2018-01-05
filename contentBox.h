@@ -12,35 +12,47 @@ struct boxPalette_t {
 	ALLEGRO_COLOR frameHighlight;
 };
 
-
+/******************************
+*
+*
+*
+*/
 class contentBox
 {
 public:
-	contentBox(ALLEGRO_DISPLAY * display);
+	contentBox(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height, bool isBoxTransparent = false);
 	~contentBox();
 	void setPalette(boxPalette_t palette);
 	boxPalette_t getPalette();
 	void draw();
 	void acknowledgeResize();
+	bool isValid();	//devuelve true si no hubieron errores en el constructor, false en caso contrario
+
 
 protected:
 
 	ALLEGRO_DISPLAY * display;
 
-	double boxStartX;	//esquina superior derecha, coordenada X
-	double boxStartY;	//esquina superior izquierda, coordenada Y
-	double boxWidth;
-	double boxHeight;
+	unsigned int displayWidth;
+	unsigned int displayHeight;
 
-	double contentStartX;	//esquina superior derecha, coordenada X
-	double contentStartY;	//esquina superior derecha, coordenada Y
-	double contentWidth;
-	double contentHeight;
+	double relativeBoxStartX;	//esquina superior derecha, proporcional al tamanio del display (ej.: 0 indica el inicio del display, 0.5 la mitad, 1 el final)
+	double relativeBoxStartY;	//esquina superior izquierda, proporcional al tamanio del display
+	double relativeBoxWidth;	//ancho proporcional al tamanio del display
+	double relativeBoxHeight;	//ancho proporcional al tamanio del display
 
-	void drawBox();
+	double contentStartX;	//esquina superior derecha, coordenada X EN PIXELES
+	double contentStartY;	//esquina superior derecha, coordenada Y EN PIXELES
+	double contentWidth;	//ancho EN PIXELES
+	double contentHeight;	//ancho EN PIXELES
+
+	void drawBox();						//dibuja el fondo y el marco del contentBox
 	virtual void drawContent() = 0;		//dibujar el contenido del Box.
 	virtual void resizeContent() = 0;	//reformatear el contenido en respuesta a un cambio de tamanio de display
 
 	void setDimensions();
 	boxPalette_t palette;
+
+	bool valid;	//vale true si no hubieron errores en el constructor, y false en caso contrario
+	bool isBoxTransparent; //vale true si tiene marco y el fondo son transparentes, y false en caso contrario
 };

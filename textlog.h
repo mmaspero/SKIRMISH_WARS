@@ -12,16 +12,20 @@
 class textlog : public contentBox
 {
 public:
-	textlog(ALLEGRO_DISPLAY * display);
+	textlog(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height);
 	~textlog();
 	void append(std::string newMsg);
 	void append(char* newMsg);
+	void scroll(signed int offset);
 	void clear();
 
 private:
 	std::list<std::vector<std::string>> log;
-	unsigned int maxLines;	//maxima cantidad de lines que entra en el textlog
-	double lineHeight;		//alto de cada renglon. Depende de la fuente elegida
+	unsigned int maxLinesDisplayed;	//maxima cantidad de lines que entra en el textlog
+	signed int scrollOffset;		//cuantas lineas para arriba esta escrolleado el textlog
+	double lineHeight;				//alto de cada renglon. Depende de la fuente elegida
+	unsigned int totalLines;		//cuantas lineas estan guardadas. se actualiza cada vez ue se cambia de tamanio el display
+	std::string lineHeader;			//caracteres que indican el inicio de un nuevo mensaje
 	ALLEGRO_FONT * font;
 	ALLEGRO_COLOR fontColor;
 
