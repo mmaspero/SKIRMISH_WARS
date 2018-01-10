@@ -15,7 +15,7 @@ public:
 	int getCurrentHP();
 	void setCurrentHP(int currentHP);
 	int changeHPby(signed int HPchange);
-	void setPosition(unsigned int topX, unsigned int leftY);
+	void setPosition(unsigned int centerX, unsigned int centerY);
 	ALLEGRO_COLOR getScoreColor();		//TODO: hace falta??
 	void setScoreColor(ALLEGRO_COLOR scoreColor);
 	bool getTransparency();

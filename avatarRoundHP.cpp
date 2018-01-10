@@ -5,6 +5,15 @@
 
 using namespace std;
 
+/********************************************************************
+Recibe:
+ALLEGRO_BITMAP * avatar: puntero al bitmap que va a ser dibujado en el centro.
+unsigned int radius: radio total del dibujo. El circulo que contiene al bitmap va a ser de menor radio, ya que tiene un margen en su borde
+unsigned int maxHP: la cantidad de subdivisiones del circulo que indica vida.
+unsigned int centerX, centerY: coordenada del centro del dibujo
+ALLEGRO_COLOR scoreColor: color del circulo que indica vida
+*/
+
 avatarRoundHP::avatarRoundHP(ALLEGRO_BITMAP * avatar, unsigned int radius, unsigned int maxHP, unsigned int centerX, unsigned int centerY, ALLEGRO_COLOR scoreColor)
 {
 	if (avatar == nullptr)
@@ -17,8 +26,9 @@ avatarRoundHP::avatarRoundHP(ALLEGRO_BITMAP * avatar, unsigned int radius, unsig
 	this->centerX = centerX;
 	this->centerY = centerY;
 	this->maxHP = this->currentHP = maxHP;	//por default se setea la vida al maximo cuando se lo crea
+	//TODO: limitar el maxHP
 	this->scoreColor = scoreColor;
-	transparency = true;
+	transparency = false;
 }
 
 avatarRoundHP::~avatarRoundHP()
@@ -28,7 +38,16 @@ avatarRoundHP::~avatarRoundHP()
 
 void avatarRoundHP::draw()
 {
-	al_draw_filled_circle(centerX, centerY, radius, al_map_rgba_f(0, 0, 0, 0.5));
+	ALLEGRO_COLOR bgColor;
+	if (transparency)
+	{
+		bgColor = al_map_rgba_f(0, 0, 0, 0.5);
+	}
+	else
+	{
+		bgColor = al_map_rgba_f(0, 0, 0, 1);
+	}
+	al_draw_filled_circle(centerX, centerY, radius, bgColor);
 		
 	float currentAngle = 0;
 	for (int i = 0; i < currentHP; i++)
