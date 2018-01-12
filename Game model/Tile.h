@@ -10,6 +10,7 @@ class Tile //asldkfaoisdfn
 {
 public:
 	friend class Map;
+	friend class tileObserver;
 
 	Tile(Point position, terrain_t t = N_TERRAINS);	//pone u y b en null, fog en true
 	~Tile();			//hace delete de u y b (ver si lo dejamos aca o que)
@@ -26,7 +27,8 @@ public:
 private:
 	const Point position;
 	terrain_t t;
-	bool fog;
+//	bool fog;
+	tileStatus_t status;
 	Unit * u;
 	Building * b;
 };

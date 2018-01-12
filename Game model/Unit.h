@@ -41,7 +41,6 @@ public:
 
 	void getPossibleActions(std::list<Move> * moves, std::list<Attack> * attacks);
 	//todos! no tiene en cuenta la fog, eventualmente se puede agregar
-	//tambien falta considerar cargar/descargar los apcs
 
 protected:
 	const unit_t type;

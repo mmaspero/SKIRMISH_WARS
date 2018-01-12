@@ -13,7 +13,6 @@ public:
 	player_t getPlayer();
 	bool isBeingCaptured();
 	bool capture(bool isReduced, player_t player) { return true; } //despues vemos que hace si capturas mal
-	void repair() { ; }
 
 private:
 	building_t type;
