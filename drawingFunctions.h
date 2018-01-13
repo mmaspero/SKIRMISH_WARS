@@ -47,6 +47,24 @@ parametros deben valer 1
 void drawTexturedRectangle(unsigned int leftX, unsigned int topY, unsigned int rightX, unsigned int bottomY,
 	ALLEGRO_BITMAP * texture, float scaleX, float scaleY);
 
+/*******************************************************************************************************
+drawGradientRectangle
 
+Dibuja en un rectangulo un gradiente de colores.
+
+Recibe:
+-unsigned int leftX, topY, rightX, bottomY: coordenadas del rectangulo.
+-ALLEGRO_COLOR topLeft, topRight, bottomLeft, bottomRight: el color del gradiente en cada esquina.
+Por ejemplo, si topLeft y topRight son negros y bottomLeft y bottomRight son blancos, hay un gradiente
+vertical que es negro en el limite superior y blanco en el limite inferior
+********************************************************************************************************/
 void drawGradientRectangle(unsigned int leftX, unsigned int topY, unsigned int rightX, unsigned int bottomY,
 	ALLEGRO_COLOR topLeftColor, ALLEGRO_COLOR topRightColor, ALLEGRO_COLOR bottomLeftColor, ALLEGRO_COLOR bottomRightColor);
+
+/*
+cede ownership del bitmap resultante
+*/
+ALLEGRO_BITMAP * cropToCircle(ALLEGRO_BITMAP * bmp, float sourceRadius, float destinationRadius,
+	float sourceCenterX, float sourceCenterY);
+
+

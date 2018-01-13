@@ -33,3 +33,4 @@ private:
 	virtual void resizeContent();
 };
 
+//TODO: copiador????????????? y si le quiero cambiar el tamanio sin que cambie el tamanio de la pantalla

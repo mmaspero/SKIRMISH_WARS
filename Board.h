@@ -1,5 +1,6 @@
 #pragma once
 #include "contentBox.h"
+#include "tileButton.h"
 
 #define BOARD_WIDTH 16
 #define BOARD_HEIGHT 12
@@ -12,15 +13,16 @@ enum{NADA, HOMBRE, MUJER, BEBE, CANT_DE_EJERCITOS};
 class Board : public contentBox
 {
 public:
-	Board(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height, unsigned int (* map)[BOARD_WIDTH][BOARD_HEIGHT][CANT_DE_ELEMENTOS]);
+	Board(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height);
 	virtual ~Board();
+	float getTileSide();
+	tileButton * getTileButton(unsigned int tileX, unsigned int tileY);
+	void setTileButton(ALLEGRO_BITMAP * tileBmp, unsigned int tileX, unsigned int tileY);
 
 private:
 	virtual void drawContent();
 	virtual void resizeContent();
-	unsigned int (* map)[BOARD_WIDTH][BOARD_HEIGHT][CANT_DE_ELEMENTOS];	
-	unsigned int tileSide;
-	ALLEGRO_BITMAP * imgTerrenos[CANT_DE_TERRENOS];	//con esto mas allegro config podemos cargar las imagees con un for.
-	ALLEGRO_BITMAP * imgEjercito[CANT_DE_EJERCITOS];
+	tileButton * tileMap[BOARD_WIDTH][BOARD_HEIGHT];	
+	float tileSide;
 };
 
