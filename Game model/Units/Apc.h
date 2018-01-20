@@ -15,7 +15,7 @@ public:
 	unsigned int nLoadedUnits();
 	void healLoadedUnits();
 
-	void getPossibleUnloads(std::list<Move> * ul);
+	void getPossibleUnloads(std::list<Action> * ul);
 
 	bool load(Unit * u);		
 	bool unload(Point whereTo);		//descarga siempre en orden inverso a como cargo

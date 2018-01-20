@@ -1,7 +1,7 @@
 #include "Mech.h"
 #include "../unitInfo.h"
 
-Mech::Mech(Point position, bool isMine) : Unit(MECH, position, isMine, ME_DEFENSE, ME_RNG_MIN, ME_RNG_MAX)
+Mech::Mech(Point position, bool isMine) : Unit(MECH, position, isMine, ME_COST, ME_DEFENSE, ME_RNG_MIN, ME_RNG_MAX)
 {
 	restoreMPs();
 }

@@ -1,7 +1,7 @@
 #include "Rocket.h"
 #include "../unitInfo.h"
 
-Rocket::Rocket(Point position, bool isMine) : Unit (ROCKET, position, isMine, RO_DEFENSE, RO_RNG_MIN, RO_RNG_MAX)
+Rocket::Rocket(Point position, bool isMine) : Unit (ROCKET, position, isMine, RO_COST, RO_DEFENSE, RO_RNG_MIN, RO_RNG_MAX)
 {
 	restoreMPs();
 }

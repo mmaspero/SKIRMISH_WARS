@@ -1,7 +1,7 @@
 #include "Artillery.h"
 #include "../unitInfo.h"
 
-Artillery::Artillery(Point position, bool isMine) : Unit(ARTILLERY, position, isMine, AR_DEFENSE, AR_RNG_MIN, AR_RNG_MAX)
+Artillery::Artillery(Point position, bool isMine) : Unit(ARTILLERY, position, isMine, AR_COST, AR_DEFENSE, AR_RNG_MIN, AR_RNG_MAX)
 {
 	restoreMPs();
 }

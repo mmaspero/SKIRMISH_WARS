@@ -1,7 +1,7 @@
 #include "Infantry.h"
 #include "../unitInfo.h"
 
-Infantry::Infantry(Point position, bool isMine) : Unit(INFANTRY, position, isMine, IN_DEFENSE, IN_RNG_MIN, IN_RNG_MAX)
+Infantry::Infantry(Point position, bool isMine) : Unit(INFANTRY, position, isMine, IN_COST, IN_DEFENSE, IN_RNG_MIN, IN_RNG_MAX)
 {
 	restoreMPs();
 }

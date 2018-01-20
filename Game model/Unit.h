@@ -16,7 +16,7 @@ class Tile;
 class Unit	//cada unidad especifica va a heredar de esta y definir como ataca y como se mueve
 {
 public:
-	Unit(unit_t type, Point position, bool isMine,
+	Unit(unit_t type, Point position, bool isMine, unsigned int cost,
 		unsigned int defense, unsigned int minRange, unsigned int maxRange);		
 	~Unit();	//no hace nada
 	//virtual??
@@ -36,10 +36,10 @@ public:
 	virtual unsigned int restoreMPs() = 0;		//pone los mps en el maximo de la unidad, devuelve los mps
 
 	//move y attack hacen minimo control sobre si lo que le decis que hagan lo pueden hacer. la idea es que uses algo que vino de getPossibleActions
-	bool move(Move m);
+	bool move(Action m);
 	int attack(Attack a, unsigned int diceRoll);	//de esto falta calcular el danio!
 
-	void getPossibleActions(std::list<Move> * moves, std::list<Attack> * attacks);
+	void getPossibleActions(std::list<Action> * moves, std::list<Attack> * attacks);
 	//todos! no tiene en cuenta la fog, eventualmente se puede agregar
 
 protected:
@@ -52,6 +52,7 @@ protected:
 	const unsigned int minRange;
 	const unsigned int maxRange;
 	const unsigned int defense;
+	const unsigned int cost;
 
 	unitState_t state;
 	unsigned int movingPoints;
@@ -64,7 +65,7 @@ protected:
 
 	static Map * map;	//todas las units comparten el mismo map
 
-	void getPossibleMoves(std::list<Move> * moves, Point start, Point curr, unsigned int movingPoints);
+	void getPossibleMoves(std::list<Action> * moves, Point start, Point curr, unsigned int movingPoints);
 	void getPossibleAttacks(bool * newAttacks, std::list<Attack> * attacks, Point position, unsigned int movingPoints = 0);
 	//FALTAN OBSERVERS!!!
 };

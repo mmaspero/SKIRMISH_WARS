@@ -1,7 +1,7 @@
 #include "MedTank.h"
 #include "../unitInfo.h"
 
-MedTank::MedTank(Point position, bool isMine) : Unit(MEDTANK, position, isMine, MT_DEFENSE, MT_RNG_MIN, MT_RNG_MAX)
+MedTank::MedTank(Point position, bool isMine) : Unit(MEDTANK, position, isMine, MT_COST, MT_DEFENSE, MT_RNG_MIN, MT_RNG_MAX)
 {
 	restoreMPs();
 }

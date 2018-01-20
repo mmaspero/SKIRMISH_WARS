@@ -1,13 +1,11 @@
 #include "Map.h"
+#include "Units\Apc.h"
 
 Map::Map()
 {
 	for (unsigned int i = 0; i < B_H; i++) {
 		for (unsigned int j = 0; j < B_W; j++) {
 			board[i][j] = new Tile(Point(i,j), GRASS);
-			board[i][j]->b = nullptr;
-			board[i][j]->u = nullptr;
-			board[i][j]->fog = true;
 		}
 	}
 }
@@ -23,12 +21,6 @@ void Map::update()
 	for (unsigned int i = 0; i < B_H; i++) {
 		for (unsigned int j = 0; j < B_W; j++) {
 			board[i][j]->update();
- 
-			if (board[i][j]->hasUnit() == USER) { //para las unidades del jugador, sacar la fog
-				for (unsigned int ii = (i == 0 ? i : i - 1); ii < (i == B_H - 1 ? i : i + 1); ii++)
-					for (unsigned int jj = (j == 0 ? j : j - 1); jj < (j == B_W - 1 ? j : j + 1); jj++)
-						board[ii][jj]->removeFog();
-			}
 		}
 	}
 }
@@ -81,30 +73,31 @@ bool Map::hasBuilding(Point p)
 		return false;
 }
 
-bool Map::hasFog(Point p)
+bool Map::hasFog(Point p, player_t player)
 {
 	if (isInMap(p))
-		return board[p.x][p.y]->fog;
+		return (player==USER? (board[p.x][p.y]->status == FOG) : !(board[p.x][p.y]->opponentCanSee));
 	else
 		return false;
 }
 
 bool Map::updateUnitPos(Unit * u, Point p, bool intoAPC)
 {
-	bool valid = false;	
+	bool valid = true;	
 	Point oldPos;
 
 	if (u != nullptr && isInMap(p)) {
 		oldPos = u->getPosition();
 		
-		if (intoAPC) {
-			if (board[p.x][p.y]->u->getType() == APC && (board[p.x][p.y]->u->getPlayer() == u->getPlayer()) ) {
-				valid = true;
-			}
+		if (intoAPC && board[p.x][p.y]->u->getType() == APC && (board[p.x][p.y]->u->getPlayer() == u->getPlayer())) {
+			((Apc *)board[p.x][p.y]->u)->load(u);
 		}
 		else if ( (board[p.x][p.y]->u) == nullptr) {
-				board[p.x][p.y]->u = u;	//si la muevo a una tile vacia, update de la posicion
-				valid = true;
+			player_t player = u->getPlayer();
+			board[p.x][p.y]->u = u;	//si la muevo a una tile vacia, update de la posicion
+		}
+		else {
+			valid = false;
 		}
 	}
 
@@ -113,20 +106,49 @@ bool Map::updateUnitPos(Unit * u, Point p, bool intoAPC)
 		//puede que viniera de un apc (o que estuviera mal desde antes) y lo dejo con lo que haya
 	}
 
+
+
 	return valid;
 }
 
 bool Map::newUnit(Unit * u)
 {
+	bool valid = false;
+
 	if (u != nullptr) {
 		Point p = u->getPosition();
 		if (isInMap(p)) {
+			valid = true;
 			board[p.x][p.y]->u = u;
-			return true;
+			
+			removeFog(u->getPosition(), u->getPlayer());
 		}
 	}
 
-	return false; 
+	return valid; 
+}
+
+void Map::removeFog(Point p, player_t player)
+{
+	if (isInMap(p)) {
+		board[p.x][p.y]->removeFog(player);
+
+		p.x--;
+		if (isInMap(p))
+			board[p.x][p.y]->removeFog(player);
+
+		p.x += 2;
+		if (isInMap(p))
+			board[p.x][p.y]->removeFog(player);
+		
+		p.x--; p.y--;
+		if (isInMap(p))
+			board[p.x][p.y]->removeFog(player);
+
+		p.y += 2;
+		if (isInMap(p))
+			board[p.x][p.y]->removeFog(player);
+	}
 }
 
 bool Map::isInMap(Point p)

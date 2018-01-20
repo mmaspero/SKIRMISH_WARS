@@ -1,7 +1,7 @@
 #include "AntiAir.h"
 #include "../unitInfo.h"
 
-AntiAir::AntiAir(Point position, bool isMine) : Unit(ANTIAIR, position, isMine, AA_DEFENSE, AA_RNG_MIN, AA_RNG_MAX)
+AntiAir::AntiAir(Point position, bool isMine) : Unit(ANTIAIR, position, isMine, AA_COST, AA_DEFENSE, AA_RNG_MIN, AA_RNG_MAX)
 {
 	restoreMPs();
 }

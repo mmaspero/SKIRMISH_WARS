@@ -4,7 +4,7 @@
 #include "../Move.h"
 #include <iterator>
 
-Apc::Apc(Point position, bool isMine) : Unit(APC, position, isMine, AP_DEFENSE, 0, 0)
+Apc::Apc(Point position, bool isMine) : Unit(APC, position, isMine, AP_COST, AP_DEFENSE, 0, 0)
 {
 	restoreMPs();
 }
@@ -71,16 +71,16 @@ void Apc::healLoadedUnits()
 	}
 }
 
-void Apc::getPossibleUnloads(std::list<Move>* ul)
+void Apc::getPossibleUnloads(std::list<Action>* ul)
 {
 	if (!loadedUnits.empty()) {
 		Unit * u = loadedUnits.back();
-		std::list<Move> m;
+		std::list<Action> m;
 		std::list<Attack> a; //para poder llamar a getPossibleActions
 		u->getPossibleActions(&m, &a);
 		
 		while (!m.empty()) {
-			Move move = m.front();
+			Action move = m.front();
 			if (position.orthogonalDistanceFrom(move.whereTo) <= 1) {
 				ul->push_back(move);
 			}
@@ -97,8 +97,6 @@ bool Apc::load(Unit * u)
 
 	if (loadedUnits.size() < AP_CAPACITY) {
 		loadedUnits.push_back(u);
-		map->updateUnitPos(u, position, true);	//el true indica que la cargo al apc
-		((Apc *)u)->position = position;		//tengo que castear para poder acceder a position
 		valid = true;
 	}
 
@@ -111,7 +109,7 @@ bool Apc::unload(Point whereTo)
 	if (loadedUnits.size() != 0 && position.orthogonalDistanceFrom(whereTo) == 1) {
 		Unit * u = loadedUnits.back();
 		loadedUnits.pop_back();
-		u->move(Move(whereTo, 0));
+		u->move(Action(MOVE, whereTo, 0));
 	}
 
 	return valid;

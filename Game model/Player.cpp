@@ -1,14 +1,21 @@
 #include "Player.h"
+#include "Units\AntiAir.h"
+#include "Units\Apc.h"
+#include "Units\Artillery.h"
+#include "Units\Infantry.h"
+#include "Units\Mech.h"
+#include "Units\MedTank.h"
+#include "Units\Recon.h"
+#include "Units\Rocket.h"
 
 #define INIT_MONEY	5	//VER DONDE DEJAMOS ESTE DEFINE
 
 
 
 
-Player::Player()
+Player::Player(player_t who) : who(who)
 {
 	money = INIT_MONEY;
-
 }
 
 void Player::collectIncome()
@@ -20,5 +27,21 @@ void Player::collectIncome()
 
 bool Player::wasDefeated()
 {
-	return (!areHQstanding || !bool(nUnits));
+	return (!bool(capturePointsHQ) || !bool(nUnits));
+}
+
+std::list<Unit *> Player::getPossiblePurchases()
+{
+	std::list<Unit *> purch;
+	Point p(1, 1); //posicion default para poder crear las unidades
+	purch.push_back(new AntiAir(p, true)); //el true indica el jugador, no importa
+	purch.push_back(new Apc(p, true));
+	purch.push_back(new Artillery(p, true));
+	purch.push_back(new Infantry(p, true));
+	purch.push_back(new Mech(p, true));
+	purch.push_back(new MedTank(p, true));
+	purch.push_back(new Recon(p, true));
+	purch.push_back(new Rocket(p, true));
+
+	return purch;
 }

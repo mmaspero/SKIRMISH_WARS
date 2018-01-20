@@ -25,7 +25,7 @@ public:
 	static bool isInMap(Point p); //para verificar que un punto no se vaya de rango
 	bool hasUnit(Point p);
 	bool hasBuilding(Point p);
-	bool hasFog(Point p);
+	bool hasFog(Point p, player_t player);
 
 	void update();
 	bool updateUnitPos(Unit * u, Point newPosition, bool intoAPC = false);	//llamarla antes de cambiar la posicion de la unidad!
@@ -33,4 +33,6 @@ public:
 
 private:
 	Tile * board[B_H][B_W]; 
+
+	void removeFog(Point p, player_t player);
 };

@@ -6,29 +6,32 @@
 
 class Unit;
 
-class Tile //asldkfaoisdfn
+class Tile 
 {
 public:
 	friend class Map;
 	friend class tileObserver;
 
-	Tile(Point position, terrain_t t = N_TERRAINS);	//pone u y b en null, fog en true
+	Tile(Point position, terrain_t t);	//pone u y b en null, fog en true
 	~Tile();			//hace delete de u y b (ver si lo dejamos aca o que)
-	void update();
-	player_t hasUnit(); //si devuelve NEUTRAL es que no hay
 
-	bool setTerrain(terrain_t t);//solo puedo llamarla cuando el terreno esta en none, no se puede llamar con none como arg
+	void update();
+
+	player_t hasUnit(); //si devuelve NEUTRAL es que no hay
+	Point getPosition();
+
 	bool setUnit(Unit * u);			//estas funciones verifican que no metas dos edificios o dos units en la misma tile
 	bool setBuilding(Building * b);
 
-	void removeFog();	//como estan ahora, no se fijan si habia o no fog antes
-	void putFog();		//eventualmente, habria que notificar al viewer dependiendo si cambia algo o no
+	void removeFog(player_t p);
+
 
 private:
 	const Point position;
-	terrain_t t;
-//	bool fog;
+	const terrain_t t;
 	tileStatus_t status;
+	bool opponentCanSee;
 	Unit * u;
 	Building * b;
+	tileObserver * observer;
 };

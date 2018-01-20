@@ -1,7 +1,7 @@
 #include "Recon.h"
 #include "../unitInfo.h"
 
-Recon::Recon(Point position, bool isMine) : Unit(RECON, position, isMine, RE_DEFENSE, RE_RNG_MIN, RE_RNG_MAX)
+Recon::Recon(Point position, bool isMine) : Unit(RECON, position, isMine, RE_COST, RE_DEFENSE, RE_RNG_MIN, RE_RNG_MAX)
 {
 	restoreMPs();
 }

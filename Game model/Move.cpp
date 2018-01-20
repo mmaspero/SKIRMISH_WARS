@@ -1,6 +1,6 @@
 #include "Move.h"
 
-Move::Move(Point target, unsigned int mps)
+Action::Action(action_t type, Point target, unsigned int mps) : type(type)
 {
 	this->whereTo = target;
 	this->mps = mps;

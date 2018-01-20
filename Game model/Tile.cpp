@@ -1,11 +1,12 @@
 #include "Tile.h"
 
-Tile::Tile(Point position, terrain_t t) : position(position)
+Tile::Tile(Point position, terrain_t t) : position(position), t(t)
 {
-	this->t = t;
 	u = nullptr;
 	b = nullptr;
-	fog = true;
+	status = FOG;
+	opponentCanSee = false;
+	observer = nullptr;
 }
 
 Tile::~Tile()
@@ -24,11 +25,9 @@ Tile::~Tile()
 void Tile::update()
 {
 	if (b != nullptr) {
-		b->repair();
-
 		if (u != nullptr) {
-			if (b->getPlayer() == NEUTRAL || (u->getPlayer() != b->getPlayer())) {
-				//capturo si el edificio es neutral, o si el jugador del edificio no es el mismo que el de la unit
+			if ( u->getBasicType() == FOOT && u->getPlayer() != b->getPlayer()) {
+			//las unidades tipo FOOT pueden capturar edificios del enemigo o neutrales
 				b->capture(u->isReduced(), u->getPlayer());
 			}
 			else {
@@ -44,14 +43,9 @@ player_t Tile::hasUnit()
 	return (u==nullptr? NEUTRAL : u->getPlayer());
 }
 
-bool Tile::setTerrain(terrain_t t)
+Point Tile::getPosition()
 {
-	if (this->t == N_TERRAINS && t != N_TERRAINS) {
-		this->t = t;
-		return true;
-	}
-	else
-		return false;
+	return position;
 }
 
 bool Tile::setUnit(Unit * u)
@@ -74,12 +68,12 @@ bool Tile::setBuilding(Building * b)
 		return false;
 }
 
-void Tile::removeFog()
+void Tile::removeFog(player_t p)
 {
-	fog = false;
-}
-
-void Tile::putFog()
-{
-	fog = true;
+	if (p == USER) {
+		status = VISIBLE;
+	}
+	else {
+		opponentCanSee = true;
+	}
 }
