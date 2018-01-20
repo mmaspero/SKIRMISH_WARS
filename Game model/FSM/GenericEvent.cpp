@@ -1,7 +1,11 @@
 #include "GenericEvent.h"
 
-void GenericEvent :: setEvInfo(EventsInfo * i)
-{ this->i = i; }
+GenericEvent::GenericEvent(event_t type) : type(type)
+{
+	;
+}
 
 event_t GenericEvent :: getType()
- {	return type; }
+ {	
+	return type;
+}
