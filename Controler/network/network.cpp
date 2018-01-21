@@ -68,7 +68,31 @@ void network::tryToConect()
 
 int network::reciveData(char * buffer, int bufferSize)
 {
-	return 0;
+	int sizeReciveData = 0;
+	if (imclient && (client != NULL) && (currentState != _ERROR))
+	{
+		sizeReciveData = (client->nonBlockinReceiveDataForServer(buffer, bufferSize));
+		if (sizeReciveData == MY_ERROR)
+		{
+			currentState = _ERROR;
+			sizeReciveData = MY_ERROR;
+		}
+	}
+	else if ((!imclient) && (server != NULL) && (currentState != _ERROR))
+	{
+		sizeReciveData = (server->nonBlockinReceiveDataForCliente(buffer, bufferSize));
+		if (sizeReciveData == MY_ERROR)
+		{
+			currentState = _ERROR;
+			sizeReciveData = MY_ERROR;
+		}
+	}
+	else
+	{
+		currentState = _ERROR;
+		sizeReciveData = MY_ERROR;
+	}
+	return sizeReciveData;
 }
 
 bool network::sendData(char * dataToSend, int sizeDataToSend)
