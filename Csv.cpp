@@ -2,7 +2,7 @@
 #include <cstring>
 #define _CRT_SECURE_NO_WARNINGS
 
-Csv::Csv(const char * fileName, const char token) : f(fileName), tok(token)
+Csv::Csv(const char * fileName, char const * token) : f(fileName), tok(token)
 {
 	rows = cols = 0;
 
@@ -13,14 +13,17 @@ Csv::Csv(const char * fileName, const char token) : f(fileName), tok(token)
 		memset(buffer, 0, sizeof(buffer));
 
 		f.getline(buffer, sizeof(buffer));
-		aux = strchr(buffer, tok);
+		aux = strtok(buffer, tok);
 
 		while (aux != NULL) {
 			cols++;
-			aux = strchr(aux+1, tok);
+			aux = strtok(NULL, tok);
 		} //hay tantas columnas como tokens encuentre
 
-		if (cols) {
+		if (cols) { //siempre me va a dar uno mas!
+			//n tokens separan n+1 substrings, que es lo que realmente conte
+			//la unica excepcion es si no habia ningun token, en cuyo caso esta en 0
+			//PERO POR AHORA LO DEJO ASI PORQUE ES MAS COMODO PARA CONTAR LAS COLUMNAS!
 			rows++; //ya procese la primera linea
 
 			while (valid == true && !f.eof()) {
@@ -29,14 +32,14 @@ Csv::Csv(const char * fileName, const char token) : f(fileName), tok(token)
 
 				if (buffer[0] != '\0') {
 					rows++; //si no es valida lo veo despues y pongo todo en cero
-					aux = strchr(buffer, tok);
+					aux = strtok(buffer, tok);
 					unsigned int colCount = cols;
 
 					while (aux != NULL && colCount != 0) {
 						//					for (unsigned int i = 1; i < cols && aux != NULL; i++) {
 											//empiez
 						colCount--;
-						aux = strchr(aux + 1, tok);
+						aux = strtok(NULL, tok);
 					}
 
 					//si no llego a las dos condiciones al mismo tiempo, tengo columnas de mas o de menos
@@ -55,6 +58,9 @@ Csv::Csv(const char * fileName, const char token) : f(fileName), tok(token)
 		if (!valid || cols == 0) {
 			cols = 0;
 			rows = 0;
+		}
+		else {
+			cols--; //ahora si, realmente tengo una columna menos de las que conte
 		}
 	}
 }
@@ -84,7 +90,6 @@ std::string Csv::getCell(unsigned int row, unsigned int column)
 	if (row < rows && column < cols) {
 		char buffer[CSV_MAX_LINE];
 		char * aux;
-		char tokens[2] = { tok, '\0' }; //para respetar el formato que me pide strtok()
 		memset(buffer, 0, sizeof(buffer));
 	
 		f.clear();					//por si habia llegado a eof
@@ -93,10 +98,10 @@ std::string Csv::getCell(unsigned int row, unsigned int column)
 		do {
 			f.getline(buffer, sizeof(buffer));
 		} while (row--);
-		aux = strtok(buffer, tokens);
+		aux = strtok(buffer, tok);
 
 		while (column--) {
-			aux = strtok(NULL, tokens);
+			aux = strtok(NULL, tok);
 		}
 		cell = std::string(aux);
 	}

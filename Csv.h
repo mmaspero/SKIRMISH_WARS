@@ -11,7 +11,7 @@
 
 class Csv {
 public:
-	Csv(const char * fileName, const char token = ';');
+	Csv(const char * fileName, const char const * tokens = ";,");
 	~Csv();
 
 	unsigned int getRows();		
@@ -21,7 +21,7 @@ public:
 
 private:
 	std::ifstream f;
-	const char tok;
+	char const * tok;
 
 	unsigned int rows;
 	unsigned int cols;
