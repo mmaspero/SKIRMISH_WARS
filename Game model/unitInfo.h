@@ -1,13 +1,7 @@
 #pragma once
 #include <climits>
 
-typedef enum unitTypes {WHEEL, FOOT, TREAD, N_B_TYPES} unitType_t;
-typedef enum units {	
-				RECON, ROCKET,							//	WHEEL
-				MECH, INFANTRY,							//	FOOT
-				TANK, ARTILLERY, ANTIAIR, APC, MEDTANK,	//	TREAD
-				N_TYPES
-				} unit_t;
+
 
 #define FIRST_W	RECON //para determinar facilmente el basic type
 #define FIRST_F	MECH
@@ -33,9 +27,9 @@ typedef enum units {
 #define RE_RFP_TRD	6
 #define RE_RFP_WHL	5
 
-#define RE_MC_T		2	//plain tile
-#define RE_MC_A		1	//road (Autopista)
-#define RE_MC_F		3	//forest
+#define RE_MC_T		2			//plain tile
+#define RE_MC_A		1			//road (Autopista)
+#define RE_MC_F		3			//forest
 #define RE_MC_R		UINT_MAX	//river
 #define RE_MC_H		UINT_MAX	//hill
 
@@ -56,9 +50,9 @@ typedef enum units {
 #define RO_RFP_TRD	10
 #define RO_RFP_WHL	10
 
-#define RO_MC_T		2	//plain tile
-#define RO_MC_A		1	//road (Autopista)
-#define RO_MC_F		3	//forest
+#define RO_MC_T		2			//plain tile
+#define RO_MC_A		1			//road (Autopista)
+#define RO_MC_F		3			//forest
 #define RO_MC_R		UINT_MAX	//river
 #define RO_MC_H		UINT_MAX	//hill
 
@@ -108,7 +102,6 @@ typedef enum units {
 #define IN_MC_R		2	//river
 #define IN_MC_H		2	//hill
 
-
 /*  TANK  */
 #define TA_DEFENSE	6
 #define	TA_TYPE		TREAD
@@ -132,7 +125,7 @@ typedef enum units {
 #define TA_MC_H		UINT_MAX	//hill
 
 
-/*  ARTILLIERY  */
+/*  ARTILLERY  */
 #define AR_DEFENSE	4
 #define	AR_TYPE		TREAD
 #define AR_COST		6

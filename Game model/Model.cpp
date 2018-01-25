@@ -1,6 +1,6 @@
 #include "Model.h"
 
-Model::Model(bool userStarts, char * map) : user(USER), opponent(OPPONENT)
+Model::Model(bool userStarts, char * map, player_t first) : user(USER), opponent(OPPONENT), m(map, first)
 {
 	
 }

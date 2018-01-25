@@ -5,8 +5,8 @@
 #include "../Point.h"
 #include "unitInfo.h"
 
-#define B_W	12
-#define	B_H	16
+#define B_W	16
+#define	B_H	12
 
 class Tile;
 class Unit;
@@ -14,8 +14,9 @@ class Unit;
 class Map 
 {
 public:
-	Map(); //se le podria pasar el path del archivo
+	Map(char * csvPath, player_t first);
 	~Map();
+	bool isValid();
 
 	terrain_t getTerrain(Point p);
 	player_t getPlayer(Point p);
@@ -27,7 +28,7 @@ public:
 	bool hasBuilding(Point p);
 	bool hasFog(Point p, player_t player);
 
-	void update();
+	void update();	//FALTA QUE HAGA EL UPDATE SOLO DEL JUGADOR QUE EMPIEZA SU TURNO! que reciba player_t
 	bool updateUnitPos(Unit * u, Point newPosition, bool intoAPC = false);	//llamarla antes de cambiar la posicion de la unidad!
 	bool newUnit(Unit * u);
 
@@ -35,4 +36,5 @@ private:
 	Tile * board[B_H][B_W]; 
 
 	void removeFog(Point p, player_t player);
+	bool valid;
 };

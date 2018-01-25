@@ -17,8 +17,9 @@ public:
 
 	void update();
 
-	player_t hasUnit(); //si devuelve NEUTRAL es que no hay
+	player_t hasUnit();		//si devuelve NEUTRAL es que no hay
 	Point getPosition();
+	terrain_t getTerrain();	//si tiene edificio va a devolver ROAD
 
 	bool setUnit(Unit * u);			//estas funciones verifican que no metas dos edificios o dos units en la misma tile
 	bool setBuilding(Building * b);
@@ -28,7 +29,7 @@ public:
 
 private:
 	const Point position;
-	const terrain_t t;
+	const terrain_t t;		//si tiene un edificio esta variable no importa, el terreno es como road
 	tileStatus_t status;
 	bool opponentCanSee;
 	Unit * u;

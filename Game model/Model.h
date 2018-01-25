@@ -8,7 +8,7 @@
 
 class Model {
 public:
-	Model(bool userStarts, char * map); //pasarle el path del mapa? o el mapa ya construido? pasarle gui!
+	Model(bool userStarts, char * map, player_t first); //pasarle el path del mapa? o el mapa ya construido? pasarle gui!
 	~Model() { ; }
 
 private:

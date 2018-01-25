@@ -13,7 +13,7 @@ unsigned int getDamage(int initDamage, terrain_t t, unsigned int diceRoll);
 Unit::Unit(unit_t type, Point position, bool isMine, unsigned int cost, unsigned int defense, unsigned int minRange,
 	unsigned int maxRange) : cost(cost), type(type), isMine(isMine), defense(defense), minRange(minRange), maxRange(maxRange)
 {
-	if (type >= 0 && type < N_TYPES && Map::isInMap(position)) { //solo puedo verificar si el punto se fue de rango si ya tengo el mapa
+	if (type >= 0 && type < N_UNIT_TYPES && Map::isInMap(position)) { //solo puedo verificar si el punto se fue de rango si ya tengo el mapa
 		this->position = position;
 		healthPoints = MAX_HP;
 		state = IDLE;
@@ -44,7 +44,7 @@ unitType_t Unit::getBasicType()
 	else if (FIRST_F <= type && type < FIRST_T)
 		return FOOT;
 
-	else if (FIRST_T <= type && type < N_TYPES)
+	else if (FIRST_T <= type && type < N_UNIT_TYPES)
 		return TREAD;
 
 	else
@@ -168,12 +168,7 @@ void Unit::getPossibleMoves(std::list<Action>* moves, Point start, Point curr, u
 		}
 
 		if (actionType != N_ACTIONS) {
-			if (map->hasBuilding(curr)) {
-				mod = getTerrainMod(ROAD);	//los edificios cuentan como road siempre!
-			}
-			else {
-				mod = getTerrainMod(map->getTerrain(curr));
-			}
+			mod = getTerrainMod(map->getTerrain(curr));
 		}
 
 	}

@@ -6,16 +6,16 @@ typedef enum tileStatus { VISIBLE, FOG, SELECTED, CAN_ATTACK, CAN_MOVE } tileSta
 typedef enum actions { MOVE, LOAD, UNLOAD, ATTACK, N_ACTIONS} action_t;
 
 typedef enum buildings { HEADQUARTERS, FACTORY, CITY, N_BUILDINGS } building_t;
-#define FACTORY_STR	"m"	//ademas se especifica el jugador para todos los edificios
-#define	HQ_STR		"q"
-#define CITY_STR	"c"
+#define FACTORY_CHR	'm'	//ademas se especifica el jugador para todos los edificios
+#define	HQ_CHR		'q'
+#define CITY_CHR	'c'
 
 typedef enum terrains { GRASS, RIVER, ROAD, FOREST, HILL, N_TERRAINS } terrain_t;
-#define GRASS_STR	"t"
-#define	RIVER_STR	"r"
-#define ROAD_STR	"a"
-#define FOREST_STR	"f"
-#define HILL_STR	"h"
+#define GRASS_CHR	't'
+#define	RIVER_CHR	'r'
+#define ROAD_CHR	'a'
+#define FOREST_CHR	'f'
+#define HILL_CHR	'h'
 
 typedef enum unitTypes { WHEEL, FOOT, TREAD, N_B_TYPES } unitType_t;
 typedef enum units {

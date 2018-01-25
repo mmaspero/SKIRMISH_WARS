@@ -9,13 +9,15 @@ Csv::Csv(const char * fileName, char const * token) : f(fileName), tok(token)
 	if (f.good()) {
 		bool valid = true;
 		char buffer[CSV_MAX_LINE];
-		char * aux;
+		char * aux;		//para recorrer el string
+		std::string lastCol; //para ver si el ultimo separador estaba antes o despues de la ultima col
 		memset(buffer, 0, sizeof(buffer));
 
 		f.getline(buffer, sizeof(buffer));
 		aux = strtok(buffer, tok);
 
 		while (aux != NULL) {
+			lastCol = std::string(aux);
 			cols++;
 			aux = strtok(NULL, tok);
 		} //hay tantas columnas como tokens encuentre
@@ -25,6 +27,10 @@ Csv::Csv(const char * fileName, char const * token) : f(fileName), tok(token)
 			//la unica excepcion es si no habia ningun token, en cuyo caso esta en 0
 			//PERO POR AHORA LO DEJO ASI PORQUE ES MAS COMODO PARA CONTAR LAS COLUMNAS!
 			rows++; //ya procese la primera linea
+			if (lastCol.find_first_not_of(' ') != std::string::npos) {
+				cols++;
+			}
+
 
 			while (valid == true && !f.eof()) {
 				memset(buffer, 0, sizeof(buffer));
@@ -36,12 +42,13 @@ Csv::Csv(const char * fileName, char const * token) : f(fileName), tok(token)
 					unsigned int colCount = cols;
 
 					while (aux != NULL && colCount != 0) {
-						//					for (unsigned int i = 1; i < cols && aux != NULL; i++) {
-											//empiez
+						lastCol = aux;
 						colCount--;
 						aux = strtok(NULL, tok);
 					}
-
+					if (lastCol.find_first_not_of(' ') != std::string::npos) {
+						colCount--;
+					}
 					//si no llego a las dos condiciones al mismo tiempo, tengo columnas de mas o de menos
 					if (aux != NULL || colCount != 0) {
 						valid = false;

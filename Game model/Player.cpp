@@ -7,6 +7,7 @@
 #include "Units\MedTank.h"
 #include "Units\Recon.h"
 #include "Units\Rocket.h"
+#include "Units\Tank.h"
 
 #define INIT_MONEY	5	//VER DONDE DEJAMOS ESTE DEFINE
 
@@ -42,6 +43,7 @@ std::list<Unit *> Player::getPossiblePurchases()
 	purch.push_back(new MedTank(p, true));
 	purch.push_back(new Recon(p, true));
 	purch.push_back(new Rocket(p, true));
+	purch.push_back(new Tank(p, true));
 
 	return purch;
 }

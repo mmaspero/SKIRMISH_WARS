@@ -1,8 +1,6 @@
 #pragma once
 #include "types.h"
 
-typedef enum buildings { HEADQUARTERS, FACTORY } building_t;
-
 class Building {
 public:
 	Building(building_t type, player_t player = NEUTRAL);

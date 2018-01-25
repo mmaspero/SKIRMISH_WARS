@@ -48,6 +48,14 @@ Point Tile::getPosition()
 	return position;
 }
 
+terrain_t Tile::getTerrain()
+{
+	if (b == nullptr)
+		return t;
+	else
+		return ROAD;
+}
+
 bool Tile::setUnit(Unit * u)
 {
 	if (this->u == nullptr) {
@@ -70,10 +78,10 @@ bool Tile::setBuilding(Building * b)
 
 void Tile::removeFog(player_t p)
 {
-	if (p == USER) {
+	if (p == USER && status == FOG) {
 		status = VISIBLE;
 	}
-	else {
+	else if (p == OPPONENT && opponentCanSee == false) {
 		opponentCanSee = true;
 	}
 }

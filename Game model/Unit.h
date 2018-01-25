@@ -44,7 +44,8 @@ public:
 
 protected:
 	const unit_t type;
-	const bool isMine;			//true si es de esta compu, false si es del otro jugador
+	bool isMine;			//true si es de esta compu, false si es del otro jugador
+	//si todavia no se si la compu es jugador 1 o 2: si es true es jugador 1
 
 	//unsigned int terrainMod[N_TERRAINS+1];	//dejo uno para poder tener una posicion que sea solo para error
 	//unsigned int attackMod[N_B_TYPES+1];

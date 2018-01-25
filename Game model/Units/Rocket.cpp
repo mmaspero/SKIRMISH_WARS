@@ -64,9 +64,3 @@ unsigned int Rocket::getAttackMod(unitType_t basicType)
 	}
 }
 
-//
-//bool Rocket::canFire(unsigned int distance)
-//{
-//	return false;
-//}
-//
