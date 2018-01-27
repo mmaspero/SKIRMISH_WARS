@@ -2,7 +2,7 @@
 #include "packages.h"
 #include <iostream>
 #include <ctype.h>
-#include "definesEjercitos.h"
+#include"../../Game model/types.h"
 
 bool filValidator(unsigned char filNumb);
 bool colValidator(unsigned char colNumb);
@@ -86,7 +86,7 @@ bool attackValidator(char * data, unsigned int size)
 
 bool purchaseValidator(char * data, unsigned int size)
 {
-	std::string idEjercitos[9] = {INFRANTRIES,MECHS,ROCKETS,RECONS,APCS,ANTI_AIRS,ARTILLERY,TANKS,MED_TANKS};
+	std::string idEjercitos[N_UNIT_TYPES] = {RE_STR,RO_STR,ME_STR,IN_STR,TA_STR,AR_STR,AA_STR,AP_STR,MT_STR};
 	std::string tempId;
 
 	if (size == SIZE_PURCHASE_PACKAGE)
@@ -95,7 +95,7 @@ bool purchaseValidator(char * data, unsigned int size)
 		tempId.push_back(data[2]);
 		if (colValidator(data[FILA_POSS_PURCHASE]) && filValidator(data[COL_POSS_PURCHASE]))
 		{
-			for (int i = 0; i < 9; i++)
+			for (int i = 0; i < N_UNIT_TYPES; i++)
 			{
 				if (tempId == idEjercitos[i])
 				{

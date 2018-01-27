@@ -1,7 +1,7 @@
 #pragma once
 #include "genericPackage.h"
 #include "point.h"
-#include "definesEjercitos.h"
+#include"../../Game model/types.h"
 #include <iostream>
 //*********tipos de paquetes de datos
 #define ACK 0X01
