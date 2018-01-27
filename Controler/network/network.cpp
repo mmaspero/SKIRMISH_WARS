@@ -36,22 +36,22 @@ void network::tryToConect()
 		timer.setNewTime((rand() % MAX_WAIT_CONECTION_MS) + MIN_WAIT_CONECTION_MS);
 
 	}
-	
+
 	switch (currentState)//se intenta lograr la coneccion 
 	{
 	case IN_CONECTION_STAGE_CLIENT://se intenta lograr la coneccion como cliente
-		
+
 		if (client->ConectToServer(ipNumber.getIp().c_str(), portNumber.getPortAsString().c_str()))
 		{
 			imclient = true;
 			currentState = CONNECTED;
 		}
-		
+
 
 
 		break;
 	case IN_CONECTION_STAGE_SERVER://se intenta lograr la coneccion como servidor
-		
+
 		if (server->ClientIsConected())//alguien se conecto al servidor
 		{
 			imclient = false;
@@ -63,7 +63,7 @@ void network::tryToConect()
 		break;
 
 	}
-	
+
 }
 
 int network::reciveData(char * buffer, int bufferSize)
@@ -98,21 +98,21 @@ int network::reciveData(char * buffer, int bufferSize)
 bool network::sendData(char * dataToSend, int sizeDataToSend)
 {
 	bool NoHuboError = false;
-	if (imclient && (client!=NULL)&&(currentState!=_ERROR))
+	if (imclient && (client != NULL) && (currentState != _ERROR))
 	{
 		if (!(client->sendData(dataToSend, sizeDataToSend)))
 		{
 			currentState = _ERROR;//hubo un error en la comunicacion
-			NoHuboError= false;
+			NoHuboError = false;
 		}
 		else
 		{
-			NoHuboError= true;
+			NoHuboError = true;
 		}
 	}
-	else if ((!imclient)&&(server!=NULL)&& (currentState != _ERROR))
+	else if ((!imclient) && (server != NULL) && (currentState != _ERROR))
 	{
-		if(!(server->sendData(dataToSend,sizeDataToSend)))
+		if (!(server->sendData(dataToSend, sizeDataToSend)))
 		{
 			currentState = _ERROR;//hubo un error en la comunicacion
 			NoHuboError = false;
@@ -133,5 +133,5 @@ bool network::sendData(char * dataToSend, int sizeDataToSend)
 
 network::~network()
 {
-	
+
 }
