@@ -11,7 +11,7 @@
 
 class Csv {
 public:
-	Csv(const char * fileName, const char const * tokens = ";,");
+	Csv(const char * fileName, const char * tokens = ";,");
 	~Csv();
 
 	unsigned int getRows();		

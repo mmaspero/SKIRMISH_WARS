@@ -5,5 +5,5 @@ class WaitingAttackTurnOver : public GenericState {
 public:
 	WaitingAttackTurnOver();
 
-	GenericState * onOpponentAttack(GenericEvent&);
+	GenericState * onOpponentAttack(GenericEvent *);
 };

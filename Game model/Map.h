@@ -31,6 +31,7 @@ public:
 	void update();	//FALTA QUE HAGA EL UPDATE SOLO DEL JUGADOR QUE EMPIEZA SU TURNO! que reciba player_t
 	bool updateUnitPos(Unit * u, Point newPosition, bool intoAPC = false);	//llamarla antes de cambiar la posicion de la unidad!
 	bool newUnit(Unit * u);
+	void clearTile(Point p); //saca la unidad
 
 private:
 	Tile * board[B_H][B_W]; 

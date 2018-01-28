@@ -7,32 +7,32 @@ UserPurchasing::UserPurchasing() : GenericState(USER_PURCHASING)
 	;
 }
 
-GenericState * UserPurchasing::onTimeout(GenericEvent&)
+GenericState * UserPurchasing::onTimeout(GenericEvent *)
 {
 	return new OpponentMoving();
 }
 
-GenericState * UserPurchasing::onUserPass(GenericEvent&)
+GenericState * UserPurchasing::onUserPass(GenericEvent *)
 {
 	return new OpponentMoving();
 }
 
-GenericState * UserPurchasing::onPurchaseSelection(GenericEvent&)
+GenericState * UserPurchasing::onPurchaseSelection(GenericEvent *)
 {
 	return new PurchaseSelected();
 }
 
-GenericState * UserPurchasing::onGoToPurchase(GenericEvent &)
+GenericState * UserPurchasing::onGoToPurchase(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * UserPurchasing::onUnitSelection(GenericEvent &)
+GenericState * UserPurchasing::onUnitSelection(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * UserPurchasing::onUnselect(GenericEvent &)
+GenericState * UserPurchasing::onUnselect(GenericEvent *)
 {
 	return this;
 }

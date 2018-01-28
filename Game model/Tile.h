@@ -25,7 +25,7 @@ public:
 	bool setBuilding(Building * b);
 
 	void removeFog(player_t p);
-
+	void removeUnit();
 
 private:
 	const Point position;

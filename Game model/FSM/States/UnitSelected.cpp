@@ -9,42 +9,42 @@ UnitSelected::UnitSelected() : GenericState(UNIT_SELECTED)
 {
 }
 
-GenericState * UnitSelected::onTimeout(GenericEvent&)
+GenericState * UnitSelected::onTimeout(GenericEvent *)
 {
 	return new OpponentMoving();
 }
 
-GenericState * UnitSelected::onUserPass(GenericEvent&)
+GenericState * UnitSelected::onUserPass(GenericEvent *)
 {
 	return new OpponentMoving();
 }
 
-GenericState * UnitSelected::onUserAttack(GenericEvent&)
+GenericState * UnitSelected::onUserAttack(GenericEvent *)
 {
 	return new UserAttacking();
 }
 
-GenericState * UnitSelected::onUserMove(GenericEvent&)
+GenericState * UnitSelected::onUserMove(GenericEvent *)
 {
 	return new WaitingMoveAck();
 }
 
-GenericState * UnitSelected::onGoToPurchase(GenericEvent&)
+GenericState * UnitSelected::onGoToPurchase(GenericEvent *)
 {
 	return new UserPurchasing();
 }
 
-GenericState * UnitSelected::onUnitSelection(GenericEvent &)
+GenericState * UnitSelected::onUnitSelection(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * UnitSelected::onPurchaseSelection(GenericEvent &)
+GenericState * UnitSelected::onPurchaseSelection(GenericEvent *)
 {
 	return new UserMoving();
 }
 
-GenericState * UnitSelected::onUnselect(GenericEvent&)
+GenericState * UnitSelected::onUnselect(GenericEvent *)
 {
 	return new UserMoving();
 }

@@ -5,5 +5,5 @@ class WaitingAckTurnOver : public GenericState {
 public:
 	WaitingAckTurnOver();
 
-	GenericState * onAck(GenericEvent&);
+	GenericState * onAck(GenericEvent *);
 };

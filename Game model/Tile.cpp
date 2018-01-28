@@ -85,3 +85,10 @@ void Tile::removeFog(player_t p)
 		opponentCanSee = true;
 	}
 }
+
+void Tile::removeUnit()
+{
+	if (u != nullptr) {
+		u = nullptr;
+	}
+}

@@ -5,5 +5,5 @@ class WaitingOpponentPass : public GenericState {
 public:
 	WaitingOpponentPass();
 
-	GenericState * onOpponentPass(GenericEvent&);
+	GenericState * onOpponentPass(GenericEvent *);
 };

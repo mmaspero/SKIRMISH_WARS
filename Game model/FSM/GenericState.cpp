@@ -10,72 +10,72 @@ state_t GenericState::name() const
 	return id;
 }
 
-GenericState * GenericState::onTimeout(GenericEvent&)
+GenericState * GenericState::onTimeout(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onAck(GenericEvent&)
+GenericState * GenericState::onAck(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onUserPass(GenericEvent&)
+GenericState * GenericState::onUserPass(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onUserAttack(GenericEvent&)
+GenericState * GenericState::onUserAttack(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onUserMove(GenericEvent&)
+GenericState * GenericState::onUserMove(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onUserPurchase(GenericEvent&)
+GenericState * GenericState::onUserPurchase(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onGoToPurchase(GenericEvent&)
+GenericState * GenericState::onGoToPurchase(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onOpponentPass(GenericEvent&)
+GenericState * GenericState::onOpponentPass(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onOpponentAttack(GenericEvent&)
+GenericState * GenericState::onOpponentAttack(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onOpponentMove(GenericEvent&)
+GenericState * GenericState::onOpponentMove(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onOpponentPurchase(GenericEvent&)
+GenericState * GenericState::onOpponentPurchase(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onPurchaseSelection(GenericEvent&)
+GenericState * GenericState::onPurchaseSelection(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onUnitSelection(GenericEvent&)
+GenericState * GenericState::onUnitSelection(GenericEvent *)
 {
 	return nullptr;
 }
 
-GenericState * GenericState::onUnselect(GenericEvent&)
+GenericState * GenericState::onUnselect(GenericEvent *)
 {
 	return nullptr;
 }

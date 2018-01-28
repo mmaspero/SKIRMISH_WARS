@@ -54,7 +54,9 @@ void Building::uncapture()
 
 bool Building::isBeingCaptured()
 {
-	return bool(capturePoints);
+	unsigned int maxCp = 0;
+	setCapturePoints(type, maxCp);
+	return (capturePoints != maxCp);
 }
 
 void setCapturePoints(building_t type, unsigned int& cp)

@@ -6,7 +6,7 @@ WaitingAckTurnOver::WaitingAckTurnOver() : GenericState(WAITING_ACK_TURN_OVER)
 	;
 }
 
-GenericState * WaitingAckTurnOver::onAck(GenericEvent& ev)
+GenericState * WaitingAckTurnOver::onAck(GenericEvent * ev)
 {
 	return new OpponentMoving();
 }

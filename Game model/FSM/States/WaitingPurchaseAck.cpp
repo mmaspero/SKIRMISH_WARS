@@ -7,17 +7,17 @@ WaitingPurchaseAck::WaitingPurchaseAck() : GenericState(WAITING_PURCH_ACK)
 	;
 }
 
-GenericState * WaitingPurchaseAck::onTimeout(GenericEvent &)
+GenericState * WaitingPurchaseAck::onTimeout(GenericEvent *)
 {
 	return new WaitingAckTurnOver();
 }
 
-GenericState * WaitingPurchaseAck::onAck(GenericEvent &)
+GenericState * WaitingPurchaseAck::onAck(GenericEvent *)
 {
 	return new UserPurchasing();
 }
 
-GenericState * WaitingPurchaseAck::onUserPass(GenericEvent &)
+GenericState * WaitingPurchaseAck::onUserPass(GenericEvent *)
 {
 	return new WaitingAckTurnOver();
 }

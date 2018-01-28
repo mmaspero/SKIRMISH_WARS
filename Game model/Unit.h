@@ -5,7 +5,7 @@
 #include "Map.h"
 #include <list>
 
-typedef enum unitStates { IDLE, MOVING, ATTACKING, UNLOADING, POST_ACTIVE } unitState_t;
+typedef enum unitStates { IDLE, MOVING, ATTACKING, UNLOADING, POST_ACTIVE, N_UNIT_STATES } unitState_t;
 //idle: todavia no se movio
 //moving: se movio al menos una vez, puede que haya mas movimientos validos. ya esta activa
 //attacking: ya ataco, esta esperando el contra-ataque
@@ -21,10 +21,13 @@ public:
 	~Unit();	//no hace nada
 	//virtual??
 
+	static Unit * factory(unit_t type, Point position, bool isMine);
 	static void setMap(Map * map);
 
 	unit_t getType();		//infantry, mech, tank...
 	unitType_t getBasicType();	//tread, foot or wheel
+	unsigned int getCost();
+
 	bool isAlive();
 	virtual bool isReduced();
 	player_t getPlayer();
@@ -39,12 +42,12 @@ public:
 	bool move(Action m);
 	int attack(Attack a, unsigned int diceRoll);	//de esto falta calcular el danio!
 
-	void getPossibleActions(std::list<Action> * moves, std::list<Attack> * attacks);
+	void getPossibleActions(std::list<Action>& moves, std::list<Attack>& attacks);
 	//todos! no tiene en cuenta la fog, eventualmente se puede agregar
 
 protected:
 	const unit_t type;
-	bool isMine;			//true si es de esta compu, false si es del otro jugador
+	const bool isMine;			//true si es de esta compu, false si es del otro jugador
 	//si todavia no se si la compu es jugador 1 o 2: si es true es jugador 1
 
 	//unsigned int terrainMod[N_TERRAINS+1];	//dejo uno para poder tener una posicion que sea solo para error
@@ -66,7 +69,7 @@ protected:
 
 	static Map * map;	//todas las units comparten el mismo map
 
-	void getPossibleMoves(std::list<Action> * moves, Point start, Point curr, unsigned int movingPoints);
-	void getPossibleAttacks(bool * newAttacks, std::list<Attack> * attacks, Point position, unsigned int movingPoints = 0);
+	void getPossibleMoves(std::list<Action>& moves, Point start, Point curr, unsigned int movingPoints);
+	void getPossibleAttacks(bool * newAttacks, std::list<Attack>& attacks, Point position, unsigned int movingPoints = 0);
 	//FALTAN OBSERVERS!!!
 };

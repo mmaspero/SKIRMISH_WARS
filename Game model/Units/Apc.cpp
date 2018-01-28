@@ -71,18 +71,18 @@ void Apc::healLoadedUnits()
 	}
 }
 
-void Apc::getPossibleUnloads(std::list<Action>* ul)
+void Apc::getPossibleUnloads(std::list<Action>& ul)
 {
 	if (!loadedUnits.empty()) {
 		Unit * u = loadedUnits.back();
 		std::list<Action> m;
 		std::list<Attack> a; //para poder llamar a getPossibleActions
-		u->getPossibleActions(&m, &a);
+		u->getPossibleActions(m, a);
 		
 		while (!m.empty()) {
 			Action move = m.front();
 			if (position.orthogonalDistanceFrom(move.whereTo) <= 1) {
-				ul->push_back(move);
+				ul.push_back(move);
 			}
 			m.pop_front();
 		}

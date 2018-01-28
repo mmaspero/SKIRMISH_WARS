@@ -5,7 +5,7 @@ class WaitingMoveAck : public GenericState {
 public:
 	WaitingMoveAck();
 
-	GenericState * onTimeout(GenericEvent&);
-	GenericState * onAck(GenericEvent&);
-	GenericState * onUserPass(GenericEvent&);
+	GenericState * onTimeout(GenericEvent *);
+	GenericState * onAck(GenericEvent *);
+	GenericState * onUserPass(GenericEvent *);
 };

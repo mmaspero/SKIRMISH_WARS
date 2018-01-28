@@ -7,37 +7,37 @@ UserAttacking::UserAttacking() : GenericState(USER_ATTACKING)
 	;
 }
 
-GenericState * UserAttacking::onTimeout(GenericEvent&)
+GenericState * UserAttacking::onTimeout(GenericEvent *)
 {
 	return new WaitingAttackTurnOver();
 }
 
-GenericState * UserAttacking::onUserPass(GenericEvent&)
+GenericState * UserAttacking::onUserPass(GenericEvent *)
 {
 	return new WaitingAttackTurnOver();
 }
 
-GenericState * UserAttacking::onOpponentAttack(GenericEvent&)
+GenericState * UserAttacking::onOpponentAttack(GenericEvent *)
 {
 	return new UserMoving();
 }
 
-GenericState * UserAttacking::onGoToPurchase(GenericEvent &)
+GenericState * UserAttacking::onGoToPurchase(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * UserAttacking::onPurchaseSelection(GenericEvent &)
+GenericState * UserAttacking::onPurchaseSelection(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * UserAttacking::onUnitSelection(GenericEvent &)
+GenericState * UserAttacking::onUnitSelection(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * UserAttacking::onUnselect(GenericEvent &)
+GenericState * UserAttacking::onUnselect(GenericEvent *)
 {
 	return this;
 }

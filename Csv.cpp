@@ -1,6 +1,5 @@
 #include "Csv.h"
 #include <cstring>
-#define _CRT_SECURE_NO_WARNINGS
 
 Csv::Csv(const char * fileName, char const * token) : f(fileName), tok(token)
 {

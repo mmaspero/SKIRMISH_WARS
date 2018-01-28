@@ -1,13 +1,6 @@
 #include "Map.h"
-#include "Units\AntiAir.h"
 #include "Units\Apc.h"
-#include "Units\Artillery.h"
-#include "Units\Infantry.h"
-#include "Units\Mech.h"
-#include "Units\MedTank.h"
-#include "Units\Recon.h"
-#include "Units\Rocket.h"
-#include "Units\Tank.h"
+#include "Unit.h"
 #include "../Csv.h"
 #include "unitInfo.h"
 #include <unordered_map>
@@ -206,7 +199,7 @@ bool Map::newUnit(Unit * u)
 
 	if (valid && u != nullptr) {
 		Point p = u->getPosition();
-		if (isInMap(p)) {
+		if (isInMap(p) && board[p.x][p.y]->u == nullptr) {
 			valid = true;
 			board[p.x][p.y]->u = u;
 			
@@ -215,6 +208,13 @@ bool Map::newUnit(Unit * u)
 	}
 
 	return valid; 
+}
+
+void Map::clearTile(Point p)
+{
+	if (valid && isInMap(p)) {
+		board[p.x][p.y]->removeUnit();
+	}
 }
 
 void Map::removeFog(Point p, player_t player)
@@ -287,18 +287,7 @@ Unit * parseUnit(std::string s, Point p, player_t first)
 
 		std::unordered_map<std::string, unit_t>::const_iterator it = units.find(s);
 		if (it != units.end()) {
-			switch (it->second) {
-			case RECON: { u = new Recon(p, isMine); } break;
-			case ROCKET: { u = new Rocket(p, isMine); } break;
-			case MECH: { u = new Mech(p, isMine); } break;
-			case INFANTRY: { u = new Infantry(p, isMine); } break;
-			case TANK: { u = new Tank(p, isMine); } break;
-			case ARTILLERY: { u = new Artillery(p, isMine); } break;
-			case ANTIAIR: { u = new AntiAir(p, isMine); } break;
-			case APC: { u = new Apc(p, isMine); } break;
-			case MEDTANK: { u = new MedTank(p, isMine); } break;
-				//cualquier otro caso queda en nullptr como corresponde
-			}
+			u = Unit::factory(it->second, p, isMine);
 		}
 	}
 

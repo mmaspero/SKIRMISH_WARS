@@ -8,7 +8,7 @@ public:
 	SkirmishFSM(GenericState * state);
 
 	~SkirmishFSM();
-	virtual void dispatch(GenericEvent& ev);
+	virtual void dispatch(GenericEvent * ev);
 
 	state_t state();
 };

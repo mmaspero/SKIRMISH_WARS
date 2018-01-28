@@ -10,7 +10,7 @@ public:
 	Player(player_t who);
 	~Player() { ; }
 
-	bool buy(unit_t type);
+	bool buy(unit_t type, Point p);
 	void collectIncome();
 	bool wasDefeated();
 	std::list<Unit *> getPossiblePurchases();
@@ -23,4 +23,6 @@ private:
 	const player_t who;
 	playerStatus_t status;
 	playerObserver * observer;
+
+	static std::list<Unit *> unitInfo;
 };

@@ -33,7 +33,7 @@ public:
 	
 	virtual ~GenericFSM();
 
-	virtual void dispatch(GenericEvent& ev) = 0;
+	virtual void dispatch(GenericEvent * ev) = 0;
 
 	void setFirstState(GenericState * state); //solo funciona si todavia no hay estado!!
 

@@ -6,7 +6,7 @@ WaitingAttackTurnOver::WaitingAttackTurnOver() : GenericState(WAITING_ATTACK_TUR
 	;
 }
 
-GenericState * WaitingAttackTurnOver::onOpponentAttack(GenericEvent &)
+GenericState * WaitingAttackTurnOver::onOpponentAttack(GenericEvent *)
 {
 	return new OpponentMoving();
 }

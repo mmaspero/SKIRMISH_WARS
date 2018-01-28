@@ -8,53 +8,53 @@ OpponentMoving::OpponentMoving() : GenericState(OPP_MOVING)
 	;
 }
 
-GenericState * OpponentMoving::onTimeout(GenericEvent&)
+GenericState * OpponentMoving::onTimeout(GenericEvent *)
 {
 
 	return new WaitingOpponentPass();
 }
 
-GenericState * OpponentMoving::onUserPass(GenericEvent &)
+GenericState * OpponentMoving::onUserPass(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * OpponentMoving::onGoToPurchase(GenericEvent &)
+GenericState * OpponentMoving::onGoToPurchase(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * OpponentMoving::onOpponentPass(GenericEvent&)
+GenericState * OpponentMoving::onOpponentPass(GenericEvent *)
 {
 	return new UserMoving();
 }
 
-GenericState * OpponentMoving::onOpponentAttack(GenericEvent&)
+GenericState * OpponentMoving::onOpponentAttack(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * OpponentMoving::onOpponentMove(GenericEvent&)
+GenericState * OpponentMoving::onOpponentMove(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * OpponentMoving::onOpponentPurchase(GenericEvent&)
+GenericState * OpponentMoving::onOpponentPurchase(GenericEvent *)
 {
 	return new OpponentPurchasing();
 }
 
-GenericState * OpponentMoving::onPurchaseSelection(GenericEvent &)
+GenericState * OpponentMoving::onPurchaseSelection(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * OpponentMoving::onUnitSelection(GenericEvent &)
+GenericState * OpponentMoving::onUnitSelection(GenericEvent *)
 {
 	return this;
 }
 
-GenericState * OpponentMoving::onUnselect(GenericEvent &)
+GenericState * OpponentMoving::onUnselect(GenericEvent *)
 {
 	return this;
 }
