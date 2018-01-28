@@ -28,15 +28,19 @@ particulares que se deseen utilizar.
 class GenericFSM
 {
 public:
-	GenericFSM() {;}
-	GenericFSM(GenericState * firstState) { currentState = firstState; }
+	GenericFSM();
+	GenericFSM(GenericState * firstState); 
+	
+	virtual ~GenericFSM();
+
 	virtual void dispatch(GenericEvent& ev) = 0;
-	virtual ~GenericFSM() { delete currentState ;}
-	void setState(GenericState * state) {currentState = state;}
+
+	void setFirstState(GenericState * state); //solo funciona si todavia no hay estado!!
+
 private:
 
 protected:
-	GenericState *currentState;
+	GenericState * currentState;
 
 };
 
