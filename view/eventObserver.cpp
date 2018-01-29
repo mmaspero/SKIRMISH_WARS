@@ -2,7 +2,7 @@
 
 
 
-eventObserver::eventObserver(genericEvent * event)
+eventObserver::eventObserver(GenericEvent * event)
 {
 }
 

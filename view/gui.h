@@ -3,7 +3,7 @@
 #include "contentBox.h"
 #include "Board.h"
 #include "../Game model/Tile.h"
-#include "genericEvent.h"
+#include "../Game model/FSM/GenericEvent.h"
 
 #include "tileObserver.h"
 #include "playerObserver.h"
@@ -14,6 +14,11 @@
 #include <allegro5\allegro_native_dialog.h>
 
 
+class tileObserver;
+class playerObserver;
+class eventObserver;
+class Player;
+class Tile;
 
 //TODO: ponerle types a los botones
 
@@ -25,7 +30,7 @@ public:
 	
 	tileObserver * tileObserverFactory(Tile * t);
 	playerObserver * playerObserverFactory(Player * p);
-	eventObserver * eventObserverFactory(genericEvent * e);
+	eventObserver * eventObserverFactory(GenericEvent * e);
 
 	bool isValid();
 

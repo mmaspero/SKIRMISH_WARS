@@ -226,7 +226,7 @@ playerObserver * gui::playerObserverFactory(Player * p)
 	return new playerObserver(p, (scoreBoard *)(*itScoreboard), (toolbox *)(*itToolbox));
 }
 
-eventObserver * gui::eventObserverFactory(genericEvent * e)
+eventObserver * gui::eventObserverFactory(GenericEvent * e)
 {
 	return new eventObserver(e);
 }
