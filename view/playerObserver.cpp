@@ -32,7 +32,7 @@ void playerObserver::update()
 		if (p->status == PURCHASING)
 		{
 			//TODO: !!!!!!!!!!!!!!!!!!!!!!! EN EL HEADER DE RO DECIA UNIT, NO UNIT *
-			std::list<std::pair<Unit *, unsigned int>> possiblePurchases = p->getPossiblePurchases();
+			std::list<Unit *> possiblePurchases = p->getPossiblePurchases();
 			
 			
 			//draw(possiblePurchases);

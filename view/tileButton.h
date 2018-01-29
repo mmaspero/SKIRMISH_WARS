@@ -1,6 +1,6 @@
 #pragma once
 #include "button.h"
-#include "Point.h"
+#include "../Point.h"
 
 class tileButton : public button
 {

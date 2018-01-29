@@ -1,7 +1,7 @@
 #pragma once
 
 #include "observer.h"
-#include "Tile.h"
+#include "../Game model/Tile.h"
 #include "tileButton.h"
 #include "toolbox.h"
 

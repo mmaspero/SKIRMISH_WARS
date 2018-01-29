@@ -12,12 +12,12 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 		displaySectionType = TOOLBOX;
 
 		bool buttonValid = true;
-		for (int i = 0; i < N_TYPES; i++)	//TODO: borrar!!! que se haga haciend append o algo asi
+		for (int i = 0; i < N_UNIT_TYPES; i++)	//TODO: borrar!!! que se haga haciend append o algo asi
 		{
 			int aux = (i % BUTTONS_PER_ROW);
 
 			float rWidth = contentWidth / (float)BUTTONS_PER_ROW;
-			float rHeight = contentHeight / (N_TYPES / (int)BUTTONS_PER_ROW);
+			float rHeight = contentHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
 			float rLeftX = contentStartX + rWidth * aux;
 			float rTopY = contentStartY + rHeight * (i / (int)BUTTONS_PER_ROW);
 
@@ -86,7 +86,7 @@ void toolbox::resizeContent()
 		unit_t unitSpecificType = ((productButton*)(*it))->getUnitSpecificType();
 
 		float rWidth = contentWidth / (float)BUTTONS_PER_ROW;
-		float rHeight = contentHeight / (N_TYPES / (int)BUTTONS_PER_ROW);
+		float rHeight = contentHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
 		float rLeftX = contentStartX + rWidth * (i % BUTTONS_PER_ROW);//(unitSpecificType % BUTTONS_PER_ROW);
 		float rTopY = contentStartY + rHeight * (i / (int)BUTTONS_PER_ROW);//((int)unitSpecificType / (int)BUTTONS_PER_ROW);
 
