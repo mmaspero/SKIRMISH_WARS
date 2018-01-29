@@ -5,7 +5,7 @@
 #include "gui.h"
 
 class eventObserver :
-	public observer
+	public obs
 {
 public:
 	eventObserver(GenericEvent * events);

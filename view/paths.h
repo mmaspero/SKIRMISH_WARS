@@ -1,6 +1,6 @@
 #pragma once
 
-#define CONFIG_PATH	"config"
-#define IMAGE_PATH	"media/img"
-#define SPRITE_PATH	"media/img/sprites"
-#define FONT_PATH	"media/font"
+#define CONFIG_PATH	"config/"
+#define IMAGE_PATH	"view/media/img/"
+#define SPRITE_PATH	"view/media/img/sprites/"
+#define FONT_PATH	"view/media/font/"

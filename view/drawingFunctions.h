@@ -71,5 +71,5 @@ ALLEGRO_BITMAP * cropToCircle(ALLEGRO_BITMAP * bmp, float sourceRadius, float de
 
 
 /*TODO: comentar*/
-void drawFittingText(ALLEGRO_FONT * font, ALLEGRO_COLOR color, unsigned int x, unsigned int y, const char * text,
+void drawFittingText(ALLEGRO_FONT * font, ALLEGRO_COLOR color, unsigned int row, unsigned int col, const char * text,
 	unsigned int maxWidth);

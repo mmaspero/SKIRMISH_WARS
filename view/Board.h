@@ -1,9 +1,7 @@
 #pragma once
 #include "contentBox.h"
 #include "tileButton.h"
-
-#define BOARD_WIDTH 16
-#define BOARD_HEIGHT 12
+#include "../Game model/types.h"
 
 class Board : public contentBox
 {

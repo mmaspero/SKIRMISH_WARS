@@ -4,8 +4,10 @@
 #include "toolbox.h"
 #include "../Game model/Player.h"
 
+class Player;
+
 class playerObserver :
-	public observer
+	public obs
 {
 public:
 	playerObserver(Player * p, scoreBoard * sB, toolbox * t);

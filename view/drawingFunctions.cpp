@@ -75,16 +75,16 @@ ALLEGRO_BITMAP * cropToCircle(ALLEGRO_BITMAP * bmp, float sourceRadius, float de
 	}
 }
 
-void drawFittingText(ALLEGRO_FONT * font, ALLEGRO_COLOR color, unsigned int x, unsigned int y, const char * text,
+void drawFittingText(ALLEGRO_FONT * font, ALLEGRO_COLOR color, unsigned int row, unsigned int col, const char * text,
 	unsigned int maxWidth)
 {	
 	unsigned int w = al_get_text_width(font, text);
 	if (w < maxWidth)
 	{
-		al_draw_text(font, color, x, y, 0, text);
+		al_draw_text(font, color, row, col, 0, text);
 	}
 	else
 	{
-		al_draw_justified_text(font, color, x, x + maxWidth, y, 1.0, 0, text);
+		al_draw_justified_text(font, color, row, row + maxWidth, col, 1.0, 0, text);
 	}
 }

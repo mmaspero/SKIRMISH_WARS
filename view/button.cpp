@@ -31,6 +31,7 @@ button::button(ALLEGRO_BITMAP * bmp, float leftX, float topY)
 	}
 	else
 	{
+		resizedBmp = nullptr;
 		this->unformattedBmp = al_clone_bitmap(bmp);
 		width = al_get_bitmap_width(bmp);
 		height = al_get_bitmap_height(bmp);
@@ -51,6 +52,7 @@ button::button(ALLEGRO_BITMAP * bmp, float leftX, float topY, float width, float
 	}
 	else	//TODO: limitar width y height
 	{
+		resizedBmp = nullptr;
 		this->unformattedBmp = al_clone_bitmap(bmp);
 		this->leftX = leftX;
 		this->topY = topY;
@@ -234,7 +236,9 @@ void button::resize(float width, float height)
 void button::resize()
 {
 	//dibujar unformattedBmp con sus nuevas dimensiones en un nuevo bitmap
-	al_destroy_bitmap(resizedBmp);
+	if (resizedBmp != nullptr) {
+		al_destroy_bitmap(resizedBmp);
+	}
 	resizedBmp = al_create_bitmap(width, height);
 	ALLEGRO_BITMAP * targetBmpBackup = al_get_target_bitmap();
 	al_set_target_bitmap(resizedBmp);

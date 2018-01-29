@@ -17,7 +17,7 @@
 #define TREAD_BG_COLOR  "thistle"
 #define FOOT_BG_COLOR   "thistle"
 
-#define FONT_NAME "media/font/Minecraft.ttf"
+#define FONT_NAME FONT_PATH "Minecraft.ttf"
 #define	BIG_FONT_SIZE    30
 
 #define BUTTON_MARGIN(w, h) (((w)>(h) ? h : w) / 20.0)
@@ -26,10 +26,10 @@
 #define COIN_HEIGHT_IN_MARGINS 6	//La moneda que indica plata tiene COIN_HEIGHT_IN_MARGIN veces la altura del margen
 #define LOGO_SIDE_IN_MARGINS 7
 
-#define ANTIAIR_SPRITE "media/img/sprites/antiair_red.png"
+#define ANTIAIR_SPRITE SPRITE_PATH "antiair_red.png"
 #define ANTIAIR_NAME "ANTIAIR"
 
-#define TREAD_LOGO_BMP "media/img/tread_logo.png"
+#define TREAD_LOGO_BMP IMAGE_PATH "tread_logo.png"
 #define FOOT_LOGO_BMP TREAD_LOGO_BMP
 #define WHEEL_LOGO_BMP TREAD_LOGO_BMP
 
@@ -43,6 +43,9 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 	if (valid)	//Proseguir solo si construyo button sin problemas
 	{
 		resizedBmp = nullptr;	//NO SE USA!!! EN CAMBIO SE USA reducedBmp y expandedBmp
+
+		reducedBmp = nullptr;
+		expandedBmp = nullptr;
 
 		//TODO: validacion de parametros
 		this->rLeftX = rLeftX;
@@ -118,6 +121,8 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 	{
 		resizedBmp = nullptr;	//NO SE USA!!! EN CAMBIO SE USA reducedBmp y expandedBmp
 
+		reducedBmp = nullptr;
+		expandedBmp = nullptr;
 								//TODO: validacion de parametros
 		this->rLeftX = rLeftX;
 		this->rTopY = rTopY;
@@ -357,7 +362,7 @@ bool productButton::isHidden()
 //		ALLEGRO_BITMAP * auxBmp = nullptr;
 //
 //		//Dibujar el precio
-//		auxBmp = al_load_bitmap("media/img/coin.png");
+//		auxBmp = al_load_bitmap(IMAGE_PATH "coin.png");
 //		if (auxBmp == nullptr)
 //		{
 //			cout << "No se pudo cargar la imagen de moneda" << endl;
@@ -415,13 +420,13 @@ bool productButton::isHidden()
 
 bool productButton::setReducedBmp()
 {
-	string configFile(CONFIG_PATH); 
-	configFile += "/";
-	configFile += CONFIG_FILE;
+	//string configFile(CONFIG_PATH); 
+	//configFile += "/";
+	//configFile += CONFIG_FILE;
 
 //DEBUG	cout << configFile << endl;
 
-	ALLEGRO_CONFIG * cfg = al_load_config_file(configFile.c_str());
+	ALLEGRO_CONFIG * cfg = al_load_config_file(CONFIG_PATH CONFIG_FILE);
 
 	if (reducedBmp != nullptr)
 	{
@@ -516,7 +521,7 @@ bool productButton::setReducedBmp()
 		margin * LOGO_SIDE_IN_MARGINS,			margin * LOGO_SIDE_IN_MARGINS, 0);		//TODO: sacar magic numbers
 
 	//Cargar imagen de la moneda
-	auxBmp = al_load_bitmap("media/img/coin.png");	//TODO: sacar de define
+	auxBmp = al_load_bitmap(IMAGE_PATH "coin.png");	//TODO: sacar de define
 	if (auxBmp == nullptr)
 	{
 		cout << "No se pudo cargar la imagen de moneda" << endl;

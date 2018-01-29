@@ -5,6 +5,7 @@
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
 #include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_color.h>
 
 #include "scoreBoard.h"
 #include "Board.h"
@@ -13,6 +14,7 @@
 #include "gameStatus.h"
 
 #include "drawingFunctions.h"
+#include "paths.h"
 
 #define DEFAULT_SCREEN_W 1200.0f
 #define DEFAULT_SCREEN_H 800.0f
@@ -74,13 +76,16 @@ gui::gui()
 	al_apply_window_constraints(display, true);
 
 	al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_MIPMAP);
-	ALLEGRO_BITMAP * icon = al_load_bitmap("media/img/myAvatar1.png");	//TODO: sacarlo de config
+	ALLEGRO_BITMAP * icon = al_load_bitmap(IMAGE_PATH "myAvatar1.png");	//TODO: sacarlo de config
 	if (icon == nullptr)
 	{
 		//No se pone valid en false ya que el programa puede correr sin el icono de la ventana
 		cout << "No se pudo cargar el icono del display" << endl;
 	}
-	al_set_display_icon(display, icon);
+	else
+	{
+		al_set_display_icon(display, icon);
+	}
 	al_set_window_title(display, "Skirmish Wars");	//TODO: sacarlo de config
 
 	displaySections.push_back((contentBox *) new Board(display, 0, 0.3, 0.7, 0.7));
@@ -92,7 +97,7 @@ gui::gui()
 	}
 	
 	displaySections.push_back((contentBox *) new scoreBoard(display, 0, 0.1, 0.7, 0.2,
-		al_load_bitmap("media/img/myAvatar1.png"), al_load_bitmap("media/img/theirAvatar.png"),
+		al_load_bitmap(IMAGE_PATH "myAvatar1.png"), al_load_bitmap(IMAGE_PATH "theirAvatar.png"),
 		8, 0, 0, 0));	//TODO: sacar magic numbers, validacion de parametros de ALLEGRO_BITMAP * 
 	if (!displaySections.back()->isValid())
 	{
@@ -170,25 +175,25 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 
 	//Avanzar hasta que se halle el Board * o hasta recorrer toda la lista.
 	for (itBoard = displaySections.begin(); 
-		itBoard != displaySections.end() || (*itBoard)->getType() != BOARD; 
+		itBoard != displaySections.end() && (*itBoard)->getType() != BOARD; 
 		itBoard++) {}
 
 	//Avanzar hasta que se halle el Toolbox * o hasta recorrer toda la lista.
 	for (itToolbox = displaySections.begin();
-		itToolbox != displaySections.end() || (*itToolbox)->getType() != TOOLBOX;
+		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
 		itToolbox++) {}
 
 	//Si se llego al final de la lista es porque no se encontro la display section buscada
 	if (itBoard == displaySections.end() || itToolbox == displaySections.end()) 
 	{
-		cout << "No se puso construir el tileObserver porque hay display sections faltantes" << endl;
+		cout << "No se pudo construir el tileObserver porque hay display sections faltantes" << endl;
 		return nullptr;
 	}
 	Board * boardP = (Board *)(*itBoard);
 	toolbox * toolboxP = (toolbox *)(*itToolbox);
 
-	unsigned int tileX = t->getPosition().x;
-	unsigned int tileY = t->getPosition().y;
+	unsigned int tileY = t->getPosition().row;
+	unsigned int tileX = t->getPosition().col;
 
 	//Si ya se creo el tileButton de esa posicion, indicar que hubo error.
 	if (boardP->getTileButton(tileX, tileY) != nullptr)
@@ -201,7 +206,52 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 	float tileSide = boardP->getTileSide();
 	ALLEGRO_BITMAP * tileBmp = al_create_bitmap(tileSide, tileSide);
 			
-	//TODO:dibujarle a tileBmp terrain, unit, y fog
+	ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -tileSide / 4, 0);
+	
+	ALLEGRO_COLOR tc;
+	switch (t->getTerrain()) 
+	{
+	case GRASS:
+		tc = al_color_name("green");
+		break;
+	case RIVER:
+		tc = al_color_name("blue");
+		break;	
+	case ROAD:
+		tc = al_color_name("grey");
+		break;	
+	case FOREST:
+		tc = al_color_name("darkgreen");
+		break;	
+	case HILL:
+		tc = al_color_name("yellow");
+		break;
+	default:
+		break;
+	}
+
+	al_clear_to_color(tc);
+
+	std::string name;
+	if (t->hasUnit())
+	{
+		switch (t->getUnit()->getType()) {
+		case RECON: { name = RE_STR; }		break;
+		case ROCKET: { name = RO_STR; }		break;
+		case MECH: { name = ME_STR; }		break;
+		case INFANTRY: { name = IN_STR; }	break;
+		case TANK: { name = TA_STR; }		break;
+		case ARTILLERY: { name = AR_STR; }	break;
+		case ANTIAIR: { name = AA_STR; }		break;
+		case APC: { name = AP_STR; }			break;
+		case MEDTANK: { name = MT_STR; }		break;
+			//cualquier otro caso queda en nullptr como corresponde
+		}
+	}
+	
+	al_draw_text(font, al_color_name("hot pink"), 0, 0, 0, name.c_str());
+
+	al_destroy_font(font);
 			
 	boardP->setTileButton(tileBmp, tileX, tileY);
 	return new tileObserver(t, boardP->getTileButton(tileX, tileY), toolboxP);	//TODO: control de error :)
@@ -269,6 +319,8 @@ contentBox * gui::getDisplaySection(unsigned int xPixel, unsigned int yPixel)
 
 void gui::draw()
 {
+	al_clear_to_color({ 1,1,0,1 });
+
 	for (list<contentBox *>::iterator it = displaySections.begin(); it != displaySections.end(); it++)
 	{
 		(*it)->draw();

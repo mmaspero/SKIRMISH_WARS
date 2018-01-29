@@ -5,7 +5,10 @@
 #include "tileButton.h"
 #include "toolbox.h"
 
-class tileObserver : public observer
+class Tile;
+class toolbox;
+
+class tileObserver : public obs
 {
 public:
 	tileObserver(Tile * t, tileButton * tButton, toolbox * tBox);

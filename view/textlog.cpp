@@ -2,6 +2,7 @@
 #include "textlog.h"
 #include "config/textlog_config.h"
 #include <allegro5\allegro_primitives.h>
+#include "paths.h"
 #pragma warning(disable : 4996)	//TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 

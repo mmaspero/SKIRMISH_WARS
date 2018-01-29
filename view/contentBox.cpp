@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "config/contentBox_config.h"
 
+#include "paths.h"
+
 using namespace std;
 
 
@@ -142,5 +144,5 @@ void drawFunkyRectangle(int x1, int y1, int x2, int y2)
 		{ x2, y1, 0, 256, 256, al_map_rgb_f(0, 0, 1) },
 		{ x2, y2, 0, 0, 256, al_map_rgb_f(0, 1, 0) },
 		{ x1, y2, 0, 256, 256, al_map_rgb_f(0, 1, 1) } };
-	al_draw_prim(v, nullptr, al_load_bitmap("media/img/paperTexture.png"), 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN); //TODO: corregir esta cabeceada del al_load_bitmap
+	al_draw_prim(v, nullptr, al_load_bitmap(IMAGE_PATH "paperTexture.png"), 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN); //TODO: corregir esta cabeceada del al_load_bitmap
 }

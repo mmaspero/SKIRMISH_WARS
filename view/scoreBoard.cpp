@@ -1,11 +1,12 @@
 #include "scoreBoard.h"
 
 #include <iostream>
+#include "paths.h"
 
 #define MAX_HP 1000	//TODO: mover de aca
 #define MAX_HQ_HP 25
 
-#define HQ_HP_FONT_NAME "media/font/ttf.ttf"
+#define HQ_HP_FONT_NAME FONT_PATH "ttf.ttf"
 #define FONT_SIZE 45
 #define HP_BAR_TITLE "HQ HP"
 #define HP_BAR_MARGIN 20
@@ -34,7 +35,7 @@ scoreBoard::scoreBoard(ALLEGRO_DISPLAY * display, float startX, float startY, fl
 			cout << "No se pudo cargar el avatar del usuario" << endl;
 			return;
 		}
-		else if (myAvatarBmp == nullptr)
+		else if (theirAvatarBmp == nullptr)
 		{
 			valid = false;
 			cout << "No se pudo cargar el avatar del oponente" << endl;

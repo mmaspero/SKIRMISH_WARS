@@ -1,9 +1,9 @@
 #pragma once
-class observer
+class obs
 {
 public:
-	observer();
-	~observer(); 
+	obs();
+	~obs(); 
 	virtual void update() = 0;
 };
 

@@ -2,12 +2,13 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include "paths.h"
 
-#define TIME_BMP "media/img/clock.png"
-#define UNIT_BMP "media/img/manSprite.png"
-#define COIN_BMP "media/img/coin.png"
+#define TIME_BMP IMAGE_PATH "clock.png"
+#define UNIT_BMP IMAGE_PATH "manSprite.png"
+#define COIN_BMP IMAGE_PATH "coin.png"
 
-#define DEFAULT_FONT "media/font/PressStart2P.ttf"
+#define DEFAULT_FONT FONT_PATH "PressStart2P.ttf"
 #define FONT_COLOR "black"
 #define FONT_HEIGHT_IN_BITMAP_HEIGHT (3.0/4.0)
 
@@ -113,18 +114,18 @@ void gameStatus::setMoney(unsigned int money)
 
 void gameStatus::drawContent()
 {
-	int x = contentStartX, y = contentStartY;
-	al_draw_bitmap(timeStat.bmp, x, y, 0);
-	x += al_get_bitmap_width(timeStat.bmp);
-	al_draw_textf(font, al_color_name(FONT_COLOR), x, y, 0, "%d", timeStat.value);
-	x += (getDigitCount(timeStat.value) + 1) * al_get_text_width(font, "_");	//multiplico la cantidad de digitos por el ancho de un caracter en pixeles
-	al_draw_bitmap(unitStat.bmp, x, y, 0);
-	x += al_get_bitmap_width(unitStat.bmp);
-	al_draw_textf(font, al_color_name(FONT_COLOR), x, y, 0, "%d", unitStat.value);
-	x += getDigitCount(unitStat.value) * al_get_text_width(font, "_");
-	al_draw_bitmap(moneyStat.bmp, x, y, 0);
-	x += al_get_bitmap_width(moneyStat.bmp);
-	al_draw_textf(font, al_color_name(FONT_COLOR), x, y, 0, "%d", moneyStat.value);
+	int row = contentStartX, col = contentStartY;
+	al_draw_bitmap(timeStat.bmp, row, col, 0);
+	row += al_get_bitmap_width(timeStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), row, col, 0, "%d", timeStat.value);
+	row += (getDigitCount(timeStat.value) + 1) * al_get_text_width(font, "_");	//multiplico la cantidad de digitos por el ancho de un caracter en pixeles
+	al_draw_bitmap(unitStat.bmp, row, col, 0);
+	row += al_get_bitmap_width(unitStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), row, col, 0, "%d", unitStat.value);
+	row += getDigitCount(unitStat.value) * al_get_text_width(font, "_");
+	al_draw_bitmap(moneyStat.bmp, row, col, 0);
+	row += al_get_bitmap_width(moneyStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), row, col, 0, "%d", moneyStat.value);
 
 }
 

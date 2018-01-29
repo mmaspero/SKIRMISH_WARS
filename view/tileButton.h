@@ -6,11 +6,13 @@ class tileButton : public button
 {
 public:
 
-	tileButton(ALLEGRO_BITMAP * bmp, float leftX, float topY, float width, float height);
+	tileButton(ALLEGRO_BITMAP * bmp, float leftX, float topY, float width, float height, Point tilePosition);
 	~tileButton();
 
 	virtual void draw();
+	Point getTilePosition();
 
+private:
 	Point tilePosition;
 };
 

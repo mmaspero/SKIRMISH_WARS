@@ -2,11 +2,11 @@
 
 
 
-observer::observer()
+obs::obs()
 {
 }
 
 
-observer::~observer()
+obs::~obs()
 {
 }
