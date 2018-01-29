@@ -1,8 +1,8 @@
 #pragma once
 #include "button.h"
-#include "Unit.h"
-#include "unitInfo.h"
-#include "types.h"
+#include "../Game model/Unit.h"
+#include "../Game model/unitInfo.h"
+#include "../Game model/types.h"
 
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>

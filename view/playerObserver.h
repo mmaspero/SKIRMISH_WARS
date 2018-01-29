@@ -2,7 +2,7 @@
 #include "observer.h"
 #include "scoreBoard.h"
 #include "toolbox.h"
-#include "Player.h"
+#include "../Game model/Player.h"
 
 class playerObserver :
 	public observer

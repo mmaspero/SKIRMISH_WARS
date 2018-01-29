@@ -2,7 +2,7 @@
 
 #include "contentBox.h"
 #include "Board.h"
-#include "Tile.h"
+#include "../Game model/Tile.h"
 #include "genericEvent.h"
 
 #include "tileObserver.h"
