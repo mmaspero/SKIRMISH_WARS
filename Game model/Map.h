@@ -4,17 +4,16 @@
 #include "types.h"
 #include "../Point.h"
 #include "unitInfo.h"
-
-#define B_W	16
-#define	B_H	12
+#include "../view/gui.h"
 
 class Tile;
 class Unit;
+class gui;
 
 class Map 
 {
 public:
-	Map(char * csvPath, player_t first);
+	Map(char * csvPath, player_t first, gui * g);
 	~Map();
 	bool isValid();
 
@@ -34,7 +33,7 @@ public:
 	void clearTile(Point p); //saca la unidad
 
 private:
-	Tile * board[B_H][B_W]; 
+	Tile * board[B_H][B_W];
 
 	void removeFog(Point p, player_t player);
 	bool valid;

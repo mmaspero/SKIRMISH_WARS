@@ -1,5 +1,9 @@
 #pragma once
 
+#define B_W	16	//tamanio del mapa
+#define	B_H	12
+
+
 typedef enum players { NEUTRAL, USER, OPPONENT } player_t;
 typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING } playerStatus_t;
 typedef enum tileStatus { VISIBLE, FOG, SELECTED, CAN_ATTACK, CAN_MOVE } tileStatus_t;

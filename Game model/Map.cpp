@@ -5,19 +5,20 @@
 #include "unitInfo.h"
 #include <unordered_map>
 #include <algorithm>
+#include "../view/gui.h"
 
 terrain_t parseTerrain(std::string s); 
 Unit * parseUnit(std::string s, Point p, player_t first);
 Building * parseBuilding(std::string s, Point p, player_t first);
 
 
-Map::Map(char * csvPath, player_t first)
+Map::Map(char * csvPath, player_t first, gui * g)
 {
 	Csv csv(csvPath);
 	valid = false;
 	memset((void *)board, 0, B_H*B_W*sizeof(void *)); //pongo todos en null
 
-	if (csv.getColumns() == B_W && csv.getRows() == B_H) {
+	if (g != nullptr && csv.getColumns() == B_W && csv.getRows() == B_H) {
 	//aca ya verifico que estaba bien el archivo
 		valid = true;
 		for (unsigned int i = 0; i < B_H && valid; i++) {
@@ -73,8 +74,10 @@ Map::Map(char * csvPath, player_t first)
 				for (unsigned int j = 0; j < B_W; j++) {
 					Point p(i, j);
 					if (hasUnit(p)) {
-						removeFog(p, board[p.x][p.y]->u->getPlayer());
+						removeFog(p, board[p.row][p.col]->u->getPlayer());
 					}
+
+					board[p.row][p.col]->setObserver(g->tileObserverFactory(board[p.row][p.col]));
 				}
 			}
 		}
@@ -112,7 +115,7 @@ void Map::update()
 terrain_t Map::getTerrain(Point p)
 {
 	if (valid && isInMap(p))
-		return board[p.x][p.y]->getTerrain();
+		return board[p.row][p.col]->getTerrain();
 	else
 		return N_TERRAINS;
 }
@@ -120,15 +123,15 @@ terrain_t Map::getTerrain(Point p)
 player_t Map::getPlayer(Point p)
 {
 	if (isInMap(p))
-		return ((board[p.x][p.y])->u)->getPlayer();
+		return ((board[p.row][p.col])->u)->getPlayer();
 	else
 		return NEUTRAL;
 }
 
 unitType_t Map::getBasicType(Point p)
 {
-	if (valid && isInMap(p) && (board[p.x][p.y]->u) != nullptr)
-		return ((board[p.x][p.y])->u)->getBasicType();
+	if (valid && isInMap(p) && (board[p.row][p.col]->u) != nullptr)
+		return ((board[p.row][p.col])->u)->getBasicType();
 	else
 		return N_B_TYPES;
 }
@@ -136,14 +139,14 @@ unitType_t Map::getBasicType(Point p)
 Unit * Map::getUnit(Point p)
 {
 	if (valid && isInMap(p))
-		return board[p.x][p.y]->u;
+		return board[p.row][p.col]->u;
 	else
 		return nullptr;
 }
 
 bool Map::hasUnit(Point p)
 {
-	if (valid && isInMap(p) && (board[p.x][p.y]->u) != nullptr)
+	if (valid && isInMap(p) && (board[p.row][p.col]->u) != nullptr)
 		return true;
 	else
 		return false;
@@ -151,7 +154,7 @@ bool Map::hasUnit(Point p)
 
 bool Map::hasBuilding(Point p)
 {
-	if (valid && isInMap(p) && (board[p.x][p.y]->b) != nullptr)
+	if (valid && isInMap(p) && (board[p.row][p.col]->b) != nullptr)
 		return true;
 	else
 		return false;
@@ -160,7 +163,7 @@ bool Map::hasBuilding(Point p)
 bool Map::hasFog(Point p, player_t player)
 {
 	if (valid && isInMap(p))
-		return (player==USER? (board[p.x][p.y]->status == FOG) : !(board[p.x][p.y]->opponentCanSee));
+		return (player==USER? (board[p.row][p.col]->status == FOG) : !(board[p.row][p.col]->opponentCanSee));
 	else
 		return false;
 }
@@ -173,20 +176,20 @@ bool Map::updateUnitPos(Unit * u, Point p, bool intoAPC)
 	if (valid && u != nullptr && isInMap(p)) {
 		oldPos = u->getPosition();
 		
-		if (intoAPC && board[p.x][p.y]->u->getType() == APC && (board[p.x][p.y]->u->getPlayer() == u->getPlayer())) {
-			((Apc *)board[p.x][p.y]->u)->load(u);
+		if (intoAPC && board[p.row][p.col]->u->getType() == APC && (board[p.row][p.col]->u->getPlayer() == u->getPlayer())) {
+			((Apc *)board[p.row][p.col]->u)->load(u);
 		}
-		else if ( (board[p.x][p.y]->u) == nullptr) {
+		else if ( (board[p.row][p.col]->u) == nullptr) {
 			player_t player = u->getPlayer();
-			board[p.x][p.y]->u = u;	//si la muevo a una tile vacia, update de la posicion
+			board[p.row][p.col]->u = u;	//si la muevo a una tile vacia, update de la posicion
 		}
 		else {
 			valid = false;
 		}
 	}
 
-	if (valid && isInMap(oldPos) && board[oldPos.x][oldPos.y]->u == u) {
-		board[oldPos.x][oldPos.y]->u = nullptr; // si la unidad estaba donde me dijeron, la saco. si no,
+	if (valid && isInMap(oldPos) && board[oldPos.row][oldPos.col]->u == u) {
+		board[oldPos.row][oldPos.col]->u = nullptr; // si la unidad estaba donde me dijeron, la saco. si no,
 		//puede que viniera de un apc (o que estuviera mal desde antes) y lo dejo con lo que haya
 	}
 	
@@ -199,9 +202,9 @@ bool Map::newUnit(Unit * u)
 
 	if (valid && u != nullptr) {
 		Point p = u->getPosition();
-		if (isInMap(p) && board[p.x][p.y]->u == nullptr) {
+		if (isInMap(p) && board[p.row][p.col]->u == nullptr) {
 			valid = true;
-			board[p.x][p.y]->u = u;
+			board[p.row][p.col]->u = u;
 			
 			removeFog(u->getPosition(), u->getPlayer());
 		}
@@ -213,36 +216,36 @@ bool Map::newUnit(Unit * u)
 void Map::clearTile(Point p)
 {
 	if (valid && isInMap(p)) {
-		board[p.x][p.y]->removeUnit();
+		board[p.row][p.col]->removeUnit();
 	}
 }
 
 void Map::removeFog(Point p, player_t player)
 {
 	if (valid && isInMap(p)) {
-		board[p.x][p.y]->removeFog(player);
+		board[p.row][p.col]->removeFog(player);
 
-		p.x--;
+		p.row--;
 		if (isInMap(p))
-			board[p.x][p.y]->removeFog(player);
+			board[p.row][p.col]->removeFog(player);
 
-		p.x += 2;
+		p.row += 2;
 		if (isInMap(p))
-			board[p.x][p.y]->removeFog(player);
+			board[p.row][p.col]->removeFog(player);
 		
-		p.x--; p.y--;
+		p.row--; p.col--;
 		if (isInMap(p))
-			board[p.x][p.y]->removeFog(player);
+			board[p.row][p.col]->removeFog(player);
 
-		p.y += 2;
+		p.col += 2;
 		if (isInMap(p))
-			board[p.x][p.y]->removeFog(player);
+			board[p.row][p.col]->removeFog(player);
 	}
 }
 
 bool Map::isInMap(Point p)
 {
-	if (p.x < B_H && p.y < B_W && p.x >= 0 && p.y >= 0)
+	if (p.row < B_H && p.col < B_W && p.row >= 0 && p.col >= 0)
 		return true;
 	else
 		return false;

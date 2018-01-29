@@ -3,6 +3,7 @@
 #include "../Point.h"
 #include "Unit.h"
 #include "Building.h"
+#include "../view/tileObserver.h"
 
 class Unit;
 
@@ -20,9 +21,12 @@ public:
 	player_t hasUnit();		//si devuelve NEUTRAL es que no hay
 	Point getPosition();
 	terrain_t getTerrain();	//si tiene edificio va a devolver ROAD
+	Unit * getUnit();
+	Building * getBuilding();
 
 	bool setUnit(Unit * u);			//estas funciones verifican que no metas dos edificios o dos units en la misma tile
 	bool setBuilding(Building * b);
+	void setObserver(tileObserver * obs);
 
 	void removeFog(player_t p);
 	void removeUnit();
@@ -34,5 +38,5 @@ private:
 	bool opponentCanSee;
 	Unit * u;
 	Building * b;
-	tileObserver * observer;
+	tileObserver * obs;
 };

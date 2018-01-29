@@ -2,7 +2,8 @@
 #include "FSM/States/UserMoving.h"
 #include "FSM\States\OpponentMoving.h"
 
-Model::Model(bool userStarts, char * map, player_t first) : user(USER), opponent(OPPONENT), m(map, first)
+Model::Model(bool userStarts, char * map, player_t first, gui g) : user(USER), opponent(OPPONENT),
+																			m(map, first, &g), g(g)
 {
 	if (m.isValid()) {
 		GenericState * firstState = nullptr;

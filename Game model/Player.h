@@ -1,7 +1,9 @@
 #pragma once
 #include "Unit.h"
 #include <list>
-#include <utility>
+#include "../view/playerObserver.h"
+
+class Unit;
 
 class Player {
 public:
@@ -15,6 +17,8 @@ public:
 	bool wasDefeated();
 	std::list<Unit *> getPossiblePurchases();
 
+	void setObserver(playerObserver * obs);
+
 private:
 	unsigned int money;
 	unsigned int capturePointsHQ;
@@ -22,7 +26,7 @@ private:
 	unsigned int nUnits;			//todas! para ver cuando llegamos a cero
 	const player_t who;
 	playerStatus_t status;
-	playerObserver * observer;
+	playerObserver * obs;
 
 	static std::list<Unit *> unitInfo;
 };

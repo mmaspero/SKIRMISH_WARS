@@ -20,6 +20,6 @@ public:
 	bool load(Unit * u);		
 	bool unload(Point whereTo);		//descarga siempre en orden inverso a como cargo
 
-protected:
+private:
 	std::list<Unit *> loadedUnits;
 };

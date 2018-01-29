@@ -24,16 +24,14 @@ Unit::Unit(unit_t type, Point position, bool isMine, unsigned int cost, unsigned
 	bool valid = false;
 	if (type >= 0 && type < N_UNIT_TYPES && Map::isInMap(position)) { //solo puedo verificar si el punto se fue de rango si ya tengo el mapa
 		this->position = position;
-		if (map->newUnit(this)) {
-			valid = true;
-			healthPoints = MAX_HP;
-			state = IDLE;
-		}
+		valid = true;
+		healthPoints = MAX_HP;
+		state = IDLE;
 	}
 	
 	if (!valid) {
-		this->position.x = B_W;
-		this->position.y = B_H;
+		this->position.row = B_W;
+		this->position.col = B_H;
 		state = N_UNIT_STATES; //para indicar que esta unidad no se puede usar
 	}
 }
@@ -246,16 +244,16 @@ void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, u
 
 		if (action.type != LOAD) {
 			//veo a que tiles puedo ir desde aca
-			curr.x -= 1;				// a la izquierda
+			curr.row -= 1;				// a la izquierda
 			getPossibleMoves(moves, start, curr, mps);
 
-			curr.x += 2;				//a la derecha
+			curr.row += 2;				//a la derecha
 			getPossibleMoves(moves, start, curr, mps);
 
-			curr.x -= 1; curr.y -= 1;	//arriba
+			curr.row -= 1; curr.col -= 1;	//arriba
 			getPossibleMoves(moves, start, curr, mps);
 
-			curr.y += 2;				//abajo
+			curr.col += 2;				//abajo
 			getPossibleMoves(moves, start, curr, mps);
 		}
 	}

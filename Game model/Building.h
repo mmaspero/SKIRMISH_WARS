@@ -13,7 +13,7 @@ public:
 	bool capture(bool isReduced, player_t player); //devuelve true si cambio de equipos
 	void uncapture();
 
-private:
+protected:
 	building_t type;
 	player_t player;
 	unsigned int capturePoints;

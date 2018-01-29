@@ -28,7 +28,7 @@ public:
 	virtual GenericState * onUnitSelection(GenericEvent *);
 	virtual GenericState * onUnselect(GenericEvent *);
 
-private:
+protected:
 	const state_t id;
 };
 

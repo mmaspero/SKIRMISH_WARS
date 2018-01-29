@@ -17,6 +17,7 @@ std::list<Unit *> Player::unitInfo;
 Player::Player(player_t who) : who(who)
 {
 	money = INIT_MONEY;
+	obs = nullptr;
 	if (who == USER) {
 		Point p(B_H, B_W); //posicion default para poder crear las unidades
 		unitInfo.push_back(new AntiAir(p, true)); //el true indica el jugador, no importa
@@ -69,4 +70,11 @@ bool Player::wasDefeated()
 std::list<Unit *> Player::getPossiblePurchases()
 {
 	return unitInfo;
+}
+
+void Player::setObserver(playerObserver * obs)
+{
+	if (this->obs) {
+		this->obs = obs;
+	}
 }
