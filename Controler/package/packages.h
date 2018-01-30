@@ -102,6 +102,7 @@ public:
 	purchase(std::string ejercitoID, unsigned char row, unsigned char column);
 	purchase(std::string ejercitoID, point possition);
 	point getPossition() { return possition; };
+	std::string getEjercitoId() { return ejercitoID; };
 private:
 	point possition;
 	std::string ejercitoID;
