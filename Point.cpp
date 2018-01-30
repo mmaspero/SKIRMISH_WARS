@@ -3,18 +3,18 @@
 
 Point::Point()
 {
-	x = y = 0;
+	row = col = 0;
 }
 
-Point::Point(unsigned int x, unsigned int y)
+Point::Point(unsigned int row, unsigned int col)
 {
-	this->x = x;
-	this->y = y;
+	this->row = row;
+	this->col = col;
 }
 
 bool Point::operator==(Point p)
 {
-	if (p.x == x && p.y == y)
+	if (p.row == row && p.col == col)
 		return true;
 	else
 		return false;
@@ -30,5 +30,5 @@ bool Point::operator!=(Point p)
 
 unsigned int Point::orthogonalDistanceFrom(Point p)
 {
-	return abs(long int(p.x) - long int(x)) + abs(long int(p.y) - long int(y));
+	return abs(long int(p.row) - long int(row)) + abs(long int(p.col) - long int(col));
 }
