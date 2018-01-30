@@ -33,7 +33,7 @@ Player::Player(player_t who) : who(who)
 
 }
 
-bool Player::buy(unit_t type, Point p)
+Unit * Player::buy(unit_t type, Point p)
 {
 	unsigned int cost = UINT_MAX;
 	Unit * u = nullptr;
@@ -49,16 +49,22 @@ bool Player::buy(unit_t type, Point p)
 		if (u != nullptr) {
 			money -= cost;
 			nUnits++;
+			if (obs != nullptr) {
+				obs->update();
+			}
 		}
 	}
 
-	return (u != nullptr);
+	return u;
 }
 
 void Player::collectIncome()
 {
 	if (!wasDefeated()) {
 		money += (nCities + 1)*INIT_MONEY;
+		if (obs != nullptr) {
+			obs->update();
+		}
 	}
 }
 
@@ -74,7 +80,8 @@ std::list<Unit *> Player::getPossiblePurchases()
 
 void Player::setObserver(playerObserver * obs)
 {
-	if (this->obs) {
+	if (this->obs == nullptr && obs != nullptr) {
 		this->obs = obs;
+		obs->update();
 	}
 }

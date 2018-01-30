@@ -13,7 +13,7 @@ class gui;
 class Map 
 {
 public:
-	Map(char * csvPath, player_t first, gui * g);
+	Map(const char * csvPath, player_t first);
 	~Map();
 	bool isValid();
 
@@ -37,4 +37,6 @@ private:
 
 	void removeFog(Point p, player_t player);
 	bool valid;
+
+	friend class Model;
 };

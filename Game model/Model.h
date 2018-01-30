@@ -10,7 +10,7 @@
 
 class Model {
 public:
-	Model(bool userStarts, char * map, player_t first, gui g); //pasarle el path del mapa? o el mapa ya construido? pasarle gui!
+	Model(const char * map, player_t first, gui g); //pasarle el path del mapa? o el mapa ya construido? pasarle gui!
 	~Model() { ; }
 
 	bool validMove(Point p0, Point pf);		//estas es cuando llegan por paquete del otro jugador

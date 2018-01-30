@@ -12,13 +12,13 @@ Unit * parseUnit(std::string s, Point p, player_t first);
 Building * parseBuilding(std::string s, Point p, player_t first);
 
 
-Map::Map(char * csvPath, player_t first, gui * g)
+Map::Map(const char * csvPath, player_t first)
 {
 	Csv csv(csvPath);
 	valid = false;
 	memset((void *)board, 0, B_H*B_W*sizeof(void *)); //pongo todos en null
 
-	if (g != nullptr && csv.getColumns() == B_W && csv.getRows() == B_H) {
+	if (csv.getColumns() == B_W && csv.getRows() == B_H) {
 	//aca ya verifico que estaba bien el archivo
 		valid = true;
 		for (unsigned int i = 0; i < B_H && valid; i++) {
@@ -76,8 +76,6 @@ Map::Map(char * csvPath, player_t first, gui * g)
 					if (hasUnit(p)) {
 						removeFog(p, board[p.row][p.col]->u->getPlayer());
 					}
-
-					board[p.row][p.col]->setObserver(g->tileObserverFactory(board[p.row][p.col]));
 				}
 			}
 		}

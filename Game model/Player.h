@@ -12,7 +12,7 @@ public:
 	Player(player_t who);
 	~Player() { ; }
 
-	bool buy(unit_t type, Point p);
+	Unit * buy(unit_t type, Point p);
 	void collectIncome();
 	bool wasDefeated();
 	std::list<Unit *> getPossiblePurchases();

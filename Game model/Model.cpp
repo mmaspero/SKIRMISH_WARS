@@ -2,10 +2,18 @@
 #include "FSM/States/UserMoving.h"
 #include "FSM\States\OpponentMoving.h"
 
-Model::Model(bool userStarts, char * map, player_t first, gui g) : user(USER), opponent(OPPONENT),
-																			m(map, first, &g), g(g)
+Model::Model(const char * map, player_t first, gui g) : user(USER), opponent(OPPONENT), m(map, first), g(g)
 {
 	if (m.isValid()) {
+		user.setObserver(g.playerObserverFactory(&user));
+		opponent.setObserver(g.playerObserverFactory(&opponent));
+		
+		for (unsigned int i = 0; i < B_H; i++) {
+			for (unsigned int j = 0; j < B_W; j++) {
+				m.board[i][j]->setObserver(g.tileObserverFactory(m.board[i][j]));
+			}
+		}
+
 		GenericState * firstState = nullptr;
 		if (first == USER) {
 			firstState = new UserMoving();
@@ -16,7 +24,6 @@ Model::Model(bool userStarts, char * map, player_t first, gui g) : user(USER), o
 		fsm.setFirstState(firstState);
 		active = nullptr;
 		selected = nullptr;
-
 	}
 }
 
