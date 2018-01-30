@@ -1,0 +1,171 @@
+
+#include "servidor.h"
+
+//servidor()
+//recive como paramtro un int, que representa el puerto que el srvidor escucha,
+//en caso que ese puerto no sea indicado, el puerto por defecto es 12345.
+//
+servidor::servidor(UINT32 port)
+{
+	portNumber = port;//asigno el puerto al servidor
+	ioServer = new boost::asio::io_service();//creo el io_service del servidor
+	ServerSocket = new boost::asio::ip::tcp::socket(*ioServer);//creo el socket del servidor
+	conectionServerAceptor = new boost::asio::ip::tcp::acceptor(*ioServer,
+		boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), portNumber));//creo el aceptor del servidor
+	//std::cout << std::endl << "El puerto " << portNumber << " se creo" << std::endl;
+	
+}
+
+servidor::~servidor()
+{
+	try { 
+		conectionServerAceptor->close();
+		ServerSocket->close();
+		delete conectionServerAceptor;
+		delete ServerSocket;
+		delete ioServer;
+	}
+	catch (const std::exception& e) { ; }
+}
+
+//waitForCliente()
+//metodo bloqueante, que espera la conexion del cliente.
+//
+
+void servidor::waitForCliente()
+{
+	
+	conectionServerAceptor->accept(*ServerSocket);
+	ServerSocket->non_blocking(true);
+
+	
+}
+
+
+//ClientIsConected()
+//Metodo no bloqueante que espera la coneccion de un cliente.
+//si devuelve true el cliente se conecto, si nadie se conecto devuelve false.
+
+bool servidor::ClientIsConected()
+{
+	boost::system::error_code ec;
+	conectionServerAceptor->non_blocking(true);
+	conectionServerAceptor->accept(*ServerSocket,ec);
+	if (ec)
+	{
+		//un error ocurrio
+		return false;
+	}
+	else
+	{
+		ServerSocket->non_blocking(true);
+		return true;
+	}
+	
+}
+//receiveDataForCliente
+//previamente se deve llamar a waitforcleinte()
+//recive como paramteros un arreglo de char(buffer) y una int,
+//con la cantidad de elementos de dicho arreglo.
+//si se puedo recivir toda la informacion devuelve un true, caso contrario
+//devuelve un false.
+int servidor::receiveDataForCliente(char * buffer_t, int bufferSize)
+{
+	int longitudDelMensaje = 0;
+	boost::system::error_code error;
+	char bufferTemp[900];
+	
+	do
+	{
+		longitudDelMensaje=ServerSocket->read_some(boost::asio::buffer(bufferTemp, 900), error);
+	} while (error.value() == WSAEWOULDBLOCK);
+		
+	if (error)
+	{
+		longitudDelMensaje = MY_ERROR;
+	} else if (longitudDelMensaje <= bufferSize)//evaluo si entra en lo que me mandaron
+	{
+		for (int i = 0; i < longitudDelMensaje; i++)
+		{
+			buffer_t[i] = bufferTemp[i];
+		}
+
+	}
+	else
+	{
+		longitudDelMensaje = MY_ERROR;
+	}
+
+	return longitudDelMensaje;
+}
+
+
+
+
+
+//previamente se deve llamar a waitforcleinte()
+//recive como paramteros un arreglo de char(buffer) y una int,
+//con la cantidad de elementos de dicho arreglo.
+//devuelve: true, si se recivio algo. false, si no se recivio nada
+//nota: NO ES BLOQUEANTE!!!!!!!!!!!!!!!!!!!!!!!!
+int servidor::nonBlockinReceiveDataForCliente(char * buffer_t, int bufferSize)
+{
+	
+	int longitudDelMensaje = 0;
+	boost::system::error_code error;
+	char bufferTemp[900];
+
+	longitudDelMensaje=ServerSocket->read_some(boost::asio::buffer(bufferTemp,900),error);
+	
+	if (error.value() == WSAEWOULDBLOCK)//si no se leyo nada devuelvo MY_EMPTY
+	{
+		longitudDelMensaje = MY_EMPTY;
+	}
+	else if(error)
+	{
+		longitudDelMensaje = MY_ERROR;
+	}
+	else if (longitudDelMensaje != 0)//si se recivio mensaje
+	{
+		if (longitudDelMensaje <= bufferSize)//evaluo si entra en lo que me mandaron
+		{
+			for (int i = 0; i < longitudDelMensaje; i++)
+			{
+				buffer_t[i] = bufferTemp[i];
+			}
+
+		}
+		else
+		{
+			longitudDelMensaje = MY_ERROR;
+		}
+		
+	}
+
+	return longitudDelMensaje;
+}
+
+
+
+//sendData()
+//recive un arreglo de char, que son lo elementos que mandara. tambien recive
+//un int con la cantidad de elementos que se necesitan enviar
+//devuelve false si no se pudo enviar la infromcaion, esto ocurre si hubo un error entre cliente y servidor
+bool servidor::sendData(char * dataToSend_t, unsigned int sizeData)
+{
+	size_t len = 0;
+	boost::system::error_code error;
+
+	len = ServerSocket->write_some(boost::asio::buffer(dataToSend_t, sizeData), error);
+	
+	if ((error.value() == WSAEWOULDBLOCK) || error)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+	
+}
+
