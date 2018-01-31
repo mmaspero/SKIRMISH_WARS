@@ -11,7 +11,8 @@ unsigned int Rocket::restoreMPs()
 	movingPoints = RO_MP;
 	return movingPoints;
 }
-int Rocket::getTerrainMod(terrain_t t)
+
+unsigned int Rocket::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

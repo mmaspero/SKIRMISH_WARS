@@ -9,15 +9,19 @@
 void setCapturePoints(building_t type, unsigned int& cp);
 
 
-Building::Building(building_t type, player_t player)
+Building::Building(building_t type, player_t player) : type(type)
 {
 	this->player = player;
-	this->type = type;
 
 	setCapturePoints(type, capturePoints);
 }
 
 Building :: ~Building() { ; }
+
+building_t Building::getType()
+{
+	return type;
+}
 
 player_t Building::getPlayer()
 {

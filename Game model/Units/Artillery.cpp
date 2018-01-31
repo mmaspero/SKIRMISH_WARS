@@ -11,7 +11,8 @@ unsigned int Artillery::restoreMPs()
 	movingPoints = AR_MP;
 	return movingPoints;
 }
-int Artillery::getTerrainMod(terrain_t t)
+
+unsigned int Artillery::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

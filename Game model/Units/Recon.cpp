@@ -11,7 +11,8 @@ unsigned int Recon::restoreMPs()
 	movingPoints = RE_MP;
 	return movingPoints;
 }
-int Recon::getTerrainMod(terrain_t t)
+
+unsigned int Recon::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

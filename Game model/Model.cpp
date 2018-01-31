@@ -1,16 +1,23 @@
 #include "Model.h"
 #include "FSM/States/UserMoving.h"
 #include "FSM\States\OpponentMoving.h"
+#include "FSM/Events/UnitSelection.h"
+#include "FSM/Events/UserAttack.h"
+#include "FSM\Events\UserMove.h"
+#include "FSM/Events/UserPurchase.h"
+#include "FSM/Events/OpponentAttack.h"
+#include "FSM/Events/OpponentMove.h"
+#include "FSM/Events/OpponentPurchase.h"
 
-Model::Model(const char * map, player_t first, gui g) : user(USER), opponent(OPPONENT), m(map, first), g(g)
+Model::Model(const char * map, player_t first, gui * g) : user(USER), opponent(OPPONENT), m(map, first), g(g)
 {
-	if (m.isValid()) {
-		user.setObserver(g.playerObserverFactory(&user));
-		opponent.setObserver(g.playerObserverFactory(&opponent));
+	if (g != nullptr && m.isValid()) {
+		user.setObserver(g->playerObserverFactory(&user));
+		opponent.setObserver(g->playerObserverFactory(&opponent));
 		
 		for (unsigned int i = 0; i < B_H; i++) {
 			for (unsigned int j = 0; j < B_W; j++) {
-				m.board[i][j]->setObserver(g.tileObserverFactory(m.board[i][j]));
+				m.board[i][j]->setObserver(g->tileObserverFactory(m.board[i][j]));
 			}
 		}
 
@@ -24,67 +31,93 @@ Model::Model(const char * map, player_t first, gui g) : user(USER), opponent(OPP
 		fsm.setFirstState(firstState);
 		active = nullptr;
 		selected = nullptr;
+
+		SkirmishEvent::setModel(this);
 	}
 }
 
-bool Model::validMove(Point p0, Point pf)
+Model::~Model()
 {
-	bool valid = false;
+	;
+}
+
+GenericEvent * Model::validateOpponentAttack(attack att)
+{
+	GenericEvent * e = nullptr;
 	
-	if (fsm.state() == OPP_MOVING) {
-		if (m.hasUnit(p0) && m.isInMap(pf) && !m.hasUnit(pf)) {
-			Unit * u = m.getUnit(p0);
-			if (u->getPlayer() == OPPONENT) {
-				u->getPossibleActions(moves, attacks);
+	if (fsm.state() == OPP_MOVING && m.hasUnit(att.getOrigin()) && m.getUnit(att.getOrigin())->getPlayer() == OPPONENT
+		&& m.getUnit(att.getOrigin())->isActionValid(&Attack(att.getOrigin(), att.getDestination()))) {
+		e = new OpponentAttack(att.getOrigin(), att.getDestination(), att.getDice());
+	}
+	
+	return e;
+}
 
-				std::list<Action>::iterator it = moves.begin();
-				while (it != moves.end() && it->whereTo != pf) {
-					it++;
-				}
+GenericEvent * Model::validateOpponentMove(move mov)
+{
+	GenericEvent * e = nullptr;
+	
+	if (fsm.state() == OPP_MOVING && m.hasUnit(mov.getOrigin()) && m.getUnit(mov.getOrigin())->getPlayer() == OPPONENT
+		&& m.getUnit(mov.getOrigin())->isActionValid(&Action(ACT_MOVE, mov.getDestination()))) {
+		e = new OpponentMove(mov.getOrigin(), mov.getDestination());
+	}
 
-				if (it != moves.end()) {
-					valid = true;
-				}
-				moves.clear();
-				attacks.clear();
-			}
+	return e;
+}
+
+GenericEvent * Model::validateOpponentPurchase(purchase purch)
+{
+	GenericEvent * e = nullptr;
+	
+	if (m.canPurchaseUnit(purch.getPossition(), OPPONENT)) {
+		//aca ya se que el oponente tiene una fabrica vacia ahi, falta ver si le alcanza la plata
+		unit_t type = parseUnitString(purch.getID());
+		if (Unit::getCost(type) <= opponent.getMoney()) {
+			e = new OpponentPurchase(purch.getPossition(), type);
 		}
 	}
 
-	return valid;
+	return e;
 }
 
-bool Model::validAttack(Point p0, Point pf)
+GenericEvent * Model::getTileEvent(Point p)
 {
-	bool valid = false;
+	GenericEvent * e = nullptr;
 
-	if (fsm.state() == OPP_MOVING) {
-		if (m.hasUnit(p0) && m.hasUnit(pf)) {
-			Unit * attacker = m.getUnit(p0);
-			Unit * attacked = m.getUnit(pf);
-			if (attacker->getPlayer() == OPPONENT && attacked->getPlayer() == USER) {
-				attacker->getPossibleActions(moves, attacks);
+	switch (fsm.state()) {
 
-				std::list<Attack>::iterator it = attacks.begin();
-				while (it != attacks.end() && it->whereTo != pf) {
-					it++;
+	case USER_MOVING: {
+		if (m.hasUnit(p) && m.getUnit(p)->getPlayer() == USER && m.getUnit(p)->hasValidActions()) {
+			e = new UnitSelection(p);
+		}
+	} break;
+
+	case UNIT_SELECTED: {
+		for (std::list<Action *>::iterator it = actions.begin(); it != actions.end(); it++) {
+			if ((*it)->whereTo == p) {
+				if ((*it)->type == ACT_ATTACK) {
+					e = new UserAttack(selected->getPosition(), p);
 				}
-
-				if (it != attacks.end()) {
-					valid = true;
+				else {
+					e = new UserMove(selected->getPosition(), p);
 				}
-				moves.clear();
-				attacks.clear();
+			}
+			else {
+				e = new SkirmishEvent(EV_UNSELECT);
 			}
 		}
+	} break;
+
+	case PURCHASE_SELECTED: {
+		if (m.canPurchaseUnit(p, USER)) {
+			e = new UserPurchase(p, active->getType());
+		}
+		else {
+			e = new SkirmishEvent(EV_UNSELECT);
+		}
+	} break;
+
 	}
 
-	return valid;
+	return e;
 }
-
-bool Model::validAction(action_t type, Point p0, Point pf)
-{
-	return (type == ATTACK ? validAttack(p0, pf) : validMove(p0, pf));
-}
-
-

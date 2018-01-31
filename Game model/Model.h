@@ -4,31 +4,29 @@
 #include "FSM\SkirmishFsm.h"
 #include "Map.h"
 #include <list>
-#include "Move.h"
-#include "Attack.h"
+#include "Action.h"
 #include "../view/gui.h"
+#include "../Controler/package/packages.h"
 
 class Model {
 public:
-	Model(const char * map, player_t first, gui g); //pasarle el path del mapa? o el mapa ya construido? pasarle gui!
-	~Model() { ; }
+	Model(const char * map, player_t first, gui * g); //setea el model para los eventos skirmish!
+	~Model();
 
-	bool validMove(Point p0, Point pf);		//estas es cuando llegan por paquete del otro jugador
-	bool validAttack(Point p0, Point pf);
-	bool validAction(action_t type, Point p0, Point pf);
-
-	GenericEvent * tileSelected(Point p);	//puede devolver null si esa tile no es nada 
+	GenericEvent * validateOpponentAttack(attack att);		//estas es cuando llegan por paquete del otro jugador
+	GenericEvent * validateOpponentMove(move mov);
+	GenericEvent * validateOpponentPurchase(purchase purch);
+	GenericEvent * getTileEvent(Point p);			//puede devolver null si esa tile no es nada 
 
 private:
 	Unit * active;		//unidad activa (es decir, ya la use y si decido usar otra no puedo usarla mas)
 	Tile * selected;	//la primer tile seleccionada para una accion (capaz convendria tener solo un point, ver)
-	std::list<Action> moves;
-	std::list<Attack> attacks;
+	std::list<Action *> actions;
 
 	Player user;
 	Player opponent;
 	Map m;
 	
 	SkirmishFSM fsm;
-	const gui& g;
+	gui * g;
 };

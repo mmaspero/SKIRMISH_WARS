@@ -11,7 +11,8 @@ unsigned int MedTank::restoreMPs()
 	movingPoints = MT_MP;
 	return movingPoints;
 }
-int MedTank::getTerrainMod(terrain_t t)
+
+unsigned int MedTank::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

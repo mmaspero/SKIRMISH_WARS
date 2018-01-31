@@ -11,7 +11,8 @@ unsigned int Mech::restoreMPs()
 	movingPoints = ME_MP;
 	return movingPoints;
 }
-int Mech::getTerrainMod(terrain_t t)
+
+unsigned int Mech::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

@@ -8,13 +8,14 @@ public:
 
 	~Building();	//no hace nada
 
+	building_t getType();
 	player_t getPlayer();
 	bool isBeingCaptured();
 	bool capture(bool isReduced, player_t player); //devuelve true si cambio de equipos
 	void uncapture();
 
 protected:
-	building_t type;
+	const building_t type;
 	player_t player;
 	unsigned int capturePoints;
 };

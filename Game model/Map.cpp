@@ -3,7 +3,6 @@
 #include "Unit.h"
 #include "../Csv.h"
 #include "unitInfo.h"
-#include <unordered_map>
 #include <algorithm>
 #include "../view/gui.h"
 
@@ -131,7 +130,7 @@ unitType_t Map::getBasicType(Point p)
 	if (valid && isInMap(p) && (board[p.row][p.col]->u) != nullptr)
 		return ((board[p.row][p.col])->u)->getBasicType();
 	else
-		return N_B_TYPES;
+		return N_BASIC_U_TYPES;
 }
 
 Unit * Map::getUnit(Point p)
@@ -164,6 +163,11 @@ bool Map::hasFog(Point p, player_t player)
 		return (player==USER? (board[p.row][p.col]->status == FOG) : !(board[p.row][p.col]->opponentCanSee));
 	else
 		return false;
+}
+
+bool Map::canPurchaseUnit(Point p, player_t player)
+{
+	return (valid && isInMap(p) && board[p.row][p.col]->canPurchaseUnit(player));
 }
 
 bool Map::updateUnitPos(Unit * u, Point p, bool intoAPC)
@@ -252,15 +256,7 @@ bool Map::isInMap(Point p)
 terrain_t parseTerrain(std::string s)
 {
 	if (s.size() == 1) {
-		switch (s[0]) {
-		case GRASS_CHR:		return GRASS;
-		case RIVER_CHR:		return RIVER;
-		case ROAD_CHR:		return ROAD;
-		case FOREST_CHR:	return FOREST;
-		case HILL_CHR:		return HILL;
-
-		default:			return N_TERRAINS;
-		}
+		return parseTerrainChar(s[0]);
 	}
 	else
 		return N_TERRAINS;
@@ -269,26 +265,15 @@ terrain_t parseTerrain(std::string s)
 Unit * parseUnit(std::string s, Point p, player_t first)
 {
 	Unit * u = nullptr;
+	unit_t type = N_UNIT_TYPES;
 
-	if (s.size() == 3 && (s[2] == '1' || s[2] == '2')) {
-		bool isMine = (s[2] == '1' && first == USER);
+	if (s.back() == '1' || s.back() == '2') {
+		bool isMine = (s.back() == '1' && first == USER);
 		s.pop_back();
 
-		std::unordered_map<std::string, unit_t> units;
-		units.emplace(std::string(RE_STR), RECON);
-		units.emplace(std::string(RO_STR), ROCKET);
-		units.emplace(std::string(ME_STR), MECH);
-		units.emplace(std::string(IN_STR), INFANTRY);
-		units.emplace(std::string(TA_STR), TANK);
-		units.emplace(std::string(AR_STR), ARTILLERY);
-		units.emplace(std::string(AA_STR), ANTIAIR);
-		units.emplace(std::string(AP_STR), APC);
-		units.emplace(std::string(MT_STR), MEDTANK);
-
-
-		std::unordered_map<std::string, unit_t>::const_iterator it = units.find(s);
-		if (it != units.end()) {
-			u = Unit::factory(it->second, p, isMine);
+		type = parseUnitString(s);
+		if (type < N_UNIT_TYPES) {
+			u = Unit::factory(type, p, isMine);
 		}
 	}
 
@@ -301,13 +286,11 @@ Building * parseBuilding(std::string s, Point p, player_t first)
 
 	if (s.size() == 2 && (s[1] >= '0' || s[1] <= '2')) {
 		player_t player = (s[1] == '0' ? NEUTRAL : (s[1] == '1' && first == USER ? USER : OPPONENT));
-
-		switch (s[0]) {
-		case HQ_CHR: { b = new Building(HEADQUARTERS, player); } break;
-		case FACTORY_CHR: { b = new Building(FACTORY, player); } break;
-		case CITY_CHR: { b = new Building(CITY, player); } break;
+		building_t type = parseBuildingChar(s[0]);
+		
+		if (type < N_BUILDINGS) { 
+			b = new Building(type, player);
 		}
-
 	}
 
 	return b;

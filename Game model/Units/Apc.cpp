@@ -1,7 +1,7 @@
 #include "Apc.h"
 #include "../unitInfo.h"
 #include "../Attack.h"
-#include "../Move.h"
+#include "../Action.h"
 #include <iterator>
 
 Apc::Apc(Point position, bool isMine) : Unit(APC, position, isMine, AP_COST, AP_DEFENSE, 0, 0)
@@ -27,7 +27,7 @@ unsigned int Apc::restoreMPs()
 	return movingPoints;
 }
 
-int Apc::getTerrainMod(terrain_t t)
+unsigned int Apc::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:
@@ -71,20 +71,21 @@ void Apc::healLoadedUnits()
 	}
 }
 
-void Apc::getPossibleUnloads(std::list<Action>& ul)
+void Apc::getPossibleUnloads(std::list<Action *>& ul)
 {
 	if (!loadedUnits.empty()) {
 		Unit * u = loadedUnits.back();
-		std::list<Action> m;
-		std::list<Attack> a; //para poder llamar a getPossibleActions
-		u->getPossibleActions(m, a);
+		std::list<Action *> a;
+		u->getPossibleActions(a);
 		
-		while (!m.empty()) {
-			Action move = m.front();
-			if (position.orthogonalDistanceFrom(move.whereTo) <= 1) {
-				ul.push_back(move);
+		while (!a.empty()) {
+			Action * action = a.front();
+			if (action->type != ACT_ATTACK && position.orthogonalDistanceFrom(action->whereTo) <= 1) {
+				Action * unload = new Action(ACT_UNLOAD, action->whereTo, action->mps);
+				ul.push_back(action);
 			}
-			m.pop_front();
+			delete action;
+			a.pop_front();
 		}
 	}
 }
@@ -109,7 +110,7 @@ bool Apc::unload(Point whereTo)
 	if (loadedUnits.size() != 0 && position.orthogonalDistanceFrom(whereTo) == 1) {
 		Unit * u = loadedUnits.back();
 		loadedUnits.pop_back();
-		u->move(Action(MOVE, whereTo, 0));
+		u->move(Action(ACT_MOVE, whereTo, 0));
 	}
 
 	return valid;

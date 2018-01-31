@@ -4,11 +4,9 @@
 #include "types.h"
 #include "../Point.h"
 #include "unitInfo.h"
-#include "../view/gui.h"
 
 class Tile;
 class Unit;
-class gui;
 
 class Map 
 {
@@ -26,6 +24,7 @@ public:
 	bool hasUnit(Point p);
 	bool hasBuilding(Point p);
 	bool hasFog(Point p, player_t player);
+	bool canPurchaseUnit(Point p, player_t player);	//no le da bola al costo, solo que haya una fabrica vacia
 
 	void update();	//FALTA QUE HAGA EL UPDATE SOLO DEL JUGADOR QUE EMPIEZA SU TURNO! que reciba player_t
 	bool updateUnitPos(Unit * u, Point newPosition, bool intoAPC = false);	//llamarla antes de cambiar la posicion de la unidad!

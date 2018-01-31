@@ -11,7 +11,8 @@ unsigned int Tank::restoreMPs()
 	movingPoints = TA_MP;
 	return movingPoints;
 }
-int Tank::getTerrainMod(terrain_t t)
+
+unsigned int Tank::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

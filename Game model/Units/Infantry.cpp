@@ -11,7 +11,8 @@ unsigned int Infantry::restoreMPs()
 	movingPoints = IN_MP;
 	return movingPoints;
 }
-int Infantry::getTerrainMod(terrain_t t)
+
+unsigned int Infantry::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

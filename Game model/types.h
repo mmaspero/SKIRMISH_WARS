@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 #define B_W	16	//tamanio del mapa
 #define	B_H	12
@@ -7,7 +8,7 @@
 typedef enum players { NEUTRAL, USER, OPPONENT } player_t;
 typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING } playerStatus_t;
 typedef enum tileStatus { VISIBLE, FOG, SELECTED, CAN_ATTACK, CAN_MOVE } tileStatus_t;
-typedef enum actions { MOVE, LOAD, UNLOAD, ATTACK, N_ACTIONS} action_t;
+typedef enum actions { ACT_MOVE, ACT_LOAD, ACT_UNLOAD, ACT_ATTACK, N_ACTIONS} action_t;
 
 typedef enum buildings { HEADQUARTERS, FACTORY, CITY, N_BUILDINGS } building_t;
 #define FACTORY_CHR	'm'	//ademas se especifica el jugador para todos los edificios
@@ -21,7 +22,7 @@ typedef enum terrains { GRASS, RIVER, ROAD, FOREST, HILL, N_TERRAINS } terrain_t
 #define FOREST_CHR	'f'
 #define HILL_CHR	'h'
 
-typedef enum unitTypes { WHEEL, FOOT, TREAD, N_B_TYPES } unitType_t;
+typedef enum unitTypes { WHEEL, FOOT, TREAD, N_BASIC_U_TYPES } unitType_t;
 typedef enum units {
 	RECON, ROCKET,							//	WHEEL
 	MECH, INFANTRY,							//	FOOT
@@ -40,3 +41,7 @@ typedef enum units {
 #define MT_STR		"mt"
 
 #define UNIT_TOKEN	'+'	//caracter que separa el terreno/edificio de la unidad
+
+unit_t parseUnitString(std::string s);			//devuelve N_UNIT_TYPES si no era valida
+terrain_t parseTerrainChar(char c);				//devuelve N_TERRAINS si no era valido
+building_t parseBuildingChar(char c);			//devuelve N_BUILDINGS si no era valido

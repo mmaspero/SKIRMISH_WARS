@@ -11,7 +11,8 @@ unsigned int AntiAir::restoreMPs()
 	movingPoints = AA_MP;
 	return movingPoints;
 }
-int AntiAir::getTerrainMod(terrain_t t)
+
+unsigned int AntiAir::getTerrainMod(terrain_t t)
 {
 	switch (t) {
 	case GRASS:

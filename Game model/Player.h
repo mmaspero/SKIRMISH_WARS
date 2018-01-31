@@ -1,6 +1,5 @@
 #pragma once
 #include "Unit.h"
-#include <list>
 #include "../view/playerObserver.h"
 
 class Unit;
@@ -10,14 +9,15 @@ public:
 	friend class playerObserver;
 
 	Player(player_t who);
-	~Player() { ; }
+	~Player();
 
 	Unit * buy(unit_t type, Point p);
 	void collectIncome();
-	bool wasDefeated();
-	std::list<Unit *> getPossiblePurchases();
 
 	void setObserver(playerObserver * obs);
+
+	bool wasDefeated();
+	unsigned int getMoney();
 
 private:
 	unsigned int money;
@@ -27,6 +27,4 @@ private:
 	const player_t who;
 	playerStatus_t status;
 	playerObserver * obs;
-
-	static std::list<Unit *> unitInfo;
 };

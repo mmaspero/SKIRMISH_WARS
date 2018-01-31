@@ -78,6 +78,11 @@ Building * Tile::getBuilding()
 	return b;
 }
 
+bool Tile::canPurchaseUnit(player_t player)
+{
+	return (u == nullptr && b != nullptr && b->getPlayer() == player && b->getType() == FACTORY);
+}
+
 bool Tile::setUnit(Unit * u)
 {
 	if (this->u == nullptr) {

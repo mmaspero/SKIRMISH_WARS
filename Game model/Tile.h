@@ -23,6 +23,7 @@ public:
 	terrain_t getTerrain();	//si tiene edificio va a devolver ROAD
 	Unit * getUnit();
 	Building * getBuilding();
+	bool canPurchaseUnit(player_t player);
 
 	bool setUnit(Unit * u);			//estas funciones verifican que no metas dos edificios o dos units en la misma tile
 	bool setBuilding(Building * b);
