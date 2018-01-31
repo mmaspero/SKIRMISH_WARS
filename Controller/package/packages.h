@@ -1,6 +1,6 @@
 #pragma once
 #include "genericPackage.h"
-#include "point.h"
+#include"../../Point.h"
 #include"../../Game model/types.h"
 #include <iostream>
 //*********tipos de paquetes de datos
@@ -73,12 +73,12 @@ class move : public genericPackage
 {
 public:
 	move(unsigned char rowOrigin, unsigned char columnOrigin, unsigned char rowDestination, unsigned char columnDestination);
-	move(point origin, point destination);
-	point getOrigin() { return origin;};
-	point getDestination() { return destination;};
+	move(Point origin, Point destination);
+	Point getOrigin() { return origin;};
+	Point getDestination() { return destination;};
 private:
-	point origin;
-	point destination;
+	Point origin;
+	Point destination;
 };
 
 
@@ -86,13 +86,13 @@ class attack : public genericPackage
 {
 public:
 	attack(unsigned char dice, unsigned char rowOrigin, unsigned char columnOrigin, unsigned char rowDestination, unsigned char columnDestination);
-	attack(unsigned char dice, point origin, point destination);
-	point getOrigin() { return origin; };
-	point getDestination() { return destination; };
+	attack(unsigned char dice, Point origin, Point destination);
+	Point getOrigin() { return origin; };
+	Point getDestination() { return destination; };
 	unsigned char getDice() { return dice; };
 private:
-	point origin;
-	point destination;
+	Point origin;
+	Point destination;
 	unsigned char dice;
 };
 
@@ -100,11 +100,11 @@ class purchase : public genericPackage
 {
 public:
 	purchase(std::string ejercitoID, unsigned char row, unsigned char column);
-	purchase(std::string ejercitoID, point possition);
-	point getPossition() { return possition; };
+	purchase(std::string ejercitoID, Point possition);
+	Point getPossition() { return possition; };
 	std::string getEjercitoId() { return ejercitoID; };
 private:
-	point possition;
+	Point possition;
 	std::string ejercitoID;
 
 };

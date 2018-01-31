@@ -16,13 +16,13 @@ mapIs::mapIs(std::string mapName, unsigned char checksum)
 move::move(unsigned char rowOrigin, unsigned char columnOrigin, unsigned char rowDestination, unsigned char columnDestination)
 {
 	origin.row = rowOrigin;
-	origin.column = columnOrigin;
+	origin.col = columnOrigin;
 	destination.row = rowDestination;
-	destination.column = columnDestination;
+	destination.col= columnDestination;
 	type = MOVE;
 }
 
-move::move(point origin, point destination)
+move::move(Point origin, Point destination)
 {
 	this->origin = origin;
 	this->destination = destination;
@@ -32,14 +32,14 @@ move::move(point origin, point destination)
 attack::attack(unsigned char dice, unsigned char rowOrigin, unsigned char columnOrigin, unsigned char rowDestination, unsigned char columnDestination)
 {
 	origin.row = rowOrigin;
-	origin.column = columnOrigin;
+	origin.col = columnOrigin;
 	destination.row = rowDestination;
-	destination.column = columnDestination;
+	destination.col = columnDestination;
 	this->dice = dice;
 	type = ATTACK;
 }
 
-attack::attack(unsigned char dice, point origin, point destination)
+attack::attack(unsigned char dice, Point origin, Point destination)
 {
 	this->origin = origin;
 	this->destination = destination;
@@ -102,11 +102,11 @@ purchase::purchase(std::string ejercitoID, unsigned char row, unsigned char colu
 {
 	this->ejercitoID = ejercitoID;
 	this->possition.row = row;
-	this->possition.column = column;
+	this->possition.col= column;
 	this->type = PURCHASE;
 }
 
-purchase::purchase(std::string ejercitoID, point possition)
+purchase::purchase(std::string ejercitoID, Point possition)
 {
 	this->ejercitoID = ejercitoID;
 	this->possition = possition;
