@@ -170,6 +170,11 @@ gui::~gui()
 
 tileObserver * gui::tileObserverFactory(Tile * t)
 {
+	if (t == nullptr)
+	{
+		return nullptr;
+	}
+
 	list<contentBox *>::iterator itBoard = displaySections.begin();
 	list<contentBox *>::iterator itToolbox = displaySections.begin();
 
@@ -193,13 +198,13 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 	toolbox * toolboxP = (toolbox *)(*itToolbox);
 
 	//TODO: chequear que Tile * t no sea nullptr
-	unsigned int tileY = t->getPosition().row;
-	unsigned int tileX = t->getPosition().col;
+	unsigned int tileRow = t->getPosition().row;
+	unsigned int tileCol = t->getPosition().col;
 
 	//Si ya se creo el tileButton de esa posicion, indicar que hubo error.
-	if (boardP->getTileButton(tileX, tileY) != nullptr)
+	if (boardP->getTileButton(tileRow, tileCol) != nullptr)
 	{
-		cout << "No se puede crear tileObserver en (x,y) = (" << tileX << "," << tileY <<") porque ya hay un tileObserver para esta tile" << endl;
+		cout << "No se pudo crear tileObserver en (row,col) = (" << tileRow << "," << tileCol <<") porque ya hay un tileObserver para esta tile" << endl;
 		return nullptr;
 	}
 	
@@ -208,10 +213,15 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 			
 	ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -tileSide / 4, 0);
 	
-
-			
 	boardP->setTileButton(t);
-	return new tileObserver(t, boardP->getTileButton(tileX, tileY), toolboxP);	//TODO: control de error :)
+	
+	tileButton * tileButtonP = boardP->getTileButton(tileRow, tileCol);
+	if(tileButtonP == nullptr || !tileButtonP->isValid())
+	{
+		cout << "No se pudo crear tileObserveren (row,col) = (" << tileRow << "," << tileCol << ") ya que no se pudo crear el boton en esta posicion" << endl;
+		return nullptr;
+	}
+	return new tileObserver(t, boardP->getTileButton(tileRow, tileCol), toolboxP);
 }
 
 playerObserver * gui::playerObserverFactory(Player * p)
@@ -221,12 +231,12 @@ playerObserver * gui::playerObserverFactory(Player * p)
 
 	//Avanzar hasta que se halle el Scoreboard * o hasta recorrer toda la lista.
 	for (itScoreboard = displaySections.begin();
-		itScoreboard != displaySections.end() || (*itScoreboard)->getType() != BOARD;
+		itScoreboard != displaySections.end() && (*itScoreboard)->getType() != SCOREBOARD;
 		itScoreboard++) {}
 
 	//Avanzar hasta que se halle el Toolbox * o hasta recorrer toda la lista.
 	for (itToolbox = displaySections.begin();
-		itToolbox != displaySections.end() || (*itToolbox)->getType() != TOOLBOX;
+		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
 		itToolbox++) {}
 
 	//TODO: validacion de parametros enviados, y validacion de que no haya problemas en el constructor

@@ -27,12 +27,12 @@ float Board::getTileSide()
 	return tileSide;
 }
 
-tileButton * Board::getTileButton(unsigned int tileX, unsigned int tileY)
+tileButton * Board::getTileButton(unsigned int tileRow, unsigned int tileCol)
 {
-	if (tileX <= B_W && tileY <= B_H)
+	if (tileCol <= B_W && tileRow <= B_H)
 	{
 		list<button *>::iterator it;
-		for (it = buttonList.begin(); it != buttonList.end() && ((tileButton *)(*it))->getTilePosition() != Point(tileX, tileY); it++) {}
+		for (it = buttonList.begin(); it != buttonList.end() && ((tileButton *)(*it))->getTilePosition() != Point(tileRow, tileCol); it++) {}
 		if (it == buttonList.end())	//si no aparecio un boton correspondiente a la tile con oordenadas tileX, tileY
 		{
 			return nullptr;
@@ -50,11 +50,13 @@ tileButton * Board::getTileButton(unsigned int tileX, unsigned int tileY)
 
 void Board::setTileButton(Tile * tile)
 {
+	Point tilePos = tile->getPosition();
+
 	//crear un nuevo boton con la imagen recibida
-	tileButton * tB = new tileButton(BOARD_LEFT_X + tile->getPosition().col * tileSide, 
-									BOARD_TOP_Y + tile->getPosition().row * tileSide, 
+	tileButton * tB = new tileButton(BOARD_LEFT_X + tilePos.col * tileSide, 
+									BOARD_TOP_Y + tilePos.row * tileSide, 
 									tileSide, tileSide,
-									tile->getPosition());
+									tilePos);
 	if (tB->isValid()) 
 	{
 		buttonList.push_back(tB);	//TODO: avisar si es que no se cargo
@@ -63,8 +65,8 @@ void Board::setTileButton(Tile * tile)
 
 void Board::drawContent()
 {
-	al_draw_filled_rectangle(BOARD_LEFT_X, BOARD_TOP_Y, BOARD_LEFT_X + B_W * tileSide, 
-		BOARD_TOP_Y + B_H * tileSide, { 0,0,0,1 });	//TODO: placeholder del tablero
+	//al_draw_filled_rectangle(BOARD_LEFT_X, BOARD_TOP_Y, BOARD_LEFT_X + B_W * tileSide, 
+	//	BOARD_TOP_Y + B_H * tileSide, { 0,0,0,1 });	//TODO: placeholder del tablero
 
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 	{

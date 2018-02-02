@@ -7,6 +7,12 @@
 
 #include "paths.h"
 
+#define GRASS_TEXTURE "grassTexture.png"
+#define RIVER_TEXTURE "riverTexture.png"
+#define ROAD_TEXTURE  "roadTexture.png"
+#define FOREST_TEXTURE "forestTexture.jpg"
+#define HILL_TEXTURE "hillTexture.png"
+
 using namespace std;
 
 tileObserver::tileObserver(Tile * t, tileButton * tButton, toolbox * tBox)
@@ -30,15 +36,20 @@ void tileObserver::update()
 	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
 	al_set_target_bitmap(buttonBmp);
 
-	if (t->status = FOG)
+//	if (t->status = FOG)
 	{
 		al_clear_to_color(al_map_rgb(0, 0, 0));	//TODO: sacar magic number
 	}
-	else
+//	else
 	{
 		terrain_t terrainType = t->t;
-		unit_t unitType = t->u->getType();
-		unitType_t unitBasicType = t->u->getBasicType();
+		unit_t unitType;
+		unitType_t unitBasicType;
+		if (t->hasUnit())
+		{
+			unitType = t->u->getType();
+			unitBasicType = t->u->getBasicType();
+		}
 		tileStatus_t tileStatus = t->status;
 
 		ALLEGRO_BITMAP * terrainBmp = nullptr;
@@ -47,37 +58,60 @@ void tileObserver::update()
 		ALLEGRO_BITMAP * tileStatusBmp = nullptr;
 		ALLEGRO_COLOR marginColor;
 
-		ALLEGRO_COLOR tc;
+		ALLEGRO_COLOR tc;;	//En caso de que no se pueda cargar un bitmap del terreno, se pinta el fondo del bitmap de un color que lo represente
 		switch (terrainType)
 		{
 		case GRASS:
-			tc = al_color_name("green");
-			//terrainBmp = al_load_bitmap( el del terreno);
+			terrainBmp = al_load_bitmap(IMAGE_PATH GRASS_TEXTURE);
+			if(terrainBmp == nullptr)
+			{
+				tc = al_color_name("green");
+				cout << "No se pudo cargar el bitmap de textura de pasto " << IMAGE_PATH GRASS_TEXTURE << endl;
+			}
 			break;
 		case RIVER:
-			tc = al_color_name("blue");
-			//terrainBmp = al_load_bitmap( el del terreno);
+			terrainBmp = al_load_bitmap(IMAGE_PATH RIVER_TEXTURE);
+			if (terrainBmp == nullptr)
+			{
+				tc = al_color_name("blue");
+				cout << "No se pudo cargar el bitmap de textura de rio " << IMAGE_PATH RIVER_TEXTURE << endl;
+			}
 			break;
 		case ROAD:
-			tc = al_color_name("grey");
-			//terrainBmp = al_load_bitmap( el del terreno);
+			terrainBmp = al_load_bitmap(IMAGE_PATH ROAD_TEXTURE);
+			if (terrainBmp == nullptr)
+			{
+				tc = al_color_name("grey");
+				cout << "No se pudo cargar el bitmap de textura de calle " << IMAGE_PATH ROAD_TEXTURE << endl;
+			}
 			break;
 		case FOREST:
-			tc = al_color_name("darkgreen");
-			//terrainBmp = al_load_bitmap( el del terreno);
+			terrainBmp = al_load_bitmap(IMAGE_PATH FOREST_TEXTURE);
+			if (terrainBmp == nullptr)
+			{
+				tc = al_color_name("dark green");
+				cout << "No se pudo cargar el bitmap de textura del bosque " << IMAGE_PATH FOREST_TEXTURE << endl;
+			}
 			break;
 		case HILL:
-			tc = al_color_name("yellow");			
-			//terrainBmp = al_load_bitmap( el del terreno);
+			terrainBmp = al_load_bitmap(IMAGE_PATH HILL_TEXTURE);
+			tc = al_color_name("blue");
+			if (terrainBmp == nullptr)
+			{
+				tc = al_color_name("light blue");
+				cout << "No se pudo cargar el bitmap de textura de la colina " << IMAGE_PATH HILL_TEXTURE << endl;
+			}
 			break;
 		default:
 			break;
 		}
 
+		//Cargar bitmap de la unidad presente
 		std::string name;
 		if (t->hasUnit())
 		{
-			switch (t->getUnit()->getType()) {
+			switch (t->getUnit()->getType()) 
+			{
 			case RECON: { name = RE_STR; }		break;	//unitBmp = al_load_bitmap(fjhfkjskdj)
 			case ROCKET: { name = RO_STR; }		break;
 			case MECH: { name = ME_STR; }		break;
@@ -88,10 +122,11 @@ void tileObserver::update()
 			case APC: { name = AP_STR; }			break;
 			case MEDTANK: { name = MT_STR; }		break;
 			}
+
+			switch (unitBasicType);
 		}
 
-
-		switch (unitBasicType);
+		//Agregar el edificio
 
 		switch (tileStatus)
 		{
@@ -104,7 +139,7 @@ void tileObserver::update()
 		case CAN_MOVE:
 			marginColor = al_map_rgb(1, 1, 0);
 			break;
-		case VISIBLE:
+		case VISIBLE: default:
 			marginColor = al_map_rgba_f(0, 0, 0, 0);	//no se ve ningun margen
 			break;
 		}
@@ -115,26 +150,33 @@ void tileObserver::update()
 				0, 0, bmpW, bmpH, 0);
 			al_destroy_bitmap(terrainBmp);
 		}
-		al_clear_to_color(tc);
+		else 
+		{
+			al_clear_to_color(tc);
+		}
+
 		if (unitBmp != nullptr)
 		{
 			al_draw_scaled_bitmap(unitBmp, 0, 0, al_get_bitmap_width(unitBmp), al_get_bitmap_height(unitBmp),
 				0, 0, bmpW, bmpH, 0);
 			al_destroy_bitmap(terrainBmp);
 		}
-		{ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 4, 0);
+		
 		{
-			if (font == nullptr)
+			ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 4, 0);
 			{
-				cout << "malu sus alta gilastra y no se cargo la font " << FONT_PATH << "ttf.ttf" << endl;
-				return;
+				if (font == nullptr)
+				{
+					cout << "malu sus alta gilastra y no se cargo la font " << FONT_PATH << "ttf.ttf" << endl;
+					return;
+				}
+				else
+				{
+					al_draw_text(font, al_color_name("hot pink"), 0, 0, 0, name.c_str());
+					al_destroy_font(font);
+				}
 			}
-			else
-			{
-				al_draw_text(font, al_color_name("hot pink"), 0, 0, 0, name.c_str());
-				al_destroy_font(font);
-			}
-		}}
+		}
 		if (unitBasicTypeBmp != nullptr)
 		{
 			al_draw_scaled_bitmap(unitBasicTypeBmp, 0, 0, al_get_bitmap_width(unitBasicTypeBmp), al_get_bitmap_height(unitBasicTypeBmp),
