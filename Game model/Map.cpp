@@ -73,7 +73,10 @@ Map::Map(const char * csvPath, player_t first)
 				for (unsigned int j = 0; j < B_W; j++) {
 					Point p(i, j);
 					if (hasUnit(p)) {
-						removeFog(p, board[p.row][p.col]->u->getPlayer());
+						removeFog(p, getUnitPlayer(p));
+					}
+					if ((hasBuilding(p) && getBuildingPlayer(p) != NEUTRAL)) {
+						removeFog(p, getBuildingPlayer(p));
 					}
 				}
 			}
