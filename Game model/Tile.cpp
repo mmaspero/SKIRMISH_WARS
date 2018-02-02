@@ -59,9 +59,14 @@ void Tile::notifyObserver(void)
 		obs->update();
 }
 
-player_t Tile::hasUnit()
+bool Tile::hasUnit()
 {	
-	return (u==nullptr? NEUTRAL : u->getPlayer());
+	return u != nullptr;
+}
+
+bool Tile::hasBuilding()
+{
+	return b != nullptr;
 }
 
 Point Tile::getPosition()

@@ -19,7 +19,8 @@ public:
 	void update(player_t next);		//si se capturo un edificio, devuelve quien era el duenio de antes. si no, N_PLAYERS
 	void notifyObserver(void);
 
-	player_t hasUnit();		//si devuelve NEUTRAL es que no hay
+	bool hasUnit();	
+	bool hasBuilding();
 	Point getPosition();
 	terrain_t getTerrain();	//si tiene edificio va a devolver ROAD
 	Unit * getUnit();
