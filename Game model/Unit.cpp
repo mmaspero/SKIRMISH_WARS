@@ -1,4 +1,5 @@
 #include "Unit.h"
+#include "Action.h"
 #include "Units\AntiAir.h"
 #include "Units\Apc.h"
 #include "Units\Artillery.h"
@@ -203,108 +204,109 @@ Point Unit::getPosition()
 	return position;
 }
 
-void Unit::heal()
+bool Unit::heal()
 {
+	bool hpsChanged = false;
 	if (isAlive()) { //no curo unidades muertas!
+		
 		healthPoints += HEAL_HP;
 
 		if (healthPoints > MAX_HP)
 			healthPoints = MAX_HP;
 
 		if (type == APC) {
-			((Apc *)this)->healLoadedUnits();
-		}
-	}
-}
-
-bool Unit::isActionValid(Action * act)
-{
-	bool ans = false;
-
-	if (act != nullptr) {
-		std::list<Action *> actList;
-		getPossibleActions(actList);
-
-		while (actList.size()) {
-			Action * it = actList.front();
-			
-			if (it->whereTo == act->whereTo && it->type == act->type) {
-				if (it->type == ACT_ATTACK) {
-					if (((Attack *)it)->target == ((Attack *)act)->target) {
-						ans = true;
-					}
-				}
-				else {
-					ans = true;
-				}
-			}
-
-			delete it;
+			hpsChanged |= ((Apc *)this)->healLoadedUnits();
 		}
 	}
 
-	return ans;
+	return hpsChanged;
 }
 
-bool Unit::move(Action a)
+void Unit::nextTurn()
 {
-	if (map != nullptr && !map->isInMap(a.whereTo) || a.mps > movingPoints || !isAlive()
-		|| !map->updateUnitPos(this, a.whereTo, a.type == ACT_LOAD))
-		return false;
+	state = IDLE;
+}
+
+int Unit::isActionValid(Action act)
+{
+	int mps = CANT_REACH;
+
+	std::list<Action> actList;
+	getPossibleActions(actList);
+
+	Action it = actList.front();
+	while (actList.size() && mps == CANT_REACH) { 		
+		if (it.whereTo == it.whereTo && it.type == it.type) {
+			mps = it.mps;
+		}
+	}
+
+	return mps;
+}
+
+bool Unit::move(Action mov)
+{
+	bool valid = false;
+
+	if (mov.type == ACT_MOVE && mov.mps == isActionValid(mov) && map->updateUnitPos(this, mov.whereTo)) {
+		position = mov.whereTo;
+		movingPoints -= mov.mps;
+		state = MOVING; // la unica accion que no prohibe mas movs es MOVE
+		valid = true;
+	}
 	
-	position = a.whereTo;
-	movingPoints -= a.mps;
-	return true;
+	return valid;
 }
 
-int Unit::attack(Attack a, unsigned int diceRoll)
+int Unit::attack(Action att, unsigned int diceRoll)
 {
-	if (map != nullptr && !map->isInMap(a.target) || !map->hasUnit(a.target) || 
-		!isAlive() || !(isMine ^ (map->getPlayer(a.target) == USER)) ||!move(a) )
-		return false;
+	int hpLeft = CANT_REACH;
+	if (att.type == ACT_ATTACK && att.mps == isActionValid(att) && 1 <= diceRoll && diceRoll <= 6) {
+		Unit * enemy = map->getUnit(att.whereTo);
+		terrain_t t = map->getTerrain(att.whereTo);
+		int initDamage = getAttackMod(enemy->getBasicType()) - enemy->defense; //aca ya se tiene en cuenta si esta reducido o no
 
-	Unit * enemy = map->getUnit(a.target);
-	terrain_t t = map->getTerrain(a.target);
-	int initDamage = getAttackMod(enemy->getBasicType()) - enemy->defense; //aca ya se tiene en cuenta si esta reducido o no
-	
-	enemy->healthPoints -= getDamage(initDamage, t, diceRoll);
+		enemy->healthPoints -= getDamage(initDamage, t, diceRoll);
 
-	return true;
+		if (enemy->healthPoints < 0) {
+			enemy->healthPoints = 0;
+		}
+
+		hpLeft = enemy->healthPoints;
+	}
+	return hpLeft;
 }
 
-void Unit::getPossibleActions(std::list<Action *>& actions)
+bool Unit::startCapture(Action capt)
 {
-	if (state >= ATTACKING || map == nullptr)
-		return;				//despues de atacar no puedo hacer nada
+	bool valid = false; 
 
-	std::list<Action *> attacks;
-	bool newAttacks[B_H * B_W];	//para saber que casillas ya tienen registrado un ataque
-	memset(newAttacks, 0, sizeof(bool)*B_H*B_W);	// pongo todo en false: todavia no ataque nada
+	if (capt.type == ACT_CAPTURE && capt.mps == isActionValid(capt)) {
+
+	}
+
+	return valid;
+}
+
+void Unit::getPossibleActions(std::list<Action>& actions)
+{
+	if (map == nullptr)
+		return;
 
 	if (state <= MOVING) {
 		getPossibleMoves(actions, position, position, movingPoints);
 	}
 
-	if (state == IDLE) {
-		getPossibleAttacks(newAttacks, attacks, position); //estos ataques cuestan 0 mps (por defecto)
+	if (state == IDLE || (state == MOVING && maxRange == 1)) {
+		getPossibleAttacks(actions, position); 
 	}
 
-	if (state == MOVING && maxRange == 1) { //los de rango 1 pueden atacar despues de moverse
-		for (std::list<Action *>::iterator it = actions.begin(); it != actions.end(); it++) {
-			if ((*it)->type == ACT_MOVE) { // me fijo de no atacar desde un APC
-				getPossibleAttacks(newAttacks, attacks, (*it)->whereTo, (*it)->mps);
-				// estos cuentan tantos mps como moverse a la casilla desde donde se hacen
-			}
-		}
-	}
-	
 	if (state == UNLOADING) {
 		((Apc *)this)->getPossibleUnloads(actions);
-	}
-		
+	}		
 }
 
-void Unit::getPossibleMoves(std::list<Action *>& moves, Point start, Point curr, unsigned int mps)
+void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, unsigned int mps)
 {
 	if (map == nullptr || !map->isInMap(curr))
 		return;
@@ -315,13 +317,17 @@ void Unit::getPossibleMoves(std::list<Action *>& moves, Point start, Point curr,
 	if (start != curr) { // me fijo si puedo venir a esta casilla, y cuanto me cuesta
 
 		if (!map->hasFog(curr, getPlayer())) { //solo puedo ir a casillas que puedo ver
-			if (map->hasUnit(curr)) {
-				if ((getBasicType() == FOOT && map->getUnit(curr)->type == APC
-					&& ((Apc *)(map->getUnit(curr)))->canBoard(isMine))) { 
+			
+			if (getBasicType() == FOOT) {
+				if (map->canBoard(curr, getPlayer())) { //solo puedo ir a donde hay una unit si es un apc de los mios
 					actionType = ACT_LOAD; //solo si tiene un apc mio y soy foot
 				}
+				else if (map->canCapture(curr, getPlayer())) {
+					actionType = ACT_CAPTURE; //los foot pueden capturar edificios enemigos
+				}
 			}
-			else {
+			
+			if (!map->hasUnit(curr) && actionType == N_ACTIONS) { //los movimientos son a lugares sin unidades!
 				actionType = ACT_MOVE; //si no tiene unidad y la puedo ver puede ser un move
 			}
 		}
@@ -348,39 +354,39 @@ void Unit::getPossibleMoves(std::list<Action *>& moves, Point start, Point curr,
 		bool newTile = true;	//para saber si ya habia un camino a esta tile o no
 		if (start != curr && (actionType == ACT_LOAD || actionType == ACT_MOVE)) { //no calculo camino optimo si la distancia es 0
 
-			for (std::list<Action *>::iterator it = moves.begin(); it != moves.end() && newTile == true; it++) {
-				if ((*it)->whereTo == curr) {
+			for (std::list<Action>::iterator it = moves.begin(); it != moves.end() && newTile == true; it++) {
+				if (it->whereTo == curr) {
 					newTile = false;	// tile repetida!
 
-					if ((*it)->mps > action.mps) {	//si el camino es mas corto, lo actualizo
-						(*it)->mps = action.mps;	//(en it estan los que cuestan, movingPoints son los que tiene la unidad
+					if (it->mps > action.mps) {	//si el camino es mas corto, lo actualizo
+						it->mps = action.mps;	//(en it estan los que cuestan, movingPoints son los que tiene la unidad
 					}									//y mps los que todavia me quedan para gastar de esos)
 				}
 			}
 		}
 
 		if (newTile == true && actionType != N_ACTIONS) { //solo añado un item a la lista si es una tile nueva
-			moves.push_back(new Action(action));
+			moves.push_back(action);
 		}
 
 		if (action.type != ACT_LOAD) {
 			//veo a que tiles puedo ir desde aca
-			curr.row -= 1;				// a la izquierda
+			curr.row -= 1;				// abajo
 			getPossibleMoves(moves, start, curr, mps);
 
-			curr.row += 2;				//a la derecha
+			curr.row += 2;				// arriba
 			getPossibleMoves(moves, start, curr, mps);
 
-			curr.row -= 1; curr.col -= 1;	//arriba
+			curr.row -= 1; curr.col -= 1;	//izquierda
 			getPossibleMoves(moves, start, curr, mps);
 
-			curr.col += 2;				//abajo
+			curr.col += 2;				//derecha
 			getPossibleMoves(moves, start, curr, mps);
 		}
 	}
 }
 
-void Unit::getPossibleAttacks(bool * newAttacks, std::list<Action *>& attacks, Point curr, unsigned int movingPoints)
+void Unit::getPossibleAttacks(std::list<Action>& attacks, Point curr)
 {
 	if (map == nullptr)
 		return;
@@ -392,24 +398,9 @@ void Unit::getPossibleAttacks(bool * newAttacks, std::list<Action *>& attacks, P
 			unsigned int dist = curr.orthogonalDistanceFrom(p); 
 
 			if (minRange <= dist && dist <= maxRange && map->hasUnit(p)
-				&& (isMine ^ (map->getPlayer(p) == USER)) && !map->hasFog(p, getPlayer())) {
+				&& (isMine ^ (map->getUnitPlayer(p) == USER)) && !map->hasFog(p, getPlayer())) {
 				//me fijo si esta casilla la puedo atacar con menos MPs desde otro lugar o no
-
-				if (newAttacks[i*B_W + j] == true) { 
-					newAttacks[i*B_W + j] = false; //el ataque ya existe: me fijo si puedo mejorar los MPs
-					for (std::list<Action *>::iterator it = attacks.begin(); it != attacks.end() && newAttacks[i*B_W + j] == false; it++) {
-						if ((*it)->whereTo == curr) {
-							newAttacks[i*B_W + j] = true;
-							if (movingPoints < (*it)->mps) {
-								(*it)->mps = movingPoints;
-							}
-						}
-					}
-				}
-				else {
-					attacks.push_back(new Attack(p, curr, movingPoints));
-					newAttacks[i*B_W + j] = true; // ataque nuevo
-				}
+				attacks.push_back(Action(ACT_ATTACK, p));
 			}
 		}
 	}
@@ -426,19 +417,10 @@ bool Unit::isReduced()
 bool Unit::hasValidActions()
 {
 	bool ans = false;
-	std::list<Action *> act;
+	std::list<Action> act;
 	getPossibleActions(act);
 
-	if (act.size()) {
-		ans = true;
-		
-		while (act.size()) {
-			delete act.front();
-			act.pop_front();
-		}
-	}
-
-	return ans;
+	return act.size();
 }
 
 unsigned int getDamage(int initDamage, terrain_t t, unsigned int diceRoll)

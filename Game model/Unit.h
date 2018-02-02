@@ -1,7 +1,7 @@
 #pragma once
 #include "unitInfo.h"
 #include "types.h"
-#include "Attack.h"
+#include "Action.h"
 #include "Map.h"
 #include <list>
 #include <unordered_map>
@@ -47,9 +47,11 @@ public:
 	bool hasValidActions();
 	player_t getPlayer();
 	Point getPosition();
-	void heal();
 
-	bool isActionValid(Action * act);
+	void nextTurn();	//true si se modificaron los hps
+	bool heal();	//true si se modificaron los hps
+
+	int isActionValid(Action act); //devuelve los mps que cuesta, o -1 si no es valida
 
 	virtual unsigned int getTerrainMod(terrain_t t) = 0; // si es UINT MAX es que no puede pasar
 	virtual unsigned int getAttackMod(unitType_t basicType) = 0;	//devuelve el mod, dependiendo de si la unit esta o no reducida
@@ -57,9 +59,11 @@ public:
 
 	//move y attack hacen minimo control sobre si lo que le decis que hagan lo pueden hacer. la idea es que uses algo que vino de getPossibleActions
 	bool move(Action m);
-	int attack(Attack a, unsigned int diceRoll);	//de esto falta calcular el danio!
+	int attack(Action att , unsigned int diceRoll);	//de esto falta calcular el danio!
+	//devuelve cuantos hps le quedan al enemigo: si es 0 murio, si es <0 no es valido el ataque
+	bool startCapture(Action capt);
 
-	void getPossibleActions(std::list<Action *>& actions);
+	void getPossibleActions(std::list<Action>& actions);
 
 protected:
 	const unit_t type;
@@ -83,6 +87,6 @@ protected:
 	static Map * map;	//todas las units comparten el mismo map
 	static std::unordered_map<unit_t, Unit *> info;
 
-	void getPossibleMoves(std::list<Action *>& moves, Point start, Point curr, unsigned int movingPoints);
-	void getPossibleAttacks(bool * newAttacks, std::list<Action *>& attacks, Point position, unsigned int movingPoints = 0);
+	void getPossibleMoves(std::list<Action>& moves, Point start, Point curr, unsigned int movingPoints);
+	void getPossibleAttacks(std::list<Action>& attacks, Point position);
 };

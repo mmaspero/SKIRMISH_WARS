@@ -28,26 +28,35 @@ Tile::~Tile()
 	}
 }
 
-void Tile::update()
+void Tile::update(player_t next)
 {
-	if (b != nullptr) {
-		if (u != nullptr) {
-			if ( u->getBasicType() == FOOT && u->getPlayer() != b->getPlayer()) {
-			//las unidades tipo FOOT pueden capturar edificios del enemigo o neutrales
-				b->capture(u->isReduced(), u->getPlayer());
-				if (obs != nullptr) {
-					obs->update();
-				}
+	bool mustUpdate = false;
+
+	if (u != nullptr) {
+		u->nextTurn();
+
+		if (b != nullptr) { //los edificios solo hacen cosas si tienen units
+			if (u->getPlayer() == b->getPlayer()) {
+				//si la unit y el building son del mismo equipo: la unidad se cura
+				mustUpdate = u->heal();
 			}
-			else {
-				//si no, es que la unit y el building son del mismo equipo: la unidad se cura
-				u->heal();
-				if (obs != nullptr) {
-					obs->update();
-				}
+			else if (u->getBasicType() == FOOT) {
+				//las unidades tipo FOOT pueden capturar edificios del enemigo o neutrales
+				b->capture(u->isReduced(), u->getPlayer());
+				mustUpdate = true; 
 			}
 		}
 	}
+
+	if (mustUpdate && obs != nullptr) {
+		obs->update();
+	}
+}
+
+void Tile::notifyObserver(void)
+{
+	if (obs != nullptr)
+		obs->update();
 }
 
 player_t Tile::hasUnit()
@@ -83,10 +92,16 @@ bool Tile::canPurchaseUnit(player_t player)
 	return (u == nullptr && b != nullptr && b->getPlayer() == player && b->getType() == FACTORY);
 }
 
+bool Tile::hasFog(player_t player)
+{
+	return (player == USER ? (status == FOG) : !(opponentCanSee));
+}
+
 bool Tile::setUnit(Unit * u)
 {
 	if (this->u == nullptr) {
 		this->u = u;
+		removeFog(u->getPlayer());
 		if (obs != nullptr) {
 			obs->update();
 		}

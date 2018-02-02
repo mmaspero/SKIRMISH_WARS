@@ -1,6 +1,5 @@
 #include "Apc.h"
 #include "../unitInfo.h"
-#include "../Attack.h"
 #include "../Action.h"
 #include <iterator>
 
@@ -64,27 +63,27 @@ unsigned int Apc::nLoadedUnits()
 	return loadedUnits.size();
 }
 
-void Apc::healLoadedUnits()
+bool Apc::healLoadedUnits()
 {
+	bool hpsUpdated = false;
 	for (std::list<Unit *>::iterator it = loadedUnits.begin(); it != loadedUnits.end(); it++) {
-		(*it)->heal();
+		hpsUpdated |= (*it)->heal();
 	}
+	return hpsUpdated;
 }
 
-void Apc::getPossibleUnloads(std::list<Action *>& ul)
+void Apc::getPossibleUnloads(std::list<Action>& ul)
 {
 	if (!loadedUnits.empty()) {
 		Unit * u = loadedUnits.back();
-		std::list<Action *> a;
+		std::list<Action> a;
 		u->getPossibleActions(a);
 		
 		while (!a.empty()) {
-			Action * action = a.front();
-			if (action->type != ACT_ATTACK && position.orthogonalDistanceFrom(action->whereTo) <= 1) {
-				Action * unload = new Action(ACT_UNLOAD, action->whereTo, action->mps);
-				ul.push_back(action);
+			Action action = a.front();
+			if (action.type != ACT_ATTACK && position.orthogonalDistanceFrom(action.whereTo) <= 1) {
+				ul.push_back(Action(ACT_UNLOAD, action.whereTo, action.mps));
 			}
-			delete action;
 			a.pop_front();
 		}
 	}
@@ -110,8 +109,9 @@ bool Apc::unload(Point whereTo)
 	if (loadedUnits.size() != 0 && position.orthogonalDistanceFrom(whereTo) == 1) {
 		Unit * u = loadedUnits.back();
 		loadedUnits.pop_back();
-		u->move(Action(ACT_MOVE, whereTo, 0));
+		u->move(Action(ACT_UNLOAD, whereTo, 0));
 	}
-
+	state = MOVING;
+	movingPoints = 0; //el apc no se puede mover despues de descargar!
 	return valid;
 }

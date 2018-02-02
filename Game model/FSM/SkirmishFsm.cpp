@@ -25,18 +25,18 @@ void SkirmishFSM::dispatch(GenericEvent * ev)
 
 	switch (ev->getType())
 	{
-	case EV_TIMEOUT:			{ newState = currentState->onTimeout(ev); }			break;
-	case EV_ACK:				{ newState = currentState->onAck(ev); }				break;
+	case EV_TIMEOUT:			{ newState = currentState->onTimeout(ev); }				break;
+	case EV_ACK:				{ newState = currentState->onAck(ev); }					break;
 	case EV_USER_PASS:			{ newState = currentState->onUserPass(ev); }			break;
 	case EV_USER_ATTACK:		{ newState = currentState->onUserAttack(ev); }			break;
 	case EV_USER_MOVE:			{ newState = currentState->onUserMove(ev); }			break;
 	case EV_USER_PURCHASE:		{ newState = currentState->onUserPurchase(ev); }		break;
 	case EV_OPP_PASS:			{ newState = currentState->onOpponentPass(ev); }		break;
-	case EV_OPP_ATTACK:		{ newState = currentState->onOpponentAttack(ev); }		break;
+	case EV_OPP_ATTACK:			{ newState = currentState->onOpponentAttack(ev); }		break;
 	case EV_OPP_MOVE:			{ newState = currentState->onOpponentMove(ev); }		break;
 	case EV_OPP_PURCHASE:		{ newState = currentState->onOpponentPurchase(ev); }	break;
 	case EV_PURCH_SELECTION:	{ newState = currentState->onPurchaseSelection(ev); }	break;
-	case EV_UNIT_SELECTION:	{ newState = currentState->onUnitSelection(ev); }		break;
+	case EV_UNIT_SELECTION:		{ newState = currentState->onUnitSelection(ev); }		break;
 	case EV_UNSELECT:			{ newState = currentState->onUnselect(ev); }			break;
 	}
 

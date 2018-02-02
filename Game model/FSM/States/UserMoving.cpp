@@ -2,14 +2,19 @@
 #include "OpponentMoving.h"
 #include "UnitSelected.h"
 #include "UserPurchasing.h"
+#include "../SkirmishEvent.h"
 
 UserMoving::UserMoving() : GenericState(USER_MOVING)
 {
 	;
 }
 
-GenericState * UserMoving::onTimeout(GenericEvent *)
+GenericState * UserMoving::onTimeout(GenericEvent * e)
 {
+	SkirmishEvent * ev = (SkirmishEvent *)e;
+
+	
+
 	return new OpponentMoving();
 }
 

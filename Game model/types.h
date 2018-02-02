@@ -5,10 +5,11 @@
 #define	B_H	12
 
 
-typedef enum players { NEUTRAL, USER, OPPONENT } player_t;
+typedef enum players { NEUTRAL, USER, OPPONENT, N_PLAYERS } player_t;
 typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING } playerStatus_t;
 typedef enum tileStatus { VISIBLE, FOG, SELECTED, CAN_ATTACK, CAN_MOVE } tileStatus_t;
-typedef enum actions { ACT_MOVE, ACT_LOAD, ACT_UNLOAD, ACT_ATTACK, N_ACTIONS} action_t;
+
+typedef enum actions { ACT_MOVE, ACT_LOAD, ACT_UNLOAD, ACT_ATTACK, ACT_CAPTURE, N_ACTIONS} action_t;
 
 typedef enum buildings { HEADQUARTERS, FACTORY, CITY, N_BUILDINGS } building_t;
 #define FACTORY_CHR	'm'	//ademas se especifica el jugador para todos los edificios

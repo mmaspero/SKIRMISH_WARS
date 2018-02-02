@@ -28,10 +28,10 @@ player_t Building::getPlayer()
 	return player;
 }
 
-bool Building::capture(bool isReduced, player_t player) 
+player_t Building::capture(bool isReduced, player_t player) 
 { 
 	unsigned int lostCps;
-	bool wasCaptured = false;
+	player_t capturedFrom = N_PLAYERS;
 
 	if (player != this->player) {
 		if (isReduced)
@@ -44,16 +44,22 @@ bool Building::capture(bool isReduced, player_t player)
 		}
 		else {
 			setCapturePoints(type, capturePoints);
-			wasCaptured = true;
+			capturedFrom = this->player;
+			this->player = player;
 		}
 	}
 
-	return wasCaptured;
+	return capturedFrom;
 }
 
 void Building::uncapture()
 {
 	setCapturePoints(type, capturePoints);
+}
+
+unsigned int Building::getCapturePoints()
+{
+	return capturePoints;
 }
 
 bool Building::isBeingCaptured()

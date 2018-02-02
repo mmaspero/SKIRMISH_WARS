@@ -13,9 +13,9 @@ public:
 
 	bool canBoard(bool player);
 	unsigned int nLoadedUnits();
-	void healLoadedUnits();
+	bool healLoadedUnits();
 
-	void getPossibleUnloads(std::list<Action *>& ul);
+	void getPossibleUnloads(std::list<Action>& ul);
 
 	bool load(Unit * u);		
 	bool unload(Point whereTo);		//descarga siempre en orden inverso a como cargo

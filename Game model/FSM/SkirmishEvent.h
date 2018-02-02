@@ -11,6 +11,9 @@ public:
 	static void setModel(Model * mod);	//solo lo van a hacer una vez!
 	static void setController(Controller * cont);
 
+	Model * model();
+	Controller * contr();
+
 protected:
 	static Model * mod;
 	static Controller * cont;

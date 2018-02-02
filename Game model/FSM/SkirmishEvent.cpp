@@ -22,3 +22,13 @@ void SkirmishEvent::setController(Controller * cont)
 		SkirmishEvent::cont = cont;
 	}
 }
+
+Model * SkirmishEvent::model()
+{
+	return mod;
+}
+
+Controller * SkirmishEvent::contr()
+{
+	return cont;
+}

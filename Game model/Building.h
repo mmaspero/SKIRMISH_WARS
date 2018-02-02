@@ -11,8 +11,9 @@ public:
 	building_t getType();
 	player_t getPlayer();
 	bool isBeingCaptured();
-	bool capture(bool isReduced, player_t player); //devuelve true si cambio de equipos
+	player_t capture(bool isReduced, player_t player); //si cambio de jugador, devuelve el duenio previo. si no, N_PLAYERS
 	void uncapture();
+	unsigned int getCapturePoints();
 
 protected:
 	const building_t type;
