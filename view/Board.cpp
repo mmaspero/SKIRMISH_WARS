@@ -48,14 +48,13 @@ tileButton * Board::getTileButton(unsigned int tileX, unsigned int tileY)
 	}
 }
 
-void Board::setTileButton(ALLEGRO_BITMAP * tileBmp, unsigned int tileX, unsigned int tileY)
+void Board::setTileButton(Tile * tile)
 {
 	//crear un nuevo boton con la imagen recibida
-	tileButton * tB = new tileButton(tileBmp, 
-									BOARD_LEFT_X + tileX * tileSide, 
-									BOARD_TOP_Y + tileY * tileSide, 
+	tileButton * tB = new tileButton(BOARD_LEFT_X + tile->getPosition().col * tileSide, 
+									BOARD_TOP_Y + tile->getPosition().row * tileSide, 
 									tileSide, tileSide,
-									Point(tileX, tileY));
+									tile->getPosition());
 	if (tB->isValid()) 
 	{
 		buttonList.push_back(tB);	//TODO: avisar si es que no se cargo

@@ -99,7 +99,7 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 
 		//TODO: copiar toda la info necesaria y borrar lo de abajo
 		cost = 37;
-		for (int i = 0; i < N_B_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
+		for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 		{
 			firepower[i] = i * 2;
 			firepowerReduced[i] = i;
@@ -184,7 +184,7 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 
 		//TODO: copiar toda la info necesaria y borrar lo de abajo
 		cost = 37;
-		for (int i = 0; i < N_B_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
+		for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 		{
 			firepower[i] = i * 2;
 			firepowerReduced[i] = i;

@@ -58,7 +58,7 @@ GenericEvent * Model::validateOpponentMove(move mov)
 	GenericEvent * e = nullptr;
 	
 	if (fsm.state() == OPP_MOVING && m.hasUnit(mov.getOrigin()) && m.getUnit(mov.getOrigin())->getPlayer() == OPPONENT
-		&& m.getUnit(mov.getOrigin())->isActionValid(&Action(ACT_MOVE, mov.getDestination()))) {
+		&& m.getUnit(mov.getOrigin())->isActionValid(&(Action(ACT_MOVE, mov.getDestination())))) {
 		e = new OpponentMove(mov.getOrigin(), mov.getDestination());
 	}
 
@@ -71,7 +71,7 @@ GenericEvent * Model::validateOpponentPurchase(purchase purch)
 	
 	if (m.canPurchaseUnit(purch.getPossition(), OPPONENT)) {
 		//aca ya se que el oponente tiene una fabrica vacia ahi, falta ver si le alcanza la plata
-		unit_t type = parseUnitString(purch.getID());
+		unit_t type = parseUnitString(purch.getEjercitoId());
 		if (Unit::getCost(type) <= opponent.getMoney()) {
 			e = new OpponentPurchase(purch.getPossition(), type);
 		}

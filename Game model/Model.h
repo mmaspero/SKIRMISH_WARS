@@ -6,7 +6,7 @@
 #include <list>
 #include "Action.h"
 #include "../view/gui.h"
-#include "../Controler/package/packages.h"
+#include "../Controller/package/packages.h"
 
 class Model {
 public:

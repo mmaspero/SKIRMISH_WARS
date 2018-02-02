@@ -192,14 +192,14 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 	Board * boardP = (Board *)(*itBoard);
 	toolbox * toolboxP = (toolbox *)(*itToolbox);
 
+	//TODO: chequear que Tile * t no sea nullptr
 	unsigned int tileY = t->getPosition().row;
 	unsigned int tileX = t->getPosition().col;
 
 	//Si ya se creo el tileButton de esa posicion, indicar que hubo error.
 	if (boardP->getTileButton(tileX, tileY) != nullptr)
 	{
-		cout << "No se puede crear tileObserver en (x,y) = (" << tileX << "," << tileY <<") porque \
-			ya hay un tileObserver para esta tile" << endl;
+		cout << "No se puede crear tileObserver en (x,y) = (" << tileX << "," << tileY <<") porque ya hay un tileObserver para esta tile" << endl;
 		return nullptr;
 	}
 	
@@ -208,52 +208,9 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 			
 	ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -tileSide / 4, 0);
 	
-	ALLEGRO_COLOR tc;
-	switch (t->getTerrain()) 
-	{
-	case GRASS:
-		tc = al_color_name("green");
-		break;
-	case RIVER:
-		tc = al_color_name("blue");
-		break;	
-	case ROAD:
-		tc = al_color_name("grey");
-		break;	
-	case FOREST:
-		tc = al_color_name("darkgreen");
-		break;	
-	case HILL:
-		tc = al_color_name("yellow");
-		break;
-	default:
-		break;
-	}
 
-	al_clear_to_color(tc);
-
-	std::string name;
-	if (t->hasUnit())
-	{
-		switch (t->getUnit()->getType()) {
-		case RECON: { name = RE_STR; }		break;
-		case ROCKET: { name = RO_STR; }		break;
-		case MECH: { name = ME_STR; }		break;
-		case INFANTRY: { name = IN_STR; }	break;
-		case TANK: { name = TA_STR; }		break;
-		case ARTILLERY: { name = AR_STR; }	break;
-		case ANTIAIR: { name = AA_STR; }		break;
-		case APC: { name = AP_STR; }			break;
-		case MEDTANK: { name = MT_STR; }		break;
-			//cualquier otro caso queda en nullptr como corresponde
-		}
-	}
-	
-	al_draw_text(font, al_color_name("hot pink"), 0, 0, 0, name.c_str());
-
-	al_destroy_font(font);
 			
-	boardP->setTileButton(tileBmp, tileX, tileY);
+	boardP->setTileButton(t);
 	return new tileObserver(t, boardP->getTileButton(tileX, tileY), toolboxP);	//TODO: control de error :)
 }
 

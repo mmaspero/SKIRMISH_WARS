@@ -93,7 +93,7 @@ private:
 	unitType_t unitBasicType;
 	bool canBuy;
 	unsigned int cost;
-	unsigned int firepower[N_B_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
-	unsigned int firepowerReduced[N_B_TYPES];
+	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
+	unsigned int firepowerReduced[N_BASIC_U_TYPES];
 	unsigned int movingPoints[N_TERRAINS];
 };
