@@ -1,5 +1,8 @@
 #include "toolbox.h"
 
+#include "simpleButton.h"
+#include "productButton.h"
+
 #define BUTTONS_PER_ROW 3
 
 
@@ -12,12 +15,13 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 		displaySectionType = TOOLBOX;
 
 		bool buttonValid = true;
-		for (int i = 0; i < N_UNIT_TYPES; i++)	//TODO: borrar!!! que se haga haciend append o algo asi
+		float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
+		for (int i = 0; i < N_UNIT_TYPES; i++)
 		{
 			int aux = (i % BUTTONS_PER_ROW);
 
 			float rWidth = contentWidth / (float)BUTTONS_PER_ROW;
-			float rHeight = contentHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
+			float rHeight = productButtonSectionHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
 			float rLeftX = contentStartX + rWidth * aux;
 			float rTopY = contentStartY + rHeight * (i / (int)BUTTONS_PER_ROW);
 
@@ -29,7 +33,23 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 				buttonValid = false;
 			}
 		}
-		if (!buttonValid)	//Si hubo un error en el constructor de algun contructor, eliminar toda la lista
+		//TODO: agregar los simpleButtons;
+		simpleButton * simpleBuy = new simpleButton(BUY, contentStartX + contentWidth / 2, contentStartY + height * 0.9,
+			contentWidth / 2, contentHeight * 0.9);
+		if (simpleBuy->isValid())
+		{
+			buttonList.push_back(simpleBuy);
+		}
+		simpleButton * simpleBack = new simpleButton(BACK, contentStartX, contentStartY + height * 0.9,
+					contentWidth / 2, contentHeight * 0.9);
+		if(simpleBack->isValid())
+		{
+			buttonList.push_back(simpleBack);
+		}
+
+
+
+		if (!buttonValid)	//Si hubo un error en el constructor de algun boton, eliminar toda la lista
 		{
 			buttonList.clear();
 		}

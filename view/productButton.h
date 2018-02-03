@@ -23,7 +23,6 @@ public:
 	bool getCanBuy();
 	void setCanBuy(bool canBuy);
 	unit_t getUnitSpecificType();
-	void setUnitSpecificType(unit_t unitSpecificType);	//TODO: SACAR!!!!!!!!
 
 	//Redefinidas para que el boton modifique su tamanio cuando se lo selecciona o deselecciona
 	virtual void selectedOn();

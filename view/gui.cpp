@@ -123,6 +123,7 @@ gui::gui()
 	}
 
 	displaySections.push_back((contentBox *) new toolbox(display, 0.7, 0, 0.3, 0.5));
+//	((toolbox *)displaySections.back())->selectProduct((unit_t)3);	//TODO: volar, es de debug
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display Toolbox" << endl;
@@ -151,7 +152,6 @@ gui::gui()
 		valid = false;
 		return;
 	}
-
 }	//TODO: un control mas cercano de valid
 
 gui::~gui()
@@ -172,6 +172,7 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 {
 	if (t == nullptr)
 	{
+		cout << "No se pudo crear el tileObserver ya que se recibio un nullptr en vez de un Tile *" << endl;
 		return nullptr;
 	}
 
@@ -197,7 +198,6 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 	Board * boardP = (Board *)(*itBoard);
 	toolbox * toolboxP = (toolbox *)(*itToolbox);
 
-	//TODO: chequear que Tile * t no sea nullptr
 	unsigned int tileRow = t->getPosition().row;
 	unsigned int tileCol = t->getPosition().col;
 
@@ -216,7 +216,7 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 	boardP->setTileButton(t);
 	
 	tileButton * tileButtonP = boardP->getTileButton(tileRow, tileCol);
-	if(tileButtonP == nullptr || !tileButtonP->isValid())
+	if(tileButtonP == nullptr || !tileButtonP->isValid())	//por lazy, solo se llama la funcion si se creo el tileButton
 	{
 		cout << "No se pudo crear tileObserveren (row,col) = (" << tileRow << "," << tileCol << ") ya que no se pudo crear el boton en esta posicion" << endl;
 		return nullptr;

@@ -22,6 +22,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 {
 	if (valid)
 	{
+		displaySectionType = GAMESTATUS;
 		timeStat.value = unitStat.value = moneyStat.value = 0;
 		
 		ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();

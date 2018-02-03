@@ -3,7 +3,8 @@
 #include <list>
 
 #include "contentBox.h"
-#include "productButton.h"
+#include "../Game model/types.h"
+
 
 
 class toolbox : public contentBox

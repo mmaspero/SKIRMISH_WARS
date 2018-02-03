@@ -17,7 +17,7 @@
 #define TREAD_BG_COLOR  "thistle"
 #define FOOT_BG_COLOR   "thistle"
 
-#define FONT_NAME FONT_PATH "Minecraft.ttf"
+#define FONT_NAME "Minecraft.ttf"
 #define	BIG_FONT_SIZE    30
 
 #define BUTTON_MARGIN(w, h) (((w)>(h) ? h : w) / 20.0)
@@ -26,12 +26,15 @@
 #define COIN_HEIGHT_IN_MARGINS 6	//La moneda que indica plata tiene COIN_HEIGHT_IN_MARGIN veces la altura del margen
 #define LOGO_SIDE_IN_MARGINS 7
 
+#define COIN_IMG "coin.png"
+
 #define ANTIAIR_SPRITE SPRITE_PATH "antiair_red.png"
 #define ANTIAIR_NAME "ANTIAIR"
 
 #define TREAD_LOGO_BMP IMAGE_PATH "tread_logo.png"
 #define FOOT_LOGO_BMP TREAD_LOGO_BMP
 #define WHEEL_LOGO_BMP TREAD_LOGO_BMP
+
 
 using namespace std;
 
@@ -181,9 +184,9 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 		setExpandedBmp();
 		setReducedBmp();
 
-
+		
 		//TODO: copiar toda la info necesaria y borrar lo de abajo
-		cost = 37;
+		cost = Unit::getCost(unitSpecificType);
 		for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 		{
 			firepower[i] = i * 2;
@@ -218,10 +221,15 @@ unit_t productButton::getUnitSpecificType()
 	return unitSpecificType;
 }
 
-void productButton::setUnitSpecificType(unit_t unitSpecificType)
-{
-	this->unitSpecificType = unitSpecificType;
-}
+//unit_t productButton::getUnitSpecificType()
+//{
+//	return unitSpecificType;
+//}
+//
+//void productButton::setUnitSpecificType(unit_t unitSpecificType)
+//{
+//	this->unitSpecificType = unitSpecificType;
+//}
 
 void productButton::draw()
 {
@@ -305,129 +313,8 @@ bool productButton::isHidden()
 	return hidden;
 }
 
-//void productButton::setResizedBmp()
-//{
-//	if (resizedBmp != nullptr)
-//	{
-//		al_destroy_bitmap(resizedBmp);
-//	}
-//	resizedBmp = al_create_bitmap(width, height);
-//
-//	//hacer backup del taregt bitmap actual y dibujar el boton en resizedBmp
-//	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
-//	al_set_target_bitmap(resizedBmp);
-//
-//	if (selected)
-//	{
-//		al_draw_filled_rounded_rectangle(margin, margin,
-//			eWidth - margin, eHeight - margin,
-//			BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
-//			al_color_name(WHEEL_COLOR));	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
-//		al_draw_scaled_bitmap(unformattedBmp, 0, 0,
-//			al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
-//			margin * 2, margin * 2,
-//			height / 4.0, width / 4.0,
-//			0);
-//		al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0, 0, "FIREPOWER");
-//		al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 3 * smallFontHeight, 0, "REDUCED FIREPOWER");
-//		al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 6 * smallFontHeight, 0, "TERRAIN MOVEMENT COST");
-//	}
-//	else
-//	{
-//		//Dibujar fondo
-//		al_draw_filled_rounded_rectangle(margin, margin,
-//			width - margin, height - margin,
-//			BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
-//			al_color_name(WHEEL_COLOR));	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
-//
-//		//Dibujar la unidad
-//		al_draw_scaled_bitmap(unformattedBmp,
-//			0, 0,
-//			al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
-//			margin * 2, margin * 2,
-//			width - margin * 2 * 2, height - margin * 2 * 2,
-//			0);	//TODO: sacar magic numbers
-//
-//		//Dibujar borde
-//		al_draw_rounded_rectangle(margin, margin,
-//			width - margin, height - margin,
-//			BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
-//			{ 0.7f, 0.7f, 0.7f, 1 }, 6);	//TODO: sacar magic numbers
-//
-//											//al_draw_rounded_rectangle(margin, margin,
-//											//	buttonSide - margin, buttonSide - margin, 
-//											//	BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
-//											//	{ 1, 1, 1, 1 }, 2);	//TODO: sacar magic numbers
-//
-//		ALLEGRO_BITMAP * auxBmp = nullptr;
-//
-//		//Dibujar el precio
-//		auxBmp = al_load_bitmap(IMAGE_PATH "coin.png");
-//		if (auxBmp == nullptr)
-//		{
-//			cout << "No se pudo cargar la imagen de moneda" << endl;
-//			valid = false;
-//			return;
-//		}
-//
-//		//Dibujar moenda
-//		al_draw_scaled_bitmap(auxBmp,
-//			0, 0,
-//			al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
-//			0, width - COIN_HEIGHT_IN_MARGINS * margin,
-//			COIN_HEIGHT_IN_MARGINS * margin, COIN_HEIGHT_IN_MARGINS * margin,
-//			0);
-//
-//		//Dibujar el precio
-//		al_draw_textf(smallFont, al_color_name("white"), COIN_HEIGHT_IN_MARGINS * margin,
-//			height - COIN_HEIGHT_IN_MARGINS * margin / 2.0 - al_get_font_line_height(smallFont) / 2.0,	//centrar verticalmente
-//			0, "%d", cost);
-//		al_destroy_bitmap(auxBmp);
-//
-//		//switch (unitBasicType = u->getBasicType())
-//		switch (unitBasicType = TREAD)
-//		{
-//		case WHEEL:
-//			break;
-//		case TREAD:
-//			auxBmp = al_load_bitmap(TREAD_LOGO_BMP);	//cargar el "logo" del basic type de la unidad
-//			if (auxBmp == nullptr)
-//			{
-//				cout << "No se cargo el logo de tread" << endl;
-//				valid = false;
-//				return;
-//			}
-//			break;
-//		case FOOT:
-//			break;
-//		default:	//TODO: ???
-//			break;
-//		}
-//
-//		//una vez cargado sin error, dibujar el logo del basic type con el tamanio adecuado y luego eliminar
-//		al_draw_scaled_bitmap(auxBmp,
-//			0, 0,	//TODO: dibujarle el tipo
-//			al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
-//			width - margin * 4, height * 2.0 / 3.0,
-//			width * 2.0 / 5.0, height * 2.0 / 5.0, 0);		//TODO: sacar magic numbers
-//		al_destroy_bitmap(auxBmp);
-//	}
-//	//TODO: agregar donde se escribe el basic type
-//
-//	al_set_target_bitmap(backupBmp);
-//
-//}   //TODO: controlr de parametros (que no haya nada es nullptr)
-
 bool productButton::setReducedBmp()
 {
-	//string configFile(CONFIG_PATH); 
-	//configFile += "/";
-	//configFile += CONFIG_FILE;
-
-//DEBUG	cout << configFile << endl;
-
-	ALLEGRO_CONFIG * cfg = al_load_config_file(CONFIG_PATH CONFIG_FILE);
-
 	if (reducedBmp != nullptr)
 	{
 		al_destroy_bitmap(reducedBmp);
@@ -439,12 +326,11 @@ bool productButton::setReducedBmp()
 	al_set_target_bitmap(reducedBmp);
 
 	//Cargar el "logo"  y el color de fondo correspondiente al basic type de la unidad
-
 	ALLEGRO_BITMAP * auxBmp = nullptr;
 	ALLEGRO_COLOR bgColor;
 
 	//switch (unitBasicType = u->getBasicType())
-	switch (unitBasicType = TREAD)
+	switch (unitBasicType = TREAD)	//TODO: agregarle el type posta
 	{
 	case WHEEL:
 		bgColor = al_color_name(WHEEL_BG_COLOR);
@@ -498,14 +384,16 @@ bool productButton::setReducedBmp()
 		bgColor);
 
 	//TODO: y si unformattedBmp = nullptr?
-
-	//Dibujar la unidad
-	al_draw_tinted_scaled_bitmap(unformattedBmp, { 0, 1, 1, 1 },
-		0, 0,
-		al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
-		margin * 2, margin * 2,
-		width - margin * 2 * 2, height - margin * 2 * 2,
-		0);	//TODO: sacar magic numbers
+	if (unformattedBmp != nullptr)
+	{
+		//Dibujar la unidad
+		al_draw_tinted_scaled_bitmap(unformattedBmp, { 0, 1, 1, 1 },
+			0, 0,
+			al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
+			margin * 2, margin * 2,
+			width - margin * 2 * 2, height - margin * 2 * 2,
+			0);	//TODO: sacar magic numbers
+	}
 
 	//Dibujar borde
 	al_draw_rounded_rectangle(margin, margin,
@@ -516,12 +404,12 @@ bool productButton::setReducedBmp()
 	//Dibujar el logo del basic type con el tamanio adecuado y luego eliminar
 	al_draw_scaled_bitmap(auxBmp,
 		0, 0,
-		al_get_bitmap_width(auxBmp),				al_get_bitmap_height(auxBmp),
+		al_get_bitmap_width(auxBmp),			al_get_bitmap_height(auxBmp),
 		width - margin * LOGO_SIDE_IN_MARGINS,	height - margin * LOGO_SIDE_IN_MARGINS,
-		margin * LOGO_SIDE_IN_MARGINS,			margin * LOGO_SIDE_IN_MARGINS, 0);		//TODO: sacar magic numbers
+		margin * LOGO_SIDE_IN_MARGINS,			margin * LOGO_SIDE_IN_MARGINS, 0);
 
 	//Cargar imagen de la moneda
-	auxBmp = al_load_bitmap(IMAGE_PATH "coin.png");	//TODO: sacar de define
+	auxBmp = al_load_bitmap(IMAGE_PATH COIN_IMG);	//TODO: sacar de define
 	if (auxBmp == nullptr)
 	{
 		cout << "No se pudo cargar la imagen de moneda" << endl;
@@ -541,10 +429,10 @@ bool productButton::setReducedBmp()
 		COIN_HEIGHT_IN_MARGINS * margin, COIN_HEIGHT_IN_MARGINS * margin,
 		0);
 
-	ALLEGRO_FONT * font = al_load_font(FONT_NAME, - margin * COIN_HEIGHT_IN_MARGINS / 2.0, 0);
+	ALLEGRO_FONT * font = al_load_font(FONT_PATH FONT_NAME, - margin * COIN_HEIGHT_IN_MARGINS, 0);
 	if (font == nullptr)
 	{
-		cout << "No se pudo cargar la font para el reduced Bmp";
+		cout << "No se pudo cargar la font para el reduced Bmp" FONT_PATH FONT_NAME << endl;;
 		if (reducedBmp != nullptr)
 		{
 			al_destroy_bitmap(reducedBmp);
@@ -582,7 +470,7 @@ bool productButton::setExpandedBmp()
 {
 	expandedBmp = al_create_bitmap(eWidth, eHeight);
 
-	//hacer backup del taregt bitmap actual y dibujar el boton en resizedBmp
+	//hacer backup del target bitmap actual y dibujar el boton en expandedBmp
 	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
 	al_set_target_bitmap(expandedBmp);
 
@@ -593,11 +481,20 @@ bool productButton::setExpandedBmp()
 	al_draw_scaled_bitmap(unformattedBmp, 0, 0,
 		al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
 		margin * 2, margin * 2,
-		eHeight / 4.0 - margin * 2, eWidth / 4.0 - margin * 2,
+		eHeight / 3.0 - margin * 2, eHeight / 3.0 - margin * 2,
 		0);
-	//al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0, 0, "FIREPOWER");
-	//al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 3 * smallFontHeight, 0, "REDUCED FIREPOWER");
-	//al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 6 * smallFontHeight, 0, "TERRAIN MOVEMENT COST");
+
+	float smallFontHeight = eHeight / 15.0;	//TODO: sacar magic number
+	ALLEGRO_FONT * smallFont = al_load_font(FONT_PATH FONT_NAME, -smallFontHeight, 0);
+	if (smallFont == nullptr)
+	{
+		cout << "No se pudo crear el bitmap expandido del productButton de la unidad de tipo" << \
+			unitSpecificType << "porque no se pudo cargar la font " << FONT_PATH FONT_NAME << endl;
+	}
+
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0, 0, "FIREPOWER");
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + smallFontHeight, 0, "REDUCED FIREPOWER");
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
 
 
 	al_set_target_bitmap(backupBmp);
@@ -715,3 +612,118 @@ void productButton::calculateCurrentDimensions()
 }
 
 
+
+
+
+//void productButton::setResizedBmp()
+//{
+//	if (resizedBmp != nullptr)
+//	{
+//		al_destroy_bitmap(resizedBmp);
+//	}
+//	resizedBmp = al_create_bitmap(width, height);
+//
+//	//hacer backup del taregt bitmap actual y dibujar el boton en resizedBmp
+//	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
+//	al_set_target_bitmap(resizedBmp);
+//
+//	if (selected)
+//	{
+//		al_draw_filled_rounded_rectangle(margin, margin,
+//			eWidth - margin, eHeight - margin,
+//			BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
+//			al_color_name(WHEEL_COLOR));	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
+//		al_draw_scaled_bitmap(unformattedBmp, 0, 0,
+//			al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
+//			margin * 2, margin * 2,
+//			height / 4.0, width / 4.0,
+//			0);
+//		al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0, 0, "FIREPOWER");
+//		al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 3 * smallFontHeight, 0, "REDUCED FIREPOWER");
+//		al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 6 * smallFontHeight, 0, "TERRAIN MOVEMENT COST");
+//	}
+//	else
+//	{
+//		//Dibujar fondo
+//		al_draw_filled_rounded_rectangle(margin, margin,
+//			width - margin, height - margin,
+//			BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
+//			al_color_name(WHEEL_COLOR));	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
+//
+//		//Dibujar la unidad
+//		al_draw_scaled_bitmap(unformattedBmp,
+//			0, 0,
+//			al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
+//			margin * 2, margin * 2,
+//			width - margin * 2 * 2, height - margin * 2 * 2,
+//			0);	//TODO: sacar magic numbers
+//
+//		//Dibujar borde
+//		al_draw_rounded_rectangle(margin, margin,
+//			width - margin, height - margin,
+//			BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
+//			{ 0.7f, 0.7f, 0.7f, 1 }, 6);	//TODO: sacar magic numbers
+//
+//											//al_draw_rounded_rectangle(margin, margin,
+//											//	buttonSide - margin, buttonSide - margin, 
+//											//	BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
+//											//	{ 1, 1, 1, 1 }, 2);	//TODO: sacar magic numbers
+//
+//		ALLEGRO_BITMAP * auxBmp = nullptr;
+//
+//		//Dibujar el precio
+//		auxBmp = al_load_bitmap(IMAGE_PATH "coin.png");
+//		if (auxBmp == nullptr)
+//		{
+//			cout << "No se pudo cargar la imagen de moneda" << endl;
+//			valid = false;
+//			return;
+//		}
+//
+//		//Dibujar moenda
+//		al_draw_scaled_bitmap(auxBmp,
+//			0, 0,
+//			al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
+//			0, width - COIN_HEIGHT_IN_MARGINS * margin,
+//			COIN_HEIGHT_IN_MARGINS * margin, COIN_HEIGHT_IN_MARGINS * margin,
+//			0);
+//
+//		//Dibujar el precio
+//		al_draw_textf(smallFont, al_color_name("white"), COIN_HEIGHT_IN_MARGINS * margin,
+//			height - COIN_HEIGHT_IN_MARGINS * margin / 2.0 - al_get_font_line_height(smallFont) / 2.0,	//centrar verticalmente
+//			0, "%d", cost);
+//		al_destroy_bitmap(auxBmp);
+//
+//		//switch (unitBasicType = u->getBasicType())
+//		switch (unitBasicType = TREAD)
+//		{
+//		case WHEEL:
+//			break;
+//		case TREAD:
+//			auxBmp = al_load_bitmap(TREAD_LOGO_BMP);	//cargar el "logo" del basic type de la unidad
+//			if (auxBmp == nullptr)
+//			{
+//				cout << "No se cargo el logo de tread" << endl;
+//				valid = false;
+//				return;
+//			}
+//			break;
+//		case FOOT:
+//			break;
+//		default:	//TODO: ???
+//			break;
+//		}
+//
+//		//una vez cargado sin error, dibujar el logo del basic type con el tamanio adecuado y luego eliminar
+//		al_draw_scaled_bitmap(auxBmp,
+//			0, 0,	//TODO: dibujarle el tipo
+//			al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
+//			width - margin * 4, height * 2.0 / 3.0,
+//			width * 2.0 / 5.0, height * 2.0 / 5.0, 0);		//TODO: sacar magic numbers
+//		al_destroy_bitmap(auxBmp);
+//	}
+//	//TODO: agregar donde se escribe el basic type
+//
+//	al_set_target_bitmap(backupBmp);
+//
+//}   //TODO: controlr de parametros (que no haya nada es nullptr)

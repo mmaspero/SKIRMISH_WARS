@@ -28,23 +28,95 @@ public:
 	gui();
 	~gui();
 	
+/*******************************************************************************************************
+tileObserverFactory
+
+Recibe:
+Tile * t: tile de la cual se quiere obtener un tileObserver
+
+Devuelve:
+tileObserver * : -puntero al tileObserver de la tile recibida si no hay errores
+				 -nullptr si ya se creo un tileObserver para la Tile recibida, si se recibe nullptr,
+				 o si no se puede construir el tileObserver
+
+
+********************************************************************************************************/
 	tileObserver * tileObserverFactory(Tile * t);
+
+/*******************************************************************************************************
+tileObserverFactory
+
+Recibe:
+Tile * t: tile de la cual se quiere obtener un tileObserver
+
+Devuelve:
+tileObserver * : puntero al tileObserver de la tile recibida si no hay errores
+
+nullptr si ya se creo un tileObserver para la Tile recibida, si se recibe nullptr,
+o si no se puede construir el tileObserver
+
+//TODO: hacer bien
+********************************************************************************************************/
 	playerObserver * playerObserverFactory(Player * p);
+
+/*******************************************************************************************************
+tileObserverFactory
+
+Recibe:
+Tile * t: tile de la cual se quiere obtener un tileObserver
+
+Devuelve:
+tileObserver * : puntero al tileObserver de la tile recibida si no hay errores
+
+nullptr si ya se creo un tileObserver para la Tile recibida, si se recibe nullptr,
+o si no se puede construir el tileObserver
+
+//TODO: hacer bien
+********************************************************************************************************/
 	eventObserver * eventObserverFactory(GenericEvent * e);
 
 	bool isValid();
 
-	//getDisplay:
-	//devuelve un puntero al display sin entregar ownership
-	ALLEGRO_DISPLAY * getDisplay();
+/*******************************************************************************************************
+tileObserverFactory
 
+Devuelve:
+ALLEGRO_DISPLAY * : puntero al display que se esta usando.
+
+NO ENTREGA OWNERSHIP DEL DISPLAY! SI LO DESTRUIS ESTALLA TODO
+********************************************************************************************************/
+	ALLEGRO_DISPLAY * getDisplay();
+	
+/*******************************************************************************************************
+getButton
+
+Recibe:
+unsigned int xPixel, yPixel: coordenadas en pixeles del punto donde se busca un boton
+
+Devuelve:
+button * : -puntero al button que se encuentra ahi si es que hay alguno
+		   -nullptr si no hay un boton en ese punto
+
+Tiene undefined behaviour si hay contentBoxs o buttons superpuestos
+********************************************************************************************************/
 	button * getButton(unsigned int xPixel, unsigned int yPixel);
 	contentBox * getDisplaySection(unsigned int xPixel, unsigned int yPixel);
 
+/*******************************************************************************************************
+draw
+
+Dibuja todas las secciones del display.
+Si hubo un cambio de tamanio del display, se debe llamar primero a acknowledgeResize() para que 
+se dibujen todos los elementos con las dimensiones correctas
+//TODO: hacer private?
+********************************************************************************************************/
 	void draw();
 
-	//acknowledgeResize:
-	//actualiza las dimensiones de todas las displaySections a las dimensiones actuales del display.
+/*******************************************************************************************************
+acknowledgeResize
+
+Actualiza las dimensiones de todos los elementos del display a las dimensiones actuales del display.
+********************************************************************************************************/
 	void acknowledgeResize();
 
 private:
