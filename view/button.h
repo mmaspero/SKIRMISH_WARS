@@ -5,7 +5,6 @@
 
 typedef enum {TILE_BUTTON, PRODUCT_BUTTON, SIMPLE_BUTTON, BUTTON_TYPES_N} buttonType_t;
 
-typedef enum {PASS, BUY, CANCEL, BACK, SIMPLE_BUTTON_TYPES_N} simpleButtonType_t;	//botones que son solo una palabra y no hacen nada magico. Other quiere decir que no es niguno de los que ya estan estipulados
 
 
 /*

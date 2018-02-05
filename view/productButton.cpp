@@ -45,6 +45,8 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 {
 	if (valid)	//Proseguir solo si construyo button sin problemas
 	{
+		buttonType = PRODUCT_BUTTON;
+
 		resizedBmp = nullptr;	//NO SE USA!!! EN CAMBIO SE USA reducedBmp y expandedBmp
 
 		reducedBmp = nullptr;
@@ -122,6 +124,8 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 {
 	if (valid)	//Proseguir solo si construyo button sin problemas
 	{
+		buttonType = PRODUCT_BUTTON;
+
 		resizedBmp = nullptr;	//NO SE USA!!! EN CAMBIO SE USA reducedBmp y expandedBmp
 
 		reducedBmp = nullptr;

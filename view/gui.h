@@ -119,6 +119,8 @@ Actualiza las dimensiones de todos los elementos del display a las dimensiones a
 ********************************************************************************************************/
 	void acknowledgeResize();
 
+	void selectUnit(unit_t unit);	//TODO: sacar, es de debug
+
 private:
 	std::list<contentBox *> displaySections;
 	ALLEGRO_DISPLAY * display;

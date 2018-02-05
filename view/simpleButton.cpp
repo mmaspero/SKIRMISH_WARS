@@ -16,15 +16,17 @@
 #define PASS_TEXT "PASS"
 #define BUY_TEXT "BUY"
 #define CANCEL_TEXT "CANCEL"
+#define BACK_TEXT "BACK"
 
 using namespace std;
 
-simpleButton::simpleButton(simpleButtonType_t simpleButonType, float leftX, float topY, float width, float height)
+simpleButton::simpleButton(simpleButtonType_t simpleType, float leftX, float topY, float width, float height)
 	: button(leftX, topY, width, height)
 {
 	if (valid)
 	{
-		this->simpleButtonType;
+		buttonType = SIMPLE_BUTTON;
+		this->simpleType = simpleType;
 		float fontHeight = height;
 		font = al_load_font(FONT_PATH FONT_NAME, -fontHeight, 0);
 		if (font == nullptr)
@@ -34,7 +36,7 @@ simpleButton::simpleButton(simpleButtonType_t simpleButonType, float leftX, floa
 			return;
 		}
 
-		switch (simpleButonType)
+		switch (simpleType)
 		{
 		case PASS:
 			text = string(PASS_TEXT);
@@ -44,6 +46,9 @@ simpleButton::simpleButton(simpleButtonType_t simpleButonType, float leftX, floa
 			break;
 		case CANCEL:
 			text = string(CANCEL_TEXT);
+			break;		
+		case BACK:
+			text = string(BACK_TEXT);
 			break;
 		default:
 			break;
@@ -78,4 +83,34 @@ void simpleButton::draw()
 void simpleButton::setBgColor(ALLEGRO_COLOR bgColor)
 {
 	this->bgColor = bgColor;
+}
+
+simpleButtonType_t simpleButton::getSimpleType()
+{
+	return simpleType;
+}
+
+bool simpleButton::isItPass()
+{
+	return PASS == simpleType;
+}
+
+bool simpleButton::isItBuy()
+{
+	return BUY == simpleType;
+}
+
+bool simpleButton::isItCancel()
+{
+	return CANCEL == simpleType;
+}
+
+bool simpleButton::isItBack()
+{
+	return BACK == simpleType;
+}
+
+bool simpleButton::isItThisSimpleType(simpleButtonType_t simpleType)
+{
+	return this->simpleType == simpleType;
 }

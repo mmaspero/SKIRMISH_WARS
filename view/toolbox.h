@@ -5,6 +5,7 @@
 #include "contentBox.h"
 #include "../Game model/types.h"
 
+typedef enum{EMPTY, SHOWING_ALL_PRODUCTS, SHOWING_ONE_PRODUCT, SHOWING_UNIT_INFO, N_TOOLBOX_STATUS}toolboxStatus_t;
 
 
 class toolbox : public contentBox
@@ -17,9 +18,9 @@ public:
 	void deselectAllProducts();
 
 private:
+	toolboxStatus_t status;
+
 	virtual void drawContent();
 	virtual void resizeContent();
-
-//	productButton * unitsToBuy[N_TYPES];
 };
 

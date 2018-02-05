@@ -14,6 +14,8 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 	{
 		displaySectionType = TOOLBOX;
 
+		status = SHOWING_ALL_PRODUCTS;
+
 		bool buttonValid = true;
 		float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
 		for (int i = 0; i < N_UNIT_TYPES; i++)
@@ -33,21 +35,30 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 				buttonValid = false;
 			}
 		}
-		//TODO: agregar los simpleButtons;
-		simpleButton * simpleBuy = new simpleButton(BUY, contentStartX + contentWidth / 2, contentStartY + height * 0.9,
-			contentWidth / 2, contentHeight * 0.9);
-		if (simpleBuy->isValid())
+
+		simpleButton * simpleBuy = new simpleButton(BUY, contentStartX + contentWidth / 2, contentStartY + contentHeight * 0.9,
+			contentWidth / 2, contentHeight * 0.1);
+		buttonList.push_back(simpleBuy);
+		if(!buttonList.back()->isValid())
 		{
-			buttonList.push_back(simpleBuy);
-		}
-		simpleButton * simpleBack = new simpleButton(BACK, contentStartX, contentStartY + height * 0.9,
-					contentWidth / 2, contentHeight * 0.9);
-		if(simpleBack->isValid())
-		{
-			buttonList.push_back(simpleBack);
+			buttonValid = false;
 		}
 
+		simpleButton * simpleBack = new simpleButton(BACK, contentStartX, contentStartY + contentHeight * 0.9,
+					contentWidth / 2, contentHeight * 0.1);
+		buttonList.push_back(simpleBack);
+		if (!buttonList.back()->isValid())
+		{
+			buttonValid = false;
+		}
 
+		simpleButton * simplePass = new simpleButton(PASS, contentStartX, contentStartY + contentHeight * 0.9,
+			contentWidth / 2, contentHeight * 0.1);
+		buttonList.push_back(simplePass);
+		if (!buttonList.back()->isValid())
+		{
+			buttonValid = false;
+		}
 
 		if (!buttonValid)	//Si hubo un error en el constructor de algun boton, eliminar toda la lista
 		{
@@ -76,6 +87,7 @@ void toolbox::selectProduct(unit_t unitSpecificType)
 			((productButton *)(*it))->hiddenOn();
 		}
 	}
+	status = SHOWING_ONE_PRODUCT;
 }
 
 void toolbox::deselectAllProducts()
@@ -85,14 +97,56 @@ void toolbox::deselectAllProducts()
 		((productButton *)(*it))->selectedOff();
 		((productButton *)(*it))->hiddenOff();
 	}
-
+	status = SHOWING_ALL_PRODUCTS;
 }
 
 void toolbox::drawContent()
 {
-	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	switch (status)
 	{
-		(*it)->draw();
+	case EMPTY:
+		break;
+	case SHOWING_ALL_PRODUCTS:
+		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+		{
+			if ((*it)->isValid())
+			{
+				button * b = (*it);
+				if (b->getType() == PRODUCT_BUTTON)
+				{
+					b->draw();
+				}
+				else if (b->getType() == SIMPLE_BUTTON && ((simpleButton*)b)->isItPass() )
+				{
+					b->draw();
+				}
+			}	//TODO: hacer mas compacto pero no croto
+		}
+		break;
+	case SHOWING_ONE_PRODUCT:
+		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+		{
+			if ((*it)->isValid())
+			{
+				button * b = (*it);
+				if (b->getType() == PRODUCT_BUTTON)
+				{
+					if (b->isSelected())
+					{
+						b->draw();
+					}
+				}
+				else if (b->getType() == SIMPLE_BUTTON &&
+					(((simpleButton*)b)->isItBack() || ((simpleButton*)b)->isItBuy()))
+				{
+					b->draw();
+				}
+			}	//TODO: hacer mas compacto pero no croto
+		}
+		break;
+	case SHOWING_UNIT_INFO:
+		//TODO:
+		break;
 	}
 }
 
