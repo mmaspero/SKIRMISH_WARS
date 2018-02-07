@@ -6,14 +6,14 @@
 //*********tipos de paquetes de datos
 #define ACK 0X01
 #define NAME 0X10
-#define NAME_IS 0X11
-#define MAP_IS 0X12
+#define NAME_IS 0X11//
+#define MAP_IS 0X12//
 #define YOU_START 0X20
 #define I_START 0X21
 #define PASS 0X30
-#define MOVE 0X31
-#define PURCHASE 0X32
-#define ATTACK 0X33 
+#define MOVE 0X31//
+#define PURCHASE 0X32//
+#define ATTACK 0X33 //
 #define YOU_WON 0X40
 #define PLAY_AGAIN 0X50
 #define GAME_OVER 0X51
@@ -53,6 +53,7 @@ class nameIs :public genericPackage
 {
 public:
 	nameIs(std::string name);
+	~nameIs();
 	std::string getName() { return this->name;};
 private:
 	std::string name;
@@ -62,6 +63,7 @@ class mapIs :public genericPackage
 {
 public:
 	mapIs(std::string mapName, unsigned char checksum);
+	~mapIs();
 	std::string getMapName() { return mapName;};
 	unsigned char getChecksum() { return checksum;};
 private:
@@ -74,6 +76,7 @@ class move : public genericPackage
 public:
 	move(unsigned char rowOrigin, unsigned char columnOrigin, unsigned char rowDestination, unsigned char columnDestination);
 	move(Point origin, Point destination);
+	~move();
 	Point getOrigin() { return origin;};
 	Point getDestination() { return destination;};
 private:
@@ -87,6 +90,7 @@ class attack : public genericPackage
 public:
 	attack(unsigned char dice, unsigned char rowOrigin, unsigned char columnOrigin, unsigned char rowDestination, unsigned char columnDestination);
 	attack(unsigned char dice, Point origin, Point destination);
+	~attack();
 	Point getOrigin() { return origin; };
 	Point getDestination() { return destination; };
 	unsigned char getDice() { return dice; };
@@ -101,6 +105,7 @@ class purchase : public genericPackage
 public:
 	purchase(std::string ejercitoID, unsigned char row, unsigned char column);
 	purchase(std::string ejercitoID, Point possition);
+	~purchase();
 	Point getPossition() { return possition; };
 	std::string getEjercitoId() { return ejercitoID; };
 private:
@@ -113,56 +118,68 @@ class ack : public genericPackage
 {
 public:
 	ack();
+	~ack();
 };
 class name :public genericPackage
 {
 public:
 	name();
+	~name();
 };
 
 class youStart :public genericPackage
 {
 public:
 	youStart();
+	~youStart();
+
 };
 
 class iStart : public genericPackage
 {
 public:
 	iStart();
+	~iStart();
 };
 
 class pass : public genericPackage
 {
 public:
 	pass();
+	~pass();
 };
 
 class youWon : public genericPackage
 {
 public:
 	youWon();
+	~youWon();
 };
 
 class playAgain : public genericPackage
 {
 public:
 	playAgain();
+	~playAgain();
+
 };
 
 class gameOver :public genericPackage
 {
 public:
 	gameOver();
+	~gameOver();
 };
 class error : public genericPackage
 {
 public:
 	error();
+	~error();
 };
 
 class quit : public genericPackage
 {
 public:
 	quit();
+	~quit();
 };
