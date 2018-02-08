@@ -7,7 +7,7 @@
 
 typedef enum players { NEUTRAL, USER, OPPONENT, N_PLAYERS } player_t;
 typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING } playerStatus_t;
-typedef enum tileStatus { VISIBLE, FOG, SELECTED, CAN_ATTACK, CAN_MOVE } tileStatus_t;
+typedef enum tileStatus { VISIBLE, FOG, UNIT_REVEALED, SELECTED, CAN_ATTACK, CAN_MOVE } tileStatus_t;
 
 typedef enum actions { ACT_MOVE, ACT_LOAD, ACT_UNLOAD, ACT_ATTACK, ACT_CAPTURE, N_ACTIONS} action_t;
 
@@ -43,6 +43,7 @@ typedef enum units {
 
 #define UNIT_TOKEN	'+'	//caracter que separa el terreno/edificio de la unidad
 
+std::string getUnitString(unit_t type);
 unit_t parseUnitString(std::string s);			//devuelve N_UNIT_TYPES si no era valida
 terrain_t parseTerrainChar(char c);				//devuelve N_TERRAINS si no era valido
 building_t parseBuildingChar(char c);			//devuelve N_BUILDINGS si no era valido

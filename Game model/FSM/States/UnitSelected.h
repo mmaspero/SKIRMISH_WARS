@@ -1,9 +1,10 @@
 #pragma once
 #include "../GenericState.h"
+#include "../../../Point.h"
 
 class UnitSelected : public GenericState {
 public:
-	UnitSelected();
+	UnitSelected(Point selection);
 
 	GenericState * onTimeout(GenericEvent *);
 	GenericState * onUserPass(GenericEvent *);
@@ -13,4 +14,7 @@ public:
 	GenericState * onUnitSelection(GenericEvent *);
 	GenericState * onPurchaseSelection(GenericEvent *);
 	GenericState * onUnselect(GenericEvent *);
+
+protected:
+	const Point selection;
 };

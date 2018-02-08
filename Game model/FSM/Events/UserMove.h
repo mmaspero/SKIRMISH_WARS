@@ -5,6 +5,6 @@
 class UserMove : public SkirmishEvent
 {
 public:
-	UserMove(Point p0, Point pf);
-	const Point p0, pf;
+	UserMove(Point pf);
+	const Point pf;
 };

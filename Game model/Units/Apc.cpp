@@ -72,6 +72,18 @@ bool Apc::healLoadedUnits()
 	return hpsUpdated;
 }
 
+bool Apc::startUnloading()
+{
+	bool valid = false;
+
+	if (state <= UNLOADING && loadedUnits.size()) {
+		valid = true;
+		state = UNLOADING;
+	}
+
+	return valid;
+}
+
 void Apc::getPossibleUnloads(std::list<Action>& ul)
 {
 	if (!loadedUnits.empty()) {

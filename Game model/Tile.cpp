@@ -5,8 +5,7 @@ Tile::Tile(Point position, terrain_t t) : position(position), t(t)
 {
 	u = nullptr;
 	b = nullptr;
-	status = FOG;
-	opponentCanSee = false;
+	opponentStatus = status = FOG;
 	obs = nullptr;
 }
 
@@ -99,7 +98,12 @@ bool Tile::canPurchaseUnit(player_t player)
 
 bool Tile::hasFog(player_t player)
 {
-	return (player == USER ? (status == FOG) : !(opponentCanSee));
+	return (player == USER ? (status == FOG || status == UNIT_REVEALED) : (opponentStatus == FOG || opponentStatus == UNIT_REVEALED));
+}
+
+bool Tile::canSeeUnit(player_t player)
+{
+	return (player == USER? (status != FOG) : (opponentStatus != FOG));
 }
 
 bool Tile::setUnit(Unit * u)
@@ -140,14 +144,40 @@ void Tile::setObserver(tileObserver * obs)
 
 void Tile::removeFog(player_t p)
 {
-	if (p == USER && status == FOG) {
+	if (p == USER && (status == FOG || status == UNIT_REVEALED)) {
 		status = VISIBLE;
 		if (obs != nullptr) {
 			obs->update();
 		}
 	}
-	else if (p == OPPONENT && opponentCanSee == false) {
-		opponentCanSee = true;
+	else if (p == OPPONENT && (opponentStatus == FOG || opponentStatus == UNIT_REVEALED)) {
+		opponentStatus = VISIBLE;
+	}
+}
+
+void Tile::revealUnit(player_t p)
+{
+	if (p == USER && status == FOG) {
+		status = UNIT_REVEALED;
+		if (obs != nullptr) {
+			obs->update();
+		}
+	}
+	else if (p == OPPONENT && opponentStatus == FOG) {
+		opponentStatus = UNIT_REVEALED;
+	}
+}
+
+void Tile::hideUnit(player_t p)
+{
+	if (p == USER && status == UNIT_REVEALED) {
+		status = FOG;
+		if (obs != nullptr) {
+			obs->update();
+		}
+	}
+	else if (p == OPPONENT && opponentStatus == UNIT_REVEALED) {
+		opponentStatus = FOG;
 	}
 }
 
@@ -157,6 +187,17 @@ void Tile::removeUnit()
 		u = nullptr;
 		if (obs != nullptr) {
 			obs->update();
+		}
+	}
+}
+
+void Tile::showAction(action_t act)
+{
+	if (status != FOG) {
+		switch (act) {
+		case ACT_MOVE:		{ status = CAN_MOVE; }		break;
+		case ACT_ATTACK:	{ status = CAN_ATTACK; }	break;
+		default:			{ status = VISIBLE; }		break;
 		}
 	}
 }

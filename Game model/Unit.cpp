@@ -10,13 +10,14 @@
 #include "Units\Rocket.h"
 #include "Units\Tank.h"
 #include <iterator>
+#include <cstdint>
 
 Map * Unit::map = nullptr;
 std::unordered_map<unit_t, Unit *> Unit::info;
 
 #define CANT_REACH	-1
 
-unsigned int getDamage(int initDamage, terrain_t t, unsigned int diceRoll);
+unsigned int getDamage(int initDamage, terrain_t t, building_t b, unsigned int diceRoll);
 
 
 
@@ -217,9 +218,20 @@ bool Unit::heal()
 		if (type == APC) {
 			hpsChanged |= ((Apc *)this)->healLoadedUnits();
 		}
+
+		if (hpsChanged == true) {
+			map->notifyTileObserver(position);
+		}
 	}
 
 	return hpsChanged;
+}
+
+void Unit::endTurn()
+{
+	if (state != IDLE) {
+		state = POST_ACTIVE;
+	}
 }
 
 void Unit::nextTurn()
@@ -236,7 +248,7 @@ int Unit::isActionValid(Action act)
 
 	Action it = actList.front();
 	while (actList.size() && mps == CANT_REACH) { 		
-		if (it.whereTo == it.whereTo && it.type == it.type) {
+		if (it.whereTo == it.whereTo && it.basicType() == it.basicType()) {
 			mps = it.mps;
 		}
 	}
@@ -264,15 +276,19 @@ int Unit::attack(Action att, unsigned int diceRoll)
 	if (att.type == ACT_ATTACK && att.mps == isActionValid(att) && 1 <= diceRoll && diceRoll <= 6) {
 		Unit * enemy = map->getUnit(att.whereTo);
 		terrain_t t = map->getTerrain(att.whereTo);
+		building_t b = map->hasBuilding(att.whereTo) ? map->getBuilding(att.whereTo)->getType() : N_BUILDINGS;
 		int initDamage = getAttackMod(enemy->getBasicType()) - enemy->defense; //aca ya se tiene en cuenta si esta reducido o no
 
-		enemy->healthPoints -= getDamage(initDamage, t, diceRoll);
+		enemy->healthPoints -= getDamage(initDamage, t, b, diceRoll);
 
 		if (enemy->healthPoints < 0) {
 			enemy->healthPoints = 0;
 		}
 
 		hpLeft = enemy->healthPoints;
+
+		state = ATTACKING;
+		map->notifyTileObserver(att.whereTo);
 	}
 	return hpLeft;
 }
@@ -281,8 +297,11 @@ bool Unit::startCapture(Action capt)
 {
 	bool valid = false; 
 
-	if (capt.type == ACT_CAPTURE && capt.mps == isActionValid(capt)) {
-
+	if (capt.type == ACT_CAPTURE && capt.mps == isActionValid(capt) && map->updateUnitPos(this, capt.whereTo)) {
+		position = capt.whereTo;
+		movingPoints -= capt.mps;
+		state = POST_ACTIVE; //despues de una captura no puedo moverme mas! es como un ataque
+		valid = true;
 	}
 
 	return valid;
@@ -398,7 +417,7 @@ void Unit::getPossibleAttacks(std::list<Action>& attacks, Point curr)
 			unsigned int dist = curr.orthogonalDistanceFrom(p); 
 
 			if (minRange <= dist && dist <= maxRange && map->hasUnit(p)
-				&& (isMine ^ (map->getUnitPlayer(p) == USER)) && !map->hasFog(p, getPlayer())) {
+				&& (isMine ^ (map->getUnitPlayer(p) == USER)) && map->canSeeUnit(p, getPlayer())) {
 				//me fijo si esta casilla la puedo atacar con menos MPs desde otro lugar o no
 				attacks.push_back(Action(ACT_ATTACK, p));
 			}
@@ -423,7 +442,57 @@ bool Unit::hasValidActions()
 	return act.size();
 }
 
-unsigned int getDamage(int initDamage, terrain_t t, unsigned int diceRoll)
+
+#define MIN_DAMAGE	-3
+#define MAX_DAMAGE	13
+typedef struct {
+	uint8_t damage;			
+	uint8_t maxDice;		//si saco esto o menos, hago un punto mas de danio
+}  terrainDefenseMod_t;
+
+unsigned int getDamage(int initDamage, terrain_t t, building_t b, unsigned int diceRoll)
 {
-	return rand()%3; //we. obviamente esto no es asi
+	unsigned int ans = UINT_MAX;
+
+	if (MIN_DAMAGE <= initDamage && initDamage <= MAX_DAMAGE && 1 <= diceRoll && diceRoll <= 6 && t <= N_TERRAINS) {
+		terrainDefenseMod_t defMods[MAX_DAMAGE - MIN_DAMAGE + 1][N_TERRAINS] = {
+			//GRASS		BUILDING	RIVER/ROAD	FOREST	HILL/HQ
+			{ {0, 0},	{0, 0},		{0, 1},		{0, 0},  {0, 0} },	//-3 (MIN_DAMAGE)
+			{ {0, 1},	{0, 0},		{0, 2},		{0, 1},  {0, 0} },	//-2
+			{ {0, 2},	{0, 1},		{0, 3},		{0, 2},  {0, 1} },	//-1
+			{ {0, 4},	{0, 2},		{0, 5},		{0, 3},  {0, 1} },	//0
+			{ {1, 2},	{1, 1},		{1, 3},		{1, 1},  {0, 5} },	//1
+			{ {2, 2},	{1, 5},		{2, 3},		{2, 1},  {1, 3} },	//2
+			{ {3, 1},	{2, 3},		{3, 3},		{2, 5},  {2, 1} },	//3
+			{ {4, 1},	{3, 1},		{4, 3},		{3, 4},  {2, 4} },	//4
+			{ {4, 5},	{3, 5},		{5, 3},		{4, 2},  {3, 2} },	//5
+			{ {5, 5},	{4, 3},		{6, 3},		{5, 1},  {3, 5} },	//6
+			{ {6, 5},	{5, 1},		{7, 3},		{6, 1},  {4, 3} },	//7
+			{ {7, 4},	{5, 5},		{8, 0},		{6, 5},  {5, 1} },	//8
+			{ {8, 0},	{6, 4},		{8, 0},		{7, 4},  {5, 4} },	//9
+			{ {8, 0},	{7, 2},		{8, 0},		{8, 0},  {6, 2} },	//10
+			{ {8, 0},	{8, 0},		{8, 0},		{8, 0},  {6, 5} },	//11
+			{ {8, 0},	{8, 0},		{8, 0},		{8, 0},  {7, 3} },	//12
+			{ {8, 0},	{8, 0},		{8, 0},		{8, 0},  {8, 0} },	//13 (MAX_DAMAGE)
+		};
+
+		if (t == ROAD) {
+			t = RIVER;	//TIENEN LOS MISMOS MODIFICADORES
+		}
+		else if (b == HEADQUARTERS) {
+			t = HILL;	
+		}
+		else if (b < N_BUILDINGS) {
+			t = ROAD; //USO EL LUGAR DE ROAD EN EL ENUM PORQUE SOBRA
+		}
+
+		initDamage -= MIN_DAMAGE;	//lo llevo a zero-based
+
+		ans = defMods[initDamage][t].damage;
+		if (diceRoll <= defMods[initDamage][t].maxDice) {
+			ans++;
+		}
+	}
+
+	return ans;
 }

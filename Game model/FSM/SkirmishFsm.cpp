@@ -18,7 +18,7 @@ SkirmishFSM::~SkirmishFSM()
 
 void SkirmishFSM::dispatch(GenericEvent * ev)
 {
-	if (currentState == nullptr || ev == nullptr)
+	if (currentState == nullptr|| currentState->name() == FSM_CRASHED || ev == nullptr)
 		return;
 
 	GenericState * newState = nullptr;
@@ -53,5 +53,10 @@ state_t SkirmishFSM::state()
 	else 
 		return N_STATES;
 
+}
+
+GenericState const * SkirmishFSM::getState()
+{
+	return currentState;
 }
 

@@ -1,25 +1,29 @@
 #include "UserPurchasing.h"
 #include "OpponentMoving.h"
 #include "PurchaseSelected.h"
+#include "../Events/PurchaseSelection.h"
+#include "skirmishHandlers.h"
 
 UserPurchasing::UserPurchasing() : GenericState(USER_PURCHASING)
 {
 	;
 }
 
-GenericState * UserPurchasing::onTimeout(GenericEvent *)
+GenericState * UserPurchasing::onTimeout(GenericEvent * e)
 {
+	skirmishHandler::nextTurn((SkirmishEvent *)e);
 	return new OpponentMoving();
 }
 
-GenericState * UserPurchasing::onUserPass(GenericEvent *)
+GenericState * UserPurchasing::onUserPass(GenericEvent * e)
 {
+	skirmishHandler::nextTurn((SkirmishEvent *)e);
 	return new OpponentMoving();
 }
 
-GenericState * UserPurchasing::onPurchaseSelection(GenericEvent *)
+GenericState * UserPurchasing::onPurchaseSelection(GenericEvent *ev)
 {
-	return new PurchaseSelected();
+	return new PurchaseSelected(((PurchaseSelection *)ev)->selection);
 }
 
 GenericState * UserPurchasing::onGoToPurchase(GenericEvent *)

@@ -20,16 +20,25 @@ public:
 	GenericEvent * validateOpponentMove(move mov);
 	GenericEvent * validateOpponentPurchase(purchase purch);
 	GenericEvent * getTileEvent(Point p);			//puede devolver null si esa tile no es nada 
+	bool dispatch(GenericEvent * ev);
 
+	void showPossibleActions(Point p);
+	void clearActions();
 	bool nextTurn();
-	bool registerAttack(Point origin, Point target, unsigned int dice);
+	bool registerAttack(Point origin, Point target, unsigned int dice); 
+	//FALTA SACAR LA FOG CUANDO TE ATACAN DE UNA TILE QUE NO VES!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//bool registerCounterAttack(Point origin, Point target, unsigned int dice);
+	void endAttack(Point attacker); 
+	bool registerMove(Point p0, Point pf);
+	bool registerPurchase(player_t who, Point factory, unit_t type);
 
 private:
 	bool valid;
 
 	player_t turn;
-	Unit * active;		//unidad activa (es decir, ya la use y si decido usar otra no puedo usarla mas)
-	Tile * selected;	//la primer tile seleccionada para una accion (capaz convendria tener solo un point, ver)
+	Unit * activeUnit;	//para saber cuando pasarla a post-active
+	//Point target;		//para saber de donde tengo que esperar un contraataque
+	//Point selected;	//la primer tile seleccionada para una accion
 	std::list<Action> actions;
 
 	Player user;
@@ -40,6 +49,7 @@ private:
 	gui * g;
 
 	Player * currPlayer();
-
+	void updateActiveUnit(Unit * u);
+	void checkForUnitDeath(Point where);
 	std::list<GenericEvent *> * softwareEvents;
 };

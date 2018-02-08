@@ -11,4 +11,5 @@ public:
 	virtual void dispatch(GenericEvent * ev);
 
 	state_t state();
+	const GenericState * getState();
 };

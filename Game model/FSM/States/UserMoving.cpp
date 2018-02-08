@@ -3,6 +3,8 @@
 #include "UnitSelected.h"
 #include "UserPurchasing.h"
 #include "../SkirmishEvent.h"
+#include "../Events/UnitSelection.h"
+#include "skirmishHandlers.h"
 
 UserMoving::UserMoving() : GenericState(USER_MOVING)
 {
@@ -11,15 +13,13 @@ UserMoving::UserMoving() : GenericState(USER_MOVING)
 
 GenericState * UserMoving::onTimeout(GenericEvent * e)
 {
-	SkirmishEvent * ev = (SkirmishEvent *)e;
-
-	
-
+	skirmishHandler::nextTurn((SkirmishEvent *)e);
 	return new OpponentMoving();
 }
 
-GenericState * UserMoving::onUserPass(GenericEvent *)
+GenericState * UserMoving::onUserPass(GenericEvent *e)
 {
+	skirmishHandler::nextTurn((SkirmishEvent *)e);
 	return new OpponentMoving();
 }
 
@@ -28,9 +28,11 @@ GenericState * UserMoving::onGoToPurchase(GenericEvent *)
 	return new UserPurchasing();
 }
 
-GenericState * UserMoving::onUnitSelection(GenericEvent *)
+GenericState * UserMoving::onUnitSelection(GenericEvent * e)
 {
-	return new UserPurchasing();
+	UnitSelection* ev = (UnitSelection*)e;
+	ev->model()->showPossibleActions(ev->tile);
+	return new UnitSelected(ev->tile);
 }
 
 GenericState * UserMoving::onUnselect(GenericEvent *)

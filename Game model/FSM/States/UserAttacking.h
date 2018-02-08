@@ -1,9 +1,10 @@
 #pragma once
 #include "../GenericState.h"
+#include "../../../Point.h"
 
 class UserAttacking : public GenericState {
 public:
-	UserAttacking();
+	UserAttacking(Point user, Point opponent);
 
 	GenericState * onTimeout(GenericEvent *);
 	GenericState * onUserPass(GenericEvent *);
@@ -12,4 +13,8 @@ public:
 	GenericState * onPurchaseSelection(GenericEvent *);
 	GenericState * onUnitSelection(GenericEvent *);
 	GenericState * onUnselect(GenericEvent *);
+
+	bool isWaitingFor(Point p0, Point pf) const;
+protected:
+	const Point user, opponent;
 };

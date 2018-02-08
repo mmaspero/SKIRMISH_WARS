@@ -1,6 +1,23 @@
 #include "types.h"
 #include <unordered_map>
 
+std::string getUnitString(unit_t type)
+{
+	std::string s;
+	switch (type) {
+	case RECON:		{ s = RE_STR; } break;
+	case ROCKET:	{ s = RO_STR; } break;
+	case MECH:		{ s = ME_STR; } break;
+	case INFANTRY:	{ s = IN_STR; } break;
+	case TANK:		{ s = TA_STR; } break;
+	case ARTILLERY:	{ s = AR_STR; } break;
+	case ANTIAIR:	{ s = AA_STR; } break;
+	case APC:		{ s = AP_STR; } break;
+	case MEDTANK:	{ s = MT_STR; }	break;
+	}
+	return s;
+}
+
 unit_t parseUnitString(std::string s)
 {
 	unit_t type = N_UNIT_TYPES;

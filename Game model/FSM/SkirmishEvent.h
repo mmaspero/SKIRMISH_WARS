@@ -1,8 +1,7 @@
 #pragma once
 #include "GenericEvent.h"
 #include "../Model.h"
-
-class Controller;	//eventualmente incluir controller y listo
+#include "../../Controller/controller.h"
 
 class SkirmishEvent : public GenericEvent {
 public:

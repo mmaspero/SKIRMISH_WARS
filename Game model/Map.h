@@ -1,6 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include "Unit.h"
+#include "Building.h"
 #include "types.h"
 #include "../Point.h"
 #include "unitInfo.h"
@@ -22,11 +23,13 @@ public:
 	player_t getBuildingPlayer(Point p);
 	unitType_t getBasicType(Point p);
 	Unit * getUnit(Point p);
+	Building * getBuilding(Point p);
 
 	static bool isInMap(Point p); //para verificar que un punto no se vaya de rango
 	bool hasUnit(Point p);
 	bool hasBuilding(Point p);
 	bool hasFog(Point p, player_t player);
+	bool canSeeUnit(Point p, player_t player);
 	bool canPurchaseUnit(Point p, player_t player);	//no le da bola al costo, solo que haya una fabrica vacia
 	bool canBoard(Point p, player_t player);
 	bool canCapture(Point p, player_t player);
@@ -37,8 +40,11 @@ public:
 	//si es una unidad nueva dejar la posicion nueva adentro de la unit tambien
 //	bool newUnit(Unit * u);
 	void clearTile(Point p); //saca la unidad
+	void revealUnit(Point p, player_t player);
+	void hideUnit(Point p, player_t player);
+	void showAction(Point p, action_t act);
 	void notifyTileObserver(Point p);
-	void playerInfo(player_t who, unsigned int& capturePointsHQ, unsigned int& nFactories, unsigned int& nCities, unsigned int& nUnits);
+	void playerInfo(player_t who, unsigned int& capturePointsHQ, unsigned int& nFactories, unsigned int& nCities, unsigned int &nUnits);
 
 
 private:

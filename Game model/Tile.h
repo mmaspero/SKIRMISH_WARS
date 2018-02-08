@@ -27,19 +27,23 @@ public:
 	Building * getBuilding();
 	bool canPurchaseUnit(player_t player);
 	bool hasFog(player_t player);
+	bool canSeeUnit(player_t player);
 
 	bool setUnit(Unit * u);			//estas funciones verifican que no metas dos edificios o dos units en la misma tile
 	bool setBuilding(Building * b);
 	void setObserver(tileObserver * obs);
 
 	void removeFog(player_t p);
+	void revealUnit(player_t p);
+	void hideUnit(player_t p);
 	void removeUnit();
+	void showAction(action_t act); //si la llamo con algo que no es ACT_ATTACK o ACT_MOVE vuelve a VISIBLE
 
 private:
 	const Point position;
 	const terrain_t t;		//si tiene un edificio esta variable no importa, el terreno es como road
 	tileStatus_t status;
-	bool opponentCanSee;
+	tileStatus_t opponentStatus;
 	Unit * u;
 	Building * b;
 	tileObserver * obs;

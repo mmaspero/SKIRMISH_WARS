@@ -5,6 +5,6 @@
 class UserAttack : public SkirmishEvent
 {
 public:
-	UserAttack(Point attacker, Point target);
-	const Point attacker, target;
+	UserAttack(Point target);
+	const Point target;
 };

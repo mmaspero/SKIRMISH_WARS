@@ -116,3 +116,9 @@ void Player::updateStats(unsigned int capturePointsHQ, unsigned int nFactories, 
 		obs->update();
 	}
 }
+
+void Player::unitKilled()
+{
+	if (nUnits)
+		nUnits--;
+}

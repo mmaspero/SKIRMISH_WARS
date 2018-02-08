@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "../Unit.h"
 #include <list>
 
@@ -14,6 +14,7 @@ public:
 	bool canBoard(bool player);
 	unsigned int nLoadedUnits();
 	bool healLoadedUnits();
+	bool startUnloading();
 
 	void getPossibleUnloads(std::list<Action>& ul);
 

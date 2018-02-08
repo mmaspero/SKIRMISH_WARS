@@ -1,9 +1,10 @@
 #pragma once
 #include "../GenericState.h"
+#include "../../types.h"
 
 class PurchaseSelected : public GenericState {
 public:
-	PurchaseSelected();
+	PurchaseSelected(unit_t selection);
 
 	GenericState * onTimeout(GenericEvent *);
 	GenericState * onUserPass(GenericEvent *);
@@ -12,4 +13,7 @@ public:
 	GenericState * onPurchaseSelection(GenericEvent *);
 	GenericState * onUnitSelection(GenericEvent *);
 	GenericState * onUnselect(GenericEvent *);
+
+protected:
+	const unit_t selection;
 };

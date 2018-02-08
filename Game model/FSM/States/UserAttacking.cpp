@@ -1,24 +1,29 @@
 #include "UserAttacking.h"
 #include "WaitingAttackTurnOver.h"
 #include "UserMoving.h"
+#include "../Events/OpponentAttack.h"
 
-UserAttacking::UserAttacking() : GenericState(USER_ATTACKING)
+UserAttacking::UserAttacking(Point user, Point opponent) : GenericState(USER_ATTACKING), user(user), opponent(opponent)
 {
 	;
 }
 
 GenericState * UserAttacking::onTimeout(GenericEvent *)
 {
-	return new WaitingAttackTurnOver();
+	return new WaitingAttackTurnOver(user, opponent);
 }
 
 GenericState * UserAttacking::onUserPass(GenericEvent *)
 {
-	return new WaitingAttackTurnOver();
+	return new WaitingAttackTurnOver(user, opponent);
 }
 
-GenericState * UserAttacking::onOpponentAttack(GenericEvent *)
+GenericState * UserAttacking::onOpponentAttack(GenericEvent * e)
 {
+	OpponentAttack * ev = (OpponentAttack *)e;
+	ev->model()->registerAttack(ev->attacker, ev->target, ev->dice);
+	//ev->contr()->resetPlayTimer();
+	ev->model()->endAttack(opponent);
 	return new UserMoving();
 }
 
@@ -40,4 +45,9 @@ GenericState * UserAttacking::onUnitSelection(GenericEvent *)
 GenericState * UserAttacking::onUnselect(GenericEvent *)
 {
 	return this;
+}
+
+bool UserAttacking::isWaitingFor(Point p0, Point pf) const
+{
+	return (p0 == opponent && pf == user);
 }

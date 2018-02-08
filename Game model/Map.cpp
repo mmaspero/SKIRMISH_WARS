@@ -152,6 +152,14 @@ Unit * Map::getUnit(Point p)
 		return nullptr;
 }
 
+Building * Map::getBuilding(Point p)
+{
+	if (valid && isInMap(p))
+		return board[p.row][p.col]->b;
+	else
+		return nullptr;
+}
+
 bool Map::hasUnit(Point p)
 {
 	if (valid && isInMap(p) && (board[p.row][p.col]->u) != nullptr)
@@ -171,6 +179,11 @@ bool Map::hasBuilding(Point p)
 bool Map::hasFog(Point p, player_t player)
 {
 	return valid && isInMap(p) && board[p.row][p.col]->hasFog(player);
+}
+
+bool Map::canSeeUnit(Point p, player_t player)
+{
+	return valid && isInMap(p) && board[p.row][p.col]->canSeeUnit(player);
 }
 
 bool Map::canPurchaseUnit(Point p, player_t player)
@@ -246,6 +259,25 @@ void Map::clearTile(Point p)
 {
 	if (valid && isInMap(p)) {
 		board[p.row][p.col]->removeUnit();
+	}
+}
+
+void Map::revealUnit(Point p, player_t player)
+{
+	if (valid && isInMap(p))
+		board[p.row][p.col]->revealUnit(player);
+}
+
+void Map::hideUnit(Point p, player_t player)
+{
+	if (valid && isInMap(p))
+		board[p.row][p.col]->hideUnit(player);
+}
+
+void Map::showAction(Point p, action_t act)
+{
+	if (valid && isInMap(p)) {
+		board[p.row][p.col]->showAction(act);
 	}
 }
 
@@ -336,7 +368,7 @@ Unit * parseUnit(std::string s, Point p, player_t first)
 	unit_t type = N_UNIT_TYPES;
 
 	if (s.back() == '1' || s.back() == '2') {
-		bool isMine = (s.back() == '2' ^ first == USER);
+		bool isMine = ((s.back() == '2') ^ (first == USER));
 		s.pop_back();
 
 		type = parseUnitString(s);
@@ -353,7 +385,7 @@ Building * parseBuilding(std::string s, Point p, player_t first)
 	Building * b = nullptr;
 
 	if (s.size() == 2 && (s[1] >= '0' || s[1] <= '2')) {
-		player_t player = (s[1] == '0' ? NEUTRAL : ((s[1] == '2' ^ first == USER)? USER : OPPONENT));
+		player_t player = (s[1] == '0' ? NEUTRAL : ( ((s[1] == '2') ^ (first == USER)) ? USER : OPPONENT) );
 		building_t type = parseBuildingChar(s[0]);
 		
 		if (type < N_BUILDINGS) { 

@@ -19,6 +19,7 @@ public:
 
 	void setObserver(playerObserver * obs);
 	void updateStats(unsigned int capturePointsHQ, unsigned int nFactories, unsigned int nCities, unsigned int nUnits);
+	void unitKilled();
 
 	bool wasDefeated();
 	unsigned int getMoney();
