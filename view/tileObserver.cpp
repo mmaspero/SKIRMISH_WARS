@@ -15,6 +15,8 @@
 #define FOREST_TEXTURE "forestTexture.jpg"
 #define HILL_TEXTURE "hillTexture.png"
 
+#define FOG_COLOR "hotpink"
+
 using namespace std;
 
 tileObserver::tileObserver(Tile * t, tileButton * tButton, toolbox * tBox)
@@ -38,15 +40,15 @@ void tileObserver::update()
 	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
 	al_set_target_bitmap(buttonBmp);
 
-//	if (t->status = FOG)
+	if (t->status == FOG)
 	{
-		al_clear_to_color(al_map_rgb(0, 0, 0));	//TODO: sacar magic number
+		al_clear_to_color(al_color_name(FOG_COLOR));	//TODO: sacar magic number
 	}
-//	else
+	else
 	{
 		terrain_t terrainType = t->t;
 		unit_t unitType;
-		unitType_t unitBasicType;
+		basicUnitType_t unitBasicType;
 		if (t->hasUnit())
 		{
 			unitType = t->u->getType();
@@ -112,23 +114,28 @@ void tileObserver::update()
 		std::string name;
 		if (t->hasUnit())
 		{
-			switch (t->getUnit()->getType()) 
-			{
-			case RECON: { name = RE_STR; }		break;	//unitBmp = al_load_bitmap(fjhfkjskdj)
-			case ROCKET: { name = RO_STR; }		break;
-			case MECH: { name = ME_STR; }		break;
-			case INFANTRY: { name = IN_STR; }	break;
-			case TANK: { name = TA_STR; }		break;
-			case ARTILLERY: { name = AR_STR; }	break;
-			case ANTIAIR: { name = AA_STR; }		break;
-			case APC: { name = AP_STR; }			break;
-			case MEDTANK: { name = MT_STR; }		break;
-			}
-
+			name = getUnitString(t->getUnit()->getType());
 			switch (unitBasicType);
 		}
 
-		//Agregar el edificio
+		std::string name2;
+		//TODO: sacar a la mierda
+		if (t->hasBuilding())
+		{
+			switch (t->b->getType())
+			{
+			case HEADQUARTERS:
+				name2 = "HQ";
+				break;
+			case FACTORY:
+				name2 = "FACT";
+				break;
+			case CITY:
+				name2 = "CITY";
+				break;
+			}
+		}
+
 
 		switch (tileStatus)
 		{
@@ -139,7 +146,7 @@ void tileObserver::update()
 			marginColor = al_map_rgb_f(1, 0, 0);
 			break;
 		case CAN_MOVE:
-			marginColor = al_map_rgb(1, 1, 0);
+			marginColor = al_map_rgb_f(1, 1, 0);
 			break;
 		case VISIBLE: default:
 			marginColor = al_map_rgba_f(0, 0, 0, 0);	//no se ve ningun margen
@@ -163,9 +170,8 @@ void tileObserver::update()
 				0, 0, bmpW, bmpH, 0);
 			al_destroy_bitmap(terrainBmp);
 		}
-		
 		{
-			ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 4, 0);
+			ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 2, 0);
 			{
 				if (font == nullptr)
 				{
@@ -174,7 +180,8 @@ void tileObserver::update()
 				}
 				else
 				{
-					al_draw_text(font, al_color_name("hot pink"), 0, 0, 0, name.c_str());
+					al_draw_text(font, al_color_name("pink"), 0, 0, 0, name.c_str());
+					al_draw_text(font, al_color_name("white"), 0, bmpH / 2.0, 0, name2.c_str());
 					al_destroy_font(font);
 				}
 			}
@@ -189,7 +196,7 @@ void tileObserver::update()
 		{
 			al_draw_scaled_bitmap(tileStatusBmp, 0, 0, al_get_bitmap_width(tileStatusBmp), al_get_bitmap_height(tileStatusBmp),
 				0, 0, bmpW, bmpH, 0);
-			al_destroy_bitmap(terrainBmp);
+			al_destroy_bitmap(tileStatusBmp);
 		}
 
 		al_draw_rectangle(0, 0, bmpW, bmpH, marginColor, 5);	//TODO: sacar magic numbers
@@ -199,4 +206,7 @@ void tileObserver::update()
 	tButton->setUnformattedBmp(buttonBmp);
 	al_set_target_bitmap(backupBmp);
 	
+	tButton->draw();
+	al_flip_display();	//TODO: sacar!!!!! hacer como contentBox con el set clipping rectangle y la herencia y bla bla bla
+
 }

@@ -65,8 +65,8 @@ void Board::setTileButton(Tile * tile)
 
 void Board::drawContent()
 {
-	//al_draw_filled_rectangle(BOARD_LEFT_X, BOARD_TOP_Y, BOARD_LEFT_X + B_W * tileSide, 
-	//	BOARD_TOP_Y + B_H * tileSide, { 0,0,0,1 });	//TODO: placeholder del tablero
+	al_draw_filled_rectangle(BOARD_LEFT_X, BOARD_TOP_Y, BOARD_LEFT_X + B_W * tileSide, 
+		BOARD_TOP_Y + B_H * tileSide, { 0,0,0,1 });	//TODO: placeholder del tablero
 
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 	{

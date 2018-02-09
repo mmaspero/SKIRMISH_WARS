@@ -89,7 +89,7 @@ private:
 
 	std::string unitSpecificTypeName;
 	unit_t unitSpecificType;
-	unitType_t unitBasicType;
+	basicUnitType_t unitBasicType;
 	bool canBuy;
 	unsigned int cost;
 	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
