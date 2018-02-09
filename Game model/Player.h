@@ -8,9 +8,10 @@ class Player {
 public:
 	friend class playerObserver;
 
-	Player(player_t who);
+	Player(player_t who, bool iStart);
 	~Player();
 
+	void nextState();
 	Unit * buy(unit_t type, Point p);
 	void collectIncome();
 	bool registerCapture(bool won, building_t type); //devuelve false si perdio sus hq
@@ -23,6 +24,7 @@ public:
 
 	bool wasDefeated();
 	unsigned int getMoney();
+	unsigned int getStatus();
 	player_t id();
 
 private:

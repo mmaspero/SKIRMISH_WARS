@@ -38,6 +38,8 @@ public:
 	void hideUnit(player_t p);
 	void removeUnit();
 	void showAction(action_t act); //si la llamo con algo que no es ACT_ATTACK o ACT_MOVE vuelve a VISIBLE
+	void select();
+	void unselect();
 
 private:
 	const Point position;

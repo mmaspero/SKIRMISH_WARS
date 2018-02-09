@@ -111,9 +111,7 @@ bool Tile::setUnit(Unit * u)
 	if (this->u == nullptr) {
 		this->u = u;
 		removeFog(u->getPlayer());
-		if (obs != nullptr) {
-			obs->update();
-		}
+		notifyObserver();
 		return true;
 	}
 	else
@@ -125,9 +123,7 @@ bool Tile::setBuilding(Building * b)
 	if (this->b == nullptr) {
 		this->b = b;
 
-		if (obs != nullptr) {
-			obs->update();
-		}
+		notifyObserver();
 		return true;
 	}
 	else
@@ -137,7 +133,7 @@ bool Tile::setBuilding(Building * b)
 void Tile::setObserver(tileObserver * obs)
 {
 	if (this->obs == nullptr && obs != nullptr) {
-		obs = obs;
+		this->obs = obs;
 		obs->update();
 	}
 }
@@ -146,9 +142,7 @@ void Tile::removeFog(player_t p)
 {
 	if (p == USER && (status == FOG || status == UNIT_REVEALED)) {
 		status = VISIBLE;
-		if (obs != nullptr) {
-			obs->update();
-		}
+		notifyObserver();
 	}
 	else if (p == OPPONENT && (opponentStatus == FOG || opponentStatus == UNIT_REVEALED)) {
 		opponentStatus = VISIBLE;
@@ -159,9 +153,7 @@ void Tile::revealUnit(player_t p)
 {
 	if (p == USER && status == FOG) {
 		status = UNIT_REVEALED;
-		if (obs != nullptr) {
-			obs->update();
-		}
+		notifyObserver();
 	}
 	else if (p == OPPONENT && opponentStatus == FOG) {
 		opponentStatus = UNIT_REVEALED;
@@ -172,9 +164,7 @@ void Tile::hideUnit(player_t p)
 {
 	if (p == USER && status == UNIT_REVEALED) {
 		status = FOG;
-		if (obs != nullptr) {
-			obs->update();
-		}
+		notifyObserver();
 	}
 	else if (p == OPPONENT && opponentStatus == UNIT_REVEALED) {
 		opponentStatus = FOG;
@@ -185,9 +175,7 @@ void Tile::removeUnit()
 {
 	if (u != nullptr) {
 		u = nullptr;
-		if (obs != nullptr) {
-			obs->update();
-		}
+		notifyObserver();
 	}
 }
 
@@ -199,5 +187,22 @@ void Tile::showAction(action_t act)
 		case ACT_ATTACK:	{ status = CAN_ATTACK; }	break;
 		default:			{ status = VISIBLE; }		break;
 		}
+		notifyObserver();
+	}
+}
+
+void Tile::select()
+{
+	if (status == VISIBLE) {
+		status = SELECTED;
+		notifyObserver();
+	}
+}
+
+void Tile::unselect()
+{
+	if (status == SELECTED) {
+		status = VISIBLE;
+		notifyObserver();
 	}
 }

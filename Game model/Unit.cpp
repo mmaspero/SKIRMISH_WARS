@@ -49,7 +49,7 @@ unit_t Unit::getType()
 	return type;
 }
 
-unitType_t Unit::getBasicType()
+basicUnitType_t Unit::getBasicType()
 {
 	if (FIRST_W <= type && type < FIRST_F)
 		return WHEEL;
@@ -141,7 +141,7 @@ unsigned int Unit::getTerrainMod(unit_t type, terrain_t t)
 	return ans;
 }
 
-unsigned int Unit::getAttackMod(unit_t type, unitType_t basicType)
+unsigned int Unit::getAttackMod(unit_t type, basicUnitType_t basicType)
 {
 	unsigned int ans = UINT_MAX;
 

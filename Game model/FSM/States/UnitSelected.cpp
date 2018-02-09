@@ -41,7 +41,7 @@ GenericState * UnitSelected::onUserMove(GenericEvent * e)
 	UserMove * ev = (UserMove *)e;
 	ev->model()->registerMove(selection, ev->pf);
 	//ev->contr()->sendMove(selection.row, selection.col, ev->pf.row, ev->pf.col);
-	//ev->contr()->resetPlayTimer;
+	//ev->contr()->resetPlayTimer();
 	return new WaitingMoveAck();
 }
 

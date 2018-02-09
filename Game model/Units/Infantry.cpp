@@ -31,7 +31,7 @@ unsigned int Infantry::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int Infantry::getAttackMod(unitType_t basicType)
+unsigned int Infantry::getAttackMod(basicUnitType_t basicType)
 {
 	if (isReduced()) {
 		switch (basicType) {

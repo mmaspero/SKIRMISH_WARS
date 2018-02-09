@@ -136,7 +136,7 @@ player_t Map::getBuildingPlayer(Point p)
 		return N_PLAYERS;
 }
 
-unitType_t Map::getBasicType(Point p)
+basicUnitType_t Map::getBasicType(Point p)
 {
 	if (valid && hasUnit(p))
 		return ((board[p.row][p.col])->u)->getBasicType();
@@ -285,6 +285,20 @@ void Map::notifyTileObserver(Point p)
 {
 	if (valid && isInMap(p)) {
 		board[p.row][p.col]->notifyObserver();
+	}
+}
+
+void Map::select(Point p)
+{
+	if (valid && isInMap(p)) {
+		board[p.row][p.col]->select();
+	}
+}
+
+void Map::unselect(Point p)
+{
+	if (valid && isInMap(p)) {
+		board[p.row][p.col]->unselect();
 	}
 }
 

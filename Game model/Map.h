@@ -21,7 +21,7 @@ public:
 	terrain_t getTerrain(Point p);
 	player_t getUnitPlayer(Point p);
 	player_t getBuildingPlayer(Point p);
-	unitType_t getBasicType(Point p);
+	basicUnitType_t getBasicType(Point p);
 	Unit * getUnit(Point p);
 	Building * getBuilding(Point p);
 
@@ -44,6 +44,8 @@ public:
 	void hideUnit(Point p, player_t player);
 	void showAction(Point p, action_t act);
 	void notifyTileObserver(Point p);
+	void select(Point p);
+	void unselect(Point p);
 	void playerInfo(player_t who, unsigned int& capturePointsHQ, unsigned int& nFactories, unsigned int& nCities, unsigned int &nUnits);
 
 

@@ -15,7 +15,6 @@ GenericState * WaitingMoveAck::onTimeout(GenericEvent *)
 
 GenericState * WaitingMoveAck::onAck(GenericEvent * ev)
 {
-	skirmishHandler::nextTurn((SkirmishEvent*)ev);
 	return new UserMoving();
 }
 

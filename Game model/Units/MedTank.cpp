@@ -31,7 +31,7 @@ unsigned int MedTank::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int MedTank::getAttackMod(unitType_t basicType)
+unsigned int MedTank::getAttackMod(basicUnitType_t basicType)
 {
 	if (isReduced()) {
 		switch (basicType) {

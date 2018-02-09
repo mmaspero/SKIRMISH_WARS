@@ -43,7 +43,7 @@ GenericState * OpponentMoving::onOpponentAttack(GenericEvent * e)
 	dice = rand() % 6 + 1;
 	ev->model()->registerAttack(ev->target, ev->attacker, dice);
 	//ev->contr()->resetPlayTimer();
-//	ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
+	//ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
 	ev->model()->endAttack(ev->attacker);
 	return this;
 }

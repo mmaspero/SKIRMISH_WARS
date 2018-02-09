@@ -31,7 +31,7 @@ unsigned int AntiAir::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int AntiAir::getAttackMod(unitType_t basicType)
+unsigned int AntiAir::getAttackMod(basicUnitType_t basicType)
 {
 	if (isReduced()) {
 		switch (basicType) {

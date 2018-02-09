@@ -8,7 +8,7 @@
 #include "../view/gui.h"
 #include "../Controller/package/packages.h"
 
-#define DEBUG_NOVIEW	1
+//#define DEBUG_NOVIEW	1
 
 class Model {
 public:
@@ -16,9 +16,9 @@ public:
 	~Model();
 	bool isValid();
 
-	GenericEvent * validateOpponentAttack(attack att);		//estas es cuando llegan por paquete del otro jugador
-	GenericEvent * validateOpponentMove(move mov);
-	GenericEvent * validateOpponentPurchase(purchase purch);
+	GenericEvent * validateOpponentAttack(attack * att);		//estas es cuando llegan por paquete del otro jugador
+	GenericEvent * validateOpponentMove(move * mov);
+	GenericEvent * validateOpponentPurchase(purchase * purch);
 	GenericEvent * getTileEvent(Point p);			//puede devolver null si esa tile no es nada 
 	bool dispatch(GenericEvent * ev);
 
@@ -46,7 +46,6 @@ private:
 	Map m;
 	
 	SkirmishFSM fsm;
-	gui * g;
 
 	Player * currPlayer();
 	void updateActiveUnit(Unit * u);

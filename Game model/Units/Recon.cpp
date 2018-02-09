@@ -31,7 +31,7 @@ unsigned int Recon::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int Recon::getAttackMod(unitType_t basicType)
+unsigned int Recon::getAttackMod(basicUnitType_t basicType)
 {
 	if (isReduced()) {
 		switch (basicType) {

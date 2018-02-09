@@ -31,7 +31,7 @@ unsigned int Rocket::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int Rocket::getAttackMod(unitType_t basicType)
+unsigned int Rocket::getAttackMod(basicUnitType_t basicType)
 {
 	if (isReduced()) {
 		switch (basicType) {

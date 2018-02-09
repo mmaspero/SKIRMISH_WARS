@@ -31,7 +31,7 @@ unsigned int Tank::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int Tank::getAttackMod(unitType_t basicType)
+unsigned int Tank::getAttackMod(basicUnitType_t basicType)
 {
 	if (isReduced()) {
 		switch (basicType) {

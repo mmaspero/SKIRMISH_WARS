@@ -23,7 +23,7 @@ typedef enum terrains { GRASS, RIVER, ROAD, FOREST, HILL, N_TERRAINS } terrain_t
 #define FOREST_CHR	'f'
 #define HILL_CHR	'h'
 
-typedef enum unitTypes { WHEEL, FOOT, TREAD, N_BASIC_U_TYPES } unitType_t;
+typedef enum unitTypes { WHEEL, FOOT, TREAD, N_BASIC_U_TYPES } basicUnitType_t;
 typedef enum units {
 	RECON, ROCKET,							//	WHEEL
 	MECH, INFANTRY,							//	FOOT

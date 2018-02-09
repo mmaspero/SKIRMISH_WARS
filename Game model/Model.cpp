@@ -12,7 +12,7 @@
 #include "Units\Apc.h"
 
 Model::Model(const char * map, player_t first, std::list<GenericEvent *> * softwareEvents, gui * g) : 
-	user(USER), opponent(OPPONENT), m(map, first), g(g), softwareEvents(softwareEvents)
+	user(USER, first == USER), opponent(OPPONENT, first == OPPONENT), m(map, first), softwareEvents(softwareEvents)
 {
 	valid = false;
 #ifndef DEBUG_NOVIEW
@@ -63,41 +63,41 @@ bool Model::isValid()
 	return valid;
 }
 
-GenericEvent * Model::validateOpponentAttack(attack att)
+GenericEvent * Model::validateOpponentAttack(attack * att)
 {
 	GenericEvent * e = nullptr;
 	
-	if ( (fsm.state() == OPP_MOVING && m.hasUnit(att.getOrigin()) && m.getUnit(att.getOrigin())->getPlayer() == OPPONENT
-			&& m.getUnit(att.getOrigin())->isActionValid(Action(ACT_ATTACK, att.getDestination()))) || //ataque
+	if ( att != nullptr && (fsm.state() == OPP_MOVING && m.hasUnit(att->getOrigin()) && m.getUnit(att->getOrigin())->getPlayer() == OPPONENT
+			&& m.getUnit(att->getOrigin())->isActionValid(Action(ACT_ATTACK, att->getDestination()))) || //ataque
 			(fsm.state() == WAITING_ATTACK_TURN_OVER || fsm.state() == USER_ATTACKING && //contraataque
-			((UserAttacking *)fsm.getState())->isWaitingFor(att.getOrigin(), att.getDestination())) ) {
-		e = new OpponentAttack(att.getOrigin(), att.getDestination(), att.getDice());
+			((UserAttacking *)fsm.getState())->isWaitingFor(att->getOrigin(), att->getDestination())) ) {
+		e = new OpponentAttack(att->getOrigin(), att->getDestination(), att->getDice());
 	}
 	
 	return e;
 }
 
-GenericEvent * Model::validateOpponentMove(move mov)
+GenericEvent * Model::validateOpponentMove(move * mov)
 {
 	GenericEvent * e = nullptr;
 	
-	if (fsm.state() == OPP_MOVING && m.hasUnit(mov.getOrigin()) && m.getUnit(mov.getOrigin())->getPlayer() == OPPONENT
-		&& m.getUnit(mov.getOrigin())->isActionValid(Action(ACT_MOVE, mov.getDestination()))) {
-		e = new OpponentMove(mov.getOrigin(), mov.getDestination());
+	if (mov != nullptr && fsm.state() == OPP_MOVING && m.hasUnit(mov->getOrigin()) && m.getUnit(mov->getOrigin())->getPlayer() == OPPONENT
+		&& m.getUnit(mov->getOrigin())->isActionValid(Action(ACT_MOVE, mov->getDestination()))) {
+		e = new OpponentMove(mov->getOrigin(), mov->getDestination());
 	}
 
 	return e;
 }
 
-GenericEvent * Model::validateOpponentPurchase(purchase purch)
+GenericEvent * Model::validateOpponentPurchase(purchase * purch)
 {
 	GenericEvent * e = nullptr;
 	
-	if (m.canPurchaseUnit(purch.getPossition(), OPPONENT)) {
+	if (purch != nullptr && m.canPurchaseUnit(purch->getPossition(), OPPONENT)) {
 		//aca ya se que el oponente tiene una fabrica vacia ahi, falta ver si le alcanza la plata
-		unit_t type = parseUnitString(purch.getEjercitoId());
+		unit_t type = parseUnitString(purch->getEjercitoId());
 		if (Unit::getCost(type) <= opponent.getMoney()) {
-			e = new OpponentPurchase(purch.getPossition(), type);
+			e = new OpponentPurchase(purch->getPossition(), type);
 		}
 	}
 
@@ -157,6 +157,7 @@ void Model::showPossibleActions(Point p)
 {
 	Unit * u = m.getUnit(p);
 	if (u != nullptr && u->getPlayer() == USER) {
+		m.select(p);
 		clearActions();
 		u->getPossibleActions(actions);
 
@@ -169,7 +170,7 @@ void Model::showPossibleActions(Point p)
 void Model::clearActions()
 {
 	for (std::list<Action>::iterator it = actions.begin(); it != actions.end(); it++) {
-		m.showAction(it->whereTo, it->basicType());
+		m.showAction(it->whereTo, N_ACTIONS);
 	}
 
 	actions.clear();
@@ -181,6 +182,7 @@ bool Model::nextTurn()
 	Player * prev = currPlayer();	//esto nunca va a devolver null si model existe!
 	turn = (turn == USER ? OPPONENT : USER);
 	Player * curr = currPlayer();
+	prev->nextState();
 	curr->collectIncome();
 	m.update(curr->id());
 
@@ -192,6 +194,9 @@ bool Model::nextTurn()
 
 	if (prev->wasDefeated()) {
 		softwareEvents->push_back(new GenericEvent(turn == USER ? EV_USER_WON : EV_OPPONENT_WON));
+	}
+	else {
+		curr->nextState();
 	}
 
 	return valid;
@@ -221,6 +226,7 @@ bool Model::registerAttack(Point origin, Point target, unsigned int dice)
 		}
 		if (turn == USER && attacker == USER) {
 			//solo en el ataque de la unidad!
+			m.unselect(origin);
 			clearActions();
 		}
 	}
@@ -285,6 +291,7 @@ bool Model::registerMove(Point p0, Point pf)
 			updateActiveUnit(u);
 
 			if (u->getPlayer() == USER) {
+				m.unselect(p0);
 				clearActions();
 			}
 		}
@@ -298,6 +305,10 @@ bool Model::registerPurchase(player_t who, Point factory, unit_t type)
 	bool valid = false;
 	
 	if (turn == who) {
+		if (currPlayer()->getStatus() == MOV_AND_ATT) {
+			currPlayer()->nextState();
+		}
+
 		Unit * purch = currPlayer()->buy(type, factory);
 
 		if (purch != nullptr) {

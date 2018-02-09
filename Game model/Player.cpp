@@ -11,16 +11,36 @@
 
 #define INIT_MONEY	5	//VER DONDE DEJAMOS ESTE DEFINE
 
-Player::Player(player_t who) : who(who)
+Player::Player(player_t who, bool iStart) : who(who)
 {
 	capturePointsHQ = nUnits = nCities = nFactories = 0;
 	money = INIT_MONEY;
 	obs = nullptr;
+
+	if (iStart) {
+		status = MOV_AND_ATT;
+	}
+	else {
+		status = WAITING;
+	}
 }
 
 Player::~Player()
 {
 	;
+}
+
+void Player::nextState()
+{
+	switch (status) {
+	case MOV_AND_ATT:	{ status = PURCHASING; }	break;
+	case PURCHASING:	{ status = WAITING; }		break;
+	case WAITING:		{ status = MOV_AND_ATT; }	break;
+	}
+
+	if (obs != nullptr) {
+		obs->update();
+	}
 }
 
 Unit * Player::buy(unit_t type, Point p)
@@ -44,7 +64,7 @@ Unit * Player::buy(unit_t type, Point p)
 
 void Player::collectIncome()
 {
-	if (!wasDefeated()) {
+	if (!wasDefeated() && status == WAITING) {
 		money += (nCities + 1)*INIT_MONEY;
 		if (obs != nullptr) {
 			obs->update();
@@ -54,14 +74,16 @@ void Player::collectIncome()
 
 bool Player::registerCapture(bool won, building_t type)
 {
-	switch (type) {
-	case CITY: { won ? nCities++ : nCities--; } break;
-	case FACTORY: {won ? nFactories++ : nFactories--; } break;
-	case HEADQUARTERS: { if (!won) capturePointsHQ = 0;  } break;
-	}
+	if (status == WAITING) {
+		switch (type) {
+		case CITY: { won ? nCities++ : nCities--; } break;
+		case FACTORY: {won ? nFactories++ : nFactories--; } break;
+		case HEADQUARTERS: { if (!won) capturePointsHQ = 0;  } break;
+		}
 
-	if (nCities > B_H * B_W || nFactories > B_H * B_W) { //ERROR! tenia 0 de ese edificio y reste
-		capturePointsHQ = 0;
+		if (nCities > B_H * B_W || nFactories > B_H * B_W) { //ERROR! tenia 0 de ese edificio y reste
+			capturePointsHQ = 0;
+		}
 	}
 
 	return (capturePointsHQ != 0);
@@ -75,6 +97,11 @@ bool Player::wasDefeated()
 unsigned int Player::getMoney()
 {
 	return money;
+}
+
+unsigned int Player::getStatus()
+{
+	return status;
 }
 
 player_t Player::id()
@@ -94,31 +121,33 @@ void Player::updateStats(unsigned int capturePointsHQ, unsigned int nFactories, 
 {
 	bool newStats = false;
 
-	if (this->capturePointsHQ != capturePointsHQ) {
-		this->capturePointsHQ = capturePointsHQ;
-		newStats = true;
-	}
+	if (status == WAITING) {
+		if (this->capturePointsHQ != capturePointsHQ) {
+			this->capturePointsHQ = capturePointsHQ;
+			newStats = true;
+		}
 
-	if (this->nFactories != nFactories) {
-		this->nFactories = nFactories;
-		newStats = true;
-	}
-	if (this->nCities != nCities) {
-		this->nCities = nCities;
-		newStats = true;
-	}
-	if (this->nUnits != nUnits) {
-		this->nUnits = nUnits;
-		newStats = true;
-	}
+		if (this->nFactories != nFactories) {
+			this->nFactories = nFactories;
+			newStats = true;
+		}
+		if (this->nCities != nCities) {
+			this->nCities = nCities;
+			newStats = true;
+		}
+		if (this->nUnits != nUnits) {
+			this->nUnits = nUnits;
+			newStats = true;
+		}
 
-	if (newStats && obs != nullptr) {
-		obs->update();
+		if (newStats && obs != nullptr) {
+			obs->update();
+		}
 	}
 }
 
 void Player::unitKilled()
 {
-	if (nUnits)
+	if (nUnits && status != PURCHASING)
 		nUnits--;
 }
