@@ -23,6 +23,7 @@ GenericState * UserPurchasing::onUserPass(GenericEvent * e)
 
 GenericState * UserPurchasing::onPurchaseSelection(GenericEvent *ev)
 {
+	((SkirmishEvent*)ev)->model()->showAvailableFactories();
 	return new PurchaseSelected(((PurchaseSelection *)ev)->selection);
 }
 

@@ -153,6 +153,20 @@ bool Model::dispatch(GenericEvent * ev)
 	return (fsm.state() < N_STATES);
 }
 
+void Model::showAvailableFactories()
+{
+	clearActions();
+	for (unsigned int i = 0; i < B_H; i++) {
+		for (unsigned int j = 0; j < B_W; j++) {
+			Point p(i, j);
+			if (m.getBuildingPlayer(p) == turn && m.getBuilding(p)->getType() == FACTORY) {
+				m.showAction(p, ACT_MOVE);
+				actions.push_back(Action(ACT_MOVE, p)); //para registrarlo y borrarlo despues
+			}
+		}
+	}
+}
+
 void Model::showPossibleActions(Point p)
 {
 	Unit * u = m.getUnit(p);
@@ -311,8 +325,9 @@ bool Model::registerPurchase(player_t who, Point factory, unit_t type)
 
 		Unit * purch = currPlayer()->buy(type, factory);
 
-		if (purch != nullptr) {
-			valid = m.updateUnitPos(purch, purch->getPosition());
+		if (purch != nullptr && m.updateUnitPos(purch, purch->getPosition())) {
+			valid = true;
+			clearActions();
 		}
 	}
 

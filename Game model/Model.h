@@ -22,6 +22,7 @@ public:
 	GenericEvent * getTileEvent(Point p);			//puede devolver null si esa tile no es nada 
 	bool dispatch(GenericEvent * ev);
 
+	void showAvailableFactories();
 	void showPossibleActions(Point p);
 	void clearActions();
 	bool nextTurn();

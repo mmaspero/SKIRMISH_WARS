@@ -237,6 +237,7 @@ void Unit::endTurn()
 void Unit::nextTurn()
 {
 	state = IDLE;
+	restoreMPs();
 }
 
 int Unit::isActionValid(Action act)
@@ -246,10 +247,9 @@ int Unit::isActionValid(Action act)
 	std::list<Action> actList;
 	getPossibleActions(actList);
 
-	Action it = actList.front();
-	while (actList.size() && mps == CANT_REACH) { 		
-		if (it.whereTo == it.whereTo && it.basicType() == it.basicType()) {
-			mps = it.mps;
+	for (std::list<Action>::iterator it = actList.begin(); it != actList.end() && mps == CANT_REACH; it++) {
+		if (it->whereTo == act.whereTo && it->basicType() == act.basicType()) {
+			mps = it->mps;
 		}
 	}
 
