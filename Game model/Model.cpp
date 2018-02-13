@@ -12,7 +12,7 @@
 #include "Units\Apc.h"
 
 Model::Model(const char * map, player_t first, std::list<GenericEvent *> * softwareEvents, gui * g) : 
-	user(USER, first == USER), opponent(OPPONENT, first == OPPONENT), m(map, first), softwareEvents(softwareEvents)
+	user(USER, first == USER), opponent(OPPONENT, first != USER), m(map, first), softwareEvents(softwareEvents)
 {
 	valid = false;
 #ifndef DEBUG_NOVIEW
@@ -153,6 +153,23 @@ bool Model::dispatch(GenericEvent * ev)
 	return (fsm.state() < N_STATES);
 }
 
+bool Model::playerWon(player_t p)
+{
+	if (p == USER) {
+		return opponent.wasDefeated();
+	}
+	else {
+		return user.wasDefeated();
+	}
+}
+
+void Model::notifyUserVictory()
+{
+	if (opponent.wasDefeated()) {
+		softwareEvents->push_back(new GenericEvent(EV_USER_WON));
+	}
+}
+
 void Model::showAvailableFactories()
 {
 	clearActions();
@@ -207,7 +224,7 @@ bool Model::nextTurn()
 	opponent.updateStats(hqHp, factories, cities, units);
 
 	if (prev->wasDefeated()) {
-		softwareEvents->push_back(new GenericEvent(turn == USER ? EV_USER_WON : EV_OPPONENT_WON));
+		softwareEvents->push_back(new GenericEvent(turn == USER ? EV_WAIT_FOR_YOU_WON : EV_OPPONENT_WON));
 	}
 	else {
 		curr->nextState();
@@ -247,21 +264,6 @@ bool Model::registerAttack(Point origin, Point target, unsigned int dice)
 	
 	return valid;
 }
-
-//bool Model::registerCounterAttack(Point origin, Point target, unsigned int dice)
-//{
-//	bool valid = true;
-//
-//	if (origin == this->target && target == selected) {
-//		valid = true; //puede que sea solo un ack (era captura o se murio la unidad)
-//		if (m.hasUnit(origin)) {
-//			valid = m.getUnit(origin)->attack(Action(ACT_ATTACK, target), dice);
-//			checkForUnitDeath(target);
-//		}
-//	}
-//
-//	return valid;
-//}
 
 void Model::endAttack(Point attacker)
 {
@@ -351,7 +353,7 @@ void Model::checkForUnitDeath(Point where)
 		}
 		m.clearTile(where);
 		if (player->wasDefeated()) {
-			softwareEvents->push_back(new GenericEvent(whose == USER ? EV_OPPONENT_WON : EV_USER_WON));
+			softwareEvents->push_back(new GenericEvent(whose == USER ? EV_OPPONENT_WON : EV_WAIT_FOR_YOU_WON));
 		}
 	}
 

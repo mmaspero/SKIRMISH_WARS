@@ -16,5 +16,5 @@ public:
 	GenericState * onPurchaseSelection(GenericEvent *);
 	GenericState * onUnitSelection(GenericEvent *);
 	GenericState * onUnselect(GenericEvent *);
-
+	GenericState * onWaitForYouWon(GenericEvent *);
 };

@@ -12,4 +12,5 @@ public:
 	GenericState * onUnitSelection(GenericEvent *);
 	GenericState * onUnselect(GenericEvent *);
 	GenericState * onOpponentAttack(GenericEvent *);
+	GenericState * onWaitForYouWon(GenericEvent *);
 };

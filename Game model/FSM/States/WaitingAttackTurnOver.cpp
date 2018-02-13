@@ -1,5 +1,6 @@
 #include "WaitingAttackTurnOver.h"
 #include "OpponentMoving.h"
+#include "WaitingYouWon.h"
 #include "skirmishHandlers.h"
 
 WaitingAttackTurnOver::WaitingAttackTurnOver(Point user, Point opponent) : UserAttacking(user, opponent)
@@ -43,4 +44,10 @@ GenericState * WaitingAttackTurnOver::onOpponentAttack(GenericEvent * e)
 	ev->model()->endAttack(user);
 	skirmishHandler::nextTurn(ev);
 	return new OpponentMoving();
+}
+
+GenericState * WaitingAttackTurnOver::onWaitForYouWon(GenericEvent * ev)
+{
+	((SkirmishEvent*)ev)->model()->endAttack(opponent);
+	return new WaitingYouWon();
 }

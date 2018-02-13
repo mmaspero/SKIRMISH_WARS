@@ -80,4 +80,13 @@ GenericState * GenericState::onUnselect(GenericEvent *)
 	return nullptr;
 }
 
-//handlers por default: no hacen nada o error?
+GenericState * GenericState::onWaitForYouWon(GenericEvent *)
+{
+	return nullptr;
+}
+
+GenericState * GenericState::onYouWon(GenericEvent *)
+{
+	return nullptr;
+}
+

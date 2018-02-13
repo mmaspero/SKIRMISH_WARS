@@ -2,6 +2,7 @@
 #include "OpponentMoving.h"
 #include "OpponentPurchasing.h"
 #include "WaitingOpponentPass.h"
+#include "WaitingYouWon.h"
 #include "UserMoving.h"
 #include "../Events/OpponentMove.h"
 #include "../Events/OpponentAttack.h"
@@ -40,10 +41,13 @@ GenericState * OpponentMoving::onOpponentAttack(GenericEvent * e)
 	OpponentAttack * ev = (OpponentAttack *)e;
 	unsigned int dice = ev->dice;
 	ev->model()->registerAttack(ev->attacker, ev->target, dice);
-	dice = rand() % 6 + 1;
-	ev->model()->registerAttack(ev->target, ev->attacker, dice);
-	//ev->contr()->resetPlayTimer();
-	//ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
+
+	if (!ev->model()->playerWon(OPPONENT)) {
+		dice = rand() % 6 + 1;
+		ev->model()->registerAttack(ev->target, ev->attacker, dice);
+		//ev->contr()->resetPlayTimer();
+		//ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
+	}
 	ev->model()->endAttack(ev->attacker);
 	return this;
 }
@@ -80,3 +84,10 @@ GenericState * OpponentMoving::onUnselect(GenericEvent *)
 {
 	return this;
 }
+
+GenericState * OpponentMoving::onWaitForYouWon(GenericEvent *)
+{
+	return new WaitingYouWon();
+}
+
+

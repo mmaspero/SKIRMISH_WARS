@@ -5,6 +5,7 @@
 #include "../SkirmishEvent.h"
 #include "../Events/UnitSelection.h"
 #include "skirmishHandlers.h"
+#include "WaitingYouWon.h"
 
 UserMoving::UserMoving() : GenericState(USER_MOVING)
 {
@@ -38,4 +39,9 @@ GenericState * UserMoving::onUnitSelection(GenericEvent * e)
 GenericState * UserMoving::onUnselect(GenericEvent *)
 {
 	return this;
+}
+
+GenericState * UserMoving::onWaitForYouWon(GenericEvent *)
+{
+	return new WaitingYouWon();
 }

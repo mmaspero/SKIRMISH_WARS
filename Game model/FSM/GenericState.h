@@ -27,6 +27,9 @@ public:
 	virtual GenericState * onPurchaseSelection(GenericEvent *);
 	virtual GenericState * onUnitSelection(GenericEvent *);
 	virtual GenericState * onUnselect(GenericEvent *);
+	virtual GenericState * onWaitForYouWon(GenericEvent *);
+	virtual GenericState * onYouWon(GenericEvent *);
+
 
 protected:
 	const state_t id;

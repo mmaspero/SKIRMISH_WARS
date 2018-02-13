@@ -10,4 +10,5 @@ public:
 	GenericState * onGoToPurchase(GenericEvent *);
 	GenericState * onUnitSelection(GenericEvent *);
 	GenericState * onUnselect(GenericEvent *);
+	GenericState * onWaitForYouWon(GenericEvent *);
 };

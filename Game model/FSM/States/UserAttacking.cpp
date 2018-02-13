@@ -1,6 +1,7 @@
 #include "UserAttacking.h"
 #include "WaitingAttackTurnOver.h"
 #include "UserMoving.h"
+#include "WaitingYouWon.h"
 #include "../Events/OpponentAttack.h"
 
 UserAttacking::UserAttacking(Point user, Point opponent) : GenericState(USER_ATTACKING), user(user), opponent(opponent)
@@ -45,6 +46,13 @@ GenericState * UserAttacking::onUnitSelection(GenericEvent *)
 GenericState * UserAttacking::onUnselect(GenericEvent *)
 {
 	return this;
+}
+
+GenericState * UserAttacking::onWaitForYouWon(GenericEvent * ev)
+{
+	((SkirmishEvent*)ev)->model()->endAttack(opponent);
+
+	return new WaitingYouWon();
 }
 
 bool UserAttacking::isWaitingFor(Point p0, Point pf) const
