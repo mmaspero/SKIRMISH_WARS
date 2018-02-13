@@ -46,7 +46,7 @@ GenericState * OpponentMoving::onOpponentAttack(GenericEvent * e)
 		dice = rand() % 6 + 1;
 		ev->model()->registerAttack(ev->target, ev->attacker, dice);
 		//ev->contr()->resetPlayTimer();
-		//ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
+		ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
 	}
 	ev->model()->endAttack(ev->attacker);
 	return this;
@@ -57,7 +57,7 @@ GenericState * OpponentMoving::onOpponentMove(GenericEvent * e)
 	OpponentMove * ev = (OpponentMove *)e;
 	ev->model()->registerMove(ev->p0, ev->pf);
 	//ev->contr()->resetPlayTimer();
-	//ev->contr()->sendOneBytePackage(ACK);
+	ev->contr()->sendOneBytePackage(ACK);
 	return this;
 }
 
@@ -66,7 +66,7 @@ GenericState * OpponentMoving::onOpponentPurchase(GenericEvent * e)
 	OpponentPurchase * ev = (OpponentPurchase *)e;
 	ev->model()->registerPurchase(OPPONENT, ev->p, ev->type);
 	//ev->contr()->resetPlayTimer();
-	//ev->contr()->sendOneBytePackage(ACK);
+	ev->contr()->sendOneBytePackage(ACK);
 	return new OpponentPurchasing();
 }
 

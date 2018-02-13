@@ -38,7 +38,7 @@ GenericState * OpponentPurchasing::onOpponentPurchase(GenericEvent * e)
 	OpponentPurchase * ev = (OpponentPurchase *)e;
 	ev->model()->registerPurchase(OPPONENT, ev->p, ev->type);
 	//ev->contr()->resetPlayTimer();
-	//ev->contr()->sendOneBytePackage(ACK);
+	ev->contr()->sendOneBytePackage(ACK);
 	return this;
 }
 
