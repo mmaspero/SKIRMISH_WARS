@@ -14,10 +14,10 @@ public:
 	NULL*/
 	GenericEvent * getNextEvent();
 	void updateEventQueue();
-
+	std::list<GenericEvent *> eventQueue;
 private:
 	std::vector<eventSource *> eventSources;
-	std::list<GenericEvent *> eventQueue;
+	
 
 
 };

@@ -4,10 +4,12 @@
 #include"package\packages.h"
 #include "../view/gui.h"
 #include "../Game model/Model.h"
+#include "eventSource\eventGenerator.h"
+
 class Controller
 {
 public:
-	Controller(network * net);
+	Controller(network * net, gui * usserInterface, Model * mod, eventGenerator * generadorDeEventos);
 	~Controller();
 	//todos los seners devuelve true si se pudo enviar correctamente el paquete.
 	bool sendNameIs(std::string name);
@@ -25,12 +27,14 @@ public:
 	void startPlayTimer();
 	void resetPlayTimer();
 	void stopPlayTimer();
-
-
+	void run();
+	
 private:
 	network * net;
 	bool sendPackage(genericPackage * package);
 	gui * usserInterface;
+	Model * mod;
+	eventGenerator * generadorDeEventos;
 	
 	
 

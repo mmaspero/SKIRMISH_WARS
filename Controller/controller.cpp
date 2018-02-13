@@ -1,7 +1,12 @@
 #include "controller.h"
 
-Controller::Controller(network * net)
+Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGenerator * generadorDeEventos)
 {
+	this->net = net;
+	this->usserInterface = usserInterface;
+	this->mod = mod;
+	this->generadorDeEventos = generadorDeEventos;
+
 }
 
 Controller::~Controller()
@@ -99,6 +104,23 @@ void Controller::resetPlayTimer()
 
 void Controller::stopPlayTimer()
 {
+}
+
+void Controller::run()
+{
+	GenericEvent * recivedEvent = NULL;
+	do
+	{
+		if (recivedEvent != NULL)
+		{
+			delete recivedEvent;
+			recivedEvent = NULL;
+		}
+		this->generadorDeEventos->updateEventQueue();
+		recivedEvent =this->generadorDeEventos->getNextEvent();
+		mod->dispatch(recivedEvent);
+
+	} while ((recivedEvent == NULL) || (recivedEvent->getType() != EV_ERROR));
 }
 
 bool Controller::sendPackage(genericPackage * package)
