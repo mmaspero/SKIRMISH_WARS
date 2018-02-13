@@ -37,6 +37,10 @@ genericPackage * packageMaker(char * data, unsigned int size)
 		{
 			return nameIsCreator(data, size);
 		}
+		else
+		{
+			return NULL;
+		}
 		break;
 	case MAP_IS:
 		if(mapIsValidator(data,size))

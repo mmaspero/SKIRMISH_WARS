@@ -5,13 +5,24 @@
 #include "port-ip.h"
 #include"myTimer.h"
 
-typedef enum { CONNECTED, _ERROR, CONECTION_LOST,IN_CONECTION_STAGE_CLIENT,IN_CONECTION_STAGE_SERVER}netState;
+typedef enum {  CONNECTED, //la coneccion se completo con exito
+			 	   _ERROR,//se ha producido un error en la comunicacion
+   	       CONECTION_LOST,//
+IN_CONECTION_STAGE_CLIENT,//etapa de intentar conectarse con un servidor
+IN_CONECTION_STAGE_SERVER,//etapa de intewntar conectarse con un cliente
+N_NET_STATE}netState;
 
 class  network
 {
 public:
 	 network(ip ipNumber, port portNumber);
+	 /*getCurrentState
+	 devuelve el estado actual de la red*/
 	 netState getCurrentState() { return currentState; };
+	 /*tryToConect
+	 intenta generar la coneccion, tanto con un servidor como con un cliente,
+	 pra saver si la coneccion se logro con exito, se deve llamar a getCurrentState(), y esete
+	 deve devolver CONNECTED*/
 	 void tryToConect();
 	 bool imClient() { return this->imclient; };
 

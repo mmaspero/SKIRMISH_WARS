@@ -89,6 +89,18 @@ bool Controller::sendOneBytePackage(unsigned char type)
 	return state;
 }
 
+void Controller::startPlayTimer()
+{
+}
+
+void Controller::resetPlayTimer()
+{
+}
+
+void Controller::stopPlayTimer()
+{
+}
+
 bool Controller::sendPackage(genericPackage * package)
 {
 	bool state = false;
