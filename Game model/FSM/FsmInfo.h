@@ -6,6 +6,8 @@ typedef enum events {
 						EV_OPP_PASS, EV_OPP_ATTACK, EV_OPP_MOVE, EV_OPP_PURCHASE,	//OPP es de OPPONENT
 						EV_PURCH_SELECTION, EV_UNIT_SELECTION, EV_UNSELECT,
 
+						EV_ERROR,EV_QUIT,//no llegan a la fsm
+
 						EV_USER_WON, EV_OPPONENT_WON,	//ESTOS NO LLEGAN A LA FSM!!
 						N_EVENTS 
 					} event_t; 
