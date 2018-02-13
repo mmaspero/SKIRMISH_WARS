@@ -7,6 +7,9 @@
 
 networkEventSource::networkEventSource(network * net, Model * eventValidator)
 {
+	this->net = net;
+	this->eventValidator = eventValidator;
+
 }
 
 networkEventSource::~networkEventSource()
@@ -25,15 +28,6 @@ GenericEvent * networkEventSource::getEvent()
 		if (recivedData > 0)//llego informacion
 		{
 
-			//typedef enum events {
-			//	EV_TIMEOUT, EV_ACK, EV_GO_TO_PURCHASE,
-			//	EV_USER_PASS, EV_USER_ATTACK, EV_USER_MOVE, EV_USER_PURCHASE,
-			//	EV_OPP_PASS, EV_OPP_ATTACK, EV_OPP_MOVE, EV_OPP_PURCHASE,	//OPP es de OPPONENT
-			//	EV_PURCH_SELECTION, EV_UNIT_SELECTION, EV_UNSELECT,
-
-			//	EV_USER_WON, EV_OPPONENT_WON,	//ESTOS NO LLEGAN A LA FSM!!
-			//	N_EVENTS
-			//} event_t;
 			packageRecived = packageMaker(buffer, recivedData);
 			if (packageRecived != NULL)//hay un paquete valido
 			{
@@ -62,13 +56,11 @@ GenericEvent * networkEventSource::getEvent()
 				}
 
 			}
-
-			else if (recivedData = 0)//no llego data
-			{
-				return NULL;
-			}
-
 			
+		}
+		else if (recivedData = 0)//no llego data
+		{
+			return NULL;
 		}
 		
 	}
