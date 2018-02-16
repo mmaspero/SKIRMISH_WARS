@@ -4,6 +4,7 @@
 #include"../../view/tileButton.h"
 #include"../../Game model/FSM/SkirmishEvent.h"
 #include"../../Game model/FSM/FsmInfo.h"
+#include "../../view/simpleButton.h"
 
 
 
@@ -74,17 +75,11 @@ GenericEvent * userInputEvSource::getEvent()
 				if (buttonSelected->getType() == TILE_BUTTON)
 				{
 					recivedEvent = packageValidator->getTileEvent(((tileButton*)buttonSelected)->getTilePosition());
-					if (recivedEvent != NULL)
-					{
-						return recivedEvent;
-					}
-					else
-					{
-						return new SkirmishEvent(EV_ERROR);
-					}
-				
+					return recivedEvent;
 				}
-
+				else if (buttonSelected->getType() == SIMPLE_BUTTON && ((simpleButton*)buttonSelected)->isItPass()) {
+					return new SkirmishEvent(EV_USER_PASS);
+				}
 			}
 			else//no se preciono nada valido
 			{
