@@ -60,7 +60,7 @@ public:
 
 	//move y attack hacen minimo control sobre si lo que le decis que hagan lo pueden hacer. la idea es que uses algo que vino de getPossibleActions
 	bool move(Action m);
-	int attack(Action att , unsigned int diceRoll);	//de esto falta calcular el danio!
+	bool attack(Action att , unsigned int diceRoll);	//de esto falta calcular el danio!
 	//devuelve cuantos hps le quedan al enemigo: si es 0 murio, si es <0 no es valido el ataque
 	bool startCapture(Action capt);
 

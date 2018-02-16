@@ -68,7 +68,7 @@ GenericEvent * Model::validateOpponentAttack(attack * att)
 	GenericEvent * e = nullptr;
 	
 	if ( att != nullptr && (fsm.state() == OPP_MOVING && m.hasUnit(att->getOrigin()) && m.getUnit(att->getOrigin())->getPlayer() == OPPONENT
-			&& m.getUnit(att->getOrigin())->isActionValid(Action(ACT_ATTACK, att->getDestination()))) || //ataque
+			&& m.getUnit(att->getOrigin())->isActionValid(Action(ACT_ATTACK, att->getDestination()))) != -1 || //ataque
 			(fsm.state() == WAITING_ATTACK_TURN_OVER || fsm.state() == USER_ATTACKING && //contraataque
 			((UserAttacking *)fsm.getState())->isWaitingFor(att->getOrigin(), att->getDestination())) ) {
 		e = new OpponentAttack(att->getOrigin(), att->getDestination(), att->getDice());

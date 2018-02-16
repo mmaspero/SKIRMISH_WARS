@@ -270,10 +270,11 @@ bool Unit::move(Action mov)
 	return valid;
 }
 
-int Unit::attack(Action att, unsigned int diceRoll)
+bool Unit::attack(Action att, unsigned int diceRoll)
 {
-	int hpLeft = CANT_REACH;
+	bool valid = false;
 	if (att.type == ACT_ATTACK && att.mps == isActionValid(att) && 1 <= diceRoll && diceRoll <= 6) {
+		valid = true;
 		Unit * enemy = map->getUnit(att.whereTo);
 		terrain_t t = map->getTerrain(att.whereTo);
 		building_t b = map->hasBuilding(att.whereTo) ? map->getBuilding(att.whereTo)->getType() : N_BUILDINGS;
@@ -285,12 +286,10 @@ int Unit::attack(Action att, unsigned int diceRoll)
 			enemy->healthPoints = 0;
 		}
 
-		hpLeft = enemy->healthPoints;
-
 		state = ATTACKING;
 		map->notifyTileObserver(att.whereTo);
 	}
-	return hpLeft;
+	return valid;
 }
 
 bool Unit::startCapture(Action capt)
