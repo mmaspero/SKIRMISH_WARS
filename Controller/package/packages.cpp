@@ -49,8 +49,8 @@ move::move(unsigned char rowOrigin, unsigned char columnOrigin, unsigned char ro
 	(getBuff())[PACKAGE_TYPE_POSS] = MOVE;
 	(getBuff())[FILA_OR_POS] = origin.row;
 	(getBuff())[FILA_DES_POS] = destination.row;
-	(getBuff())[COL_OR_POS] = origin.col;
-	(getBuff())[COL_DES_POS] = destination.col;
+	(getBuff())[COL_OR_POS] = origin.col+ MIN_COL;
+	(getBuff())[COL_DES_POS] = destination.col+ MIN_COL;
 
 }
 
@@ -64,8 +64,8 @@ move::move(Point origin, Point destination)
 	(getBuff())[PACKAGE_TYPE_POSS] = MOVE;
 	(getBuff())[FILA_OR_POS] = origin.row;
 	(getBuff())[FILA_DES_POS] = destination.row;
-	(getBuff())[COL_OR_POS] = origin.col;
-	(getBuff())[COL_DES_POS] = destination.col;
+	(getBuff())[COL_OR_POS] = origin.col+ MIN_COL;
+	(getBuff())[COL_DES_POS] = destination.col + MIN_COL;
 }
 
 move::~move()
@@ -86,8 +86,8 @@ attack::attack(unsigned char dice, unsigned char rowOrigin, unsigned char column
 	(getBuff())[PACKAGE_TYPE_POSS] = ATTACK;
 	(getBuff())[FILA_OR_POS] = origin.row;
 	(getBuff())[FILA_DES_POS] = destination.row;
-	(getBuff())[COL_OR_POS] = origin.col;
-	(getBuff())[COL_DES_POS] = destination.col;
+	(getBuff())[COL_OR_POS] = origin.col + MIN_COL;
+	(getBuff())[COL_DES_POS] = destination.col + MIN_COL;
 	(getBuff())[sizeBuff - 1] = dice;
 
 
@@ -105,8 +105,8 @@ attack::attack(unsigned char dice, Point origin, Point destination)
 	(getBuff())[PACKAGE_TYPE_POSS] = ATTACK;
 	(getBuff())[FILA_OR_POS] = origin.row;
 	(getBuff())[FILA_DES_POS] = destination.row;
-	(getBuff())[COL_OR_POS] = origin.col;
-	(getBuff())[COL_DES_POS] = destination.col;
+	(getBuff())[COL_OR_POS] = origin.col + MIN_COL;
+	(getBuff())[COL_DES_POS] = destination.col + MIN_COL;
 	(getBuff())[sizeBuff - 1] = dice;
 }
 
@@ -248,7 +248,7 @@ purchase::purchase(std::string ejercitoID, unsigned char row, unsigned char colu
 	setBuff(new char[sizeBuff]);
 	(getBuff())[PACKAGE_TYPE_POSS] = PURCHASE;
 	(getBuff())[FILA_POSS_PURCHASE] = row;
-	(getBuff())[COL_POSS_PURCHASE] = column;
+	(getBuff())[COL_POSS_PURCHASE] = column + MIN_COL;
 	(getBuff())[1] = ejercitoID.c_str()[0];
 	(getBuff())[2] = ejercitoID.c_str()[1];
 	

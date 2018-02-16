@@ -58,7 +58,7 @@ GenericEvent * networkEventSource::getEvent()
 			}
 			
 		}
-		else if (recivedData = 0)//no llego data
+		else if (recivedData == 0)//no llego data
 		{
 			return NULL;
 		}
