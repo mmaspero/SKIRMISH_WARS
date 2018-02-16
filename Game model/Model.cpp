@@ -213,7 +213,12 @@ bool Model::nextTurn()
 	Player * prev = currPlayer();	//esto nunca va a devolver null si model existe!
 	turn = (turn == USER ? OPPONENT : USER);
 	Player * curr = currPlayer();
-	prev->nextState();
+	
+	if (prev->getStatus() == MOV_AND_ATT) {
+		prev->nextState();	//paso primero a purchasing
+	}
+	prev->nextState(); //y despues a waiting
+	 
 	curr->collectIncome();
 	m.update(curr->id());
 
