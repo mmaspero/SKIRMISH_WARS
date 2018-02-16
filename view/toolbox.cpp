@@ -52,7 +52,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			buttonValid = false;
 		}
 
-		simpleButton * simplePass = new simpleButton(PASS, contentStartX, contentStartY + contentHeight * 0.9,
+		simpleButton * simplePass = new simpleButton(PASS_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
 			contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simplePass);
 		if (!buttonList.back()->isValid())

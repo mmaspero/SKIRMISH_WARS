@@ -38,7 +38,7 @@ simpleButton::simpleButton(simpleButtonType_t simpleType, float leftX, float top
 
 		switch (simpleType)
 		{
-		case PASS:
+		case PASS_BUTTON:
 			text = string(PASS_TEXT);
 			break;
 		case BUY:
@@ -92,7 +92,7 @@ simpleButtonType_t simpleButton::getSimpleType()
 
 bool simpleButton::isItPass()
 {
-	return PASS == simpleType;
+	return PASS_BUTTON == simpleType;
 }
 
 bool simpleButton::isItBuy()
