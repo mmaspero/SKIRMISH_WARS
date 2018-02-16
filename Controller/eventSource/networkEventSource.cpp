@@ -45,6 +45,9 @@ GenericEvent * networkEventSource::getEvent()
 				case ACK:
 					eventRecived = new SkirmishEvent(EV_ACK);
 					break;
+				case PASS:
+					eventRecived = new SkirmishEvent(EV_OPP_PASS);
+					break;
 				default:
 
 					break;
