@@ -98,9 +98,9 @@ GenericEvent * userInputEvSource::getEvent()
 
 
 	}
-	else
-	{
+	
+	
 		return NULL;
-	}
+
 	
 }

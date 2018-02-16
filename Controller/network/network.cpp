@@ -133,5 +133,6 @@ bool network::sendData(char * dataToSend, int sizeDataToSend)
 
 network::~network()
 {
+	int i = 0;
 
 }

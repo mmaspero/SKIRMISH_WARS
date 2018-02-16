@@ -97,7 +97,7 @@ genericPackage * packageMaker(char * data, unsigned int size)
 		tempId.push_back(data[2]);
 		if (purchaseValidator(data, size))
 		{
-			return new purchase(tempId, data[3], data[4]);
+			return new purchase(tempId, data[3], data[4] - MIN_COL);
 		}
 		else
 		{

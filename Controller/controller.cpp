@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "../Game model/FSM/SkirmishEvent.h"
 
 Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGenerator * generadorDeEventos)
 {
@@ -6,6 +7,9 @@ Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGe
 	this->usserInterface = usserInterface;
 	this->mod = mod;
 	this->generadorDeEventos = generadorDeEventos;
+	SkirmishEvent::setController(this);
+	SkirmishEvent::setModel(mod);
+
 
 }
 
