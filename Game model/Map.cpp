@@ -227,7 +227,7 @@ bool Map::updateUnitPos(Unit * u, Point p)
 		}
 		else {
 			if (u->getBasicType() == FOOT && canCapture(p, u->getPlayer())) {
-				board[p.row][p.col]->b->capture(u, u->getPlayer());
+				board[p.row][p.col]->b->capture(u->isReduced(), u->getPlayer());
 			}
 			board[p.row][p.col]->setUnit(u);
 			removeFog(p, u->getPlayer());

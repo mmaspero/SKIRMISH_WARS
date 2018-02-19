@@ -39,7 +39,7 @@ void Tile::update(player_t next)
 				//si la unit y el building son del mismo equipo: la unidad se cura
 				mustUpdate = u->heal();
 			}
-			else if (u->getBasicType() == FOOT) {
+			else if (u->getBasicType() == FOOT && next == u->getPlayer()) {
 				//las unidades tipo FOOT pueden capturar edificios del enemigo o neutrales
 				b->capture(u->isReduced(), u->getPlayer());
 				mustUpdate = true; 
