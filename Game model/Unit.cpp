@@ -370,7 +370,7 @@ void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, u
 		//mps que cuesta esta accion: los que tiene la unidad, menos los que me quedan
 
 		bool newTile = true;	//para saber si ya habia un camino a esta tile o no
-		if (start != curr && (actionType == ACT_LOAD || actionType == ACT_MOVE)) { //no calculo camino optimo si la distancia es 0
+		if (start != curr && (actionType < N_ACTIONS)) { //no calculo camino optimo si la distancia es 0
 
 			for (std::list<Action>::iterator it = moves.begin(); it != moves.end() && newTile == true; it++) {
 				if (it->whereTo == curr) {

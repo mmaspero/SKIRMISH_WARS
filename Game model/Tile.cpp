@@ -174,6 +174,9 @@ void Tile::hideUnit(player_t p)
 void Tile::removeUnit()
 {
 	if (u != nullptr) {
+		if (b != nullptr && b->getPlayer() != u->getPlayer()) {
+			b->uncapture();
+		}
 		u = nullptr;
 		notifyObserver();
 	}
