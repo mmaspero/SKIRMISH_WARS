@@ -195,6 +195,7 @@ void Model::showPossibleActions(Point p)
 		for (std::list<Action>::iterator it = actions.begin(); it != actions.end(); it++) {
 			m.showAction(it->whereTo, it->basicType());
 		}
+		actions.push_back(Action(N_ACTIONS, p)); // para que se vaya despues la seleccion
 	}
 }
 

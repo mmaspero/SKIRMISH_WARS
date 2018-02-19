@@ -14,18 +14,21 @@ PurchaseSelected::PurchaseSelected(unit_t selection) : GenericState(PURCHASE_SEL
 
 GenericState * PurchaseSelected::onTimeout(GenericEvent * ev)
 {
+	((SkirmishEvent*)ev)->model()->clearActions();
 	skirmishHandler::nextTurn((SkirmishEvent*)ev);
 	return new OpponentMoving();
 }
 
 GenericState * PurchaseSelected::onUserPass(GenericEvent * ev)
 {
+	((SkirmishEvent*)ev)->model()->clearActions();
 	skirmishHandler::nextTurn((SkirmishEvent*)ev);
 	return new OpponentMoving();
 }
 
 GenericState * PurchaseSelected::onUserPurchase(GenericEvent * e)
 {
+	((SkirmishEvent*)e)->model()->clearActions();
 	UserPurchase * ev = (UserPurchase *)e;
 	//ev->contr()->resetPlayTimer();
 	ev->contr()->sendPurchase(getUnitString(selection), ev->p.row, ev->p.col);
@@ -35,6 +38,7 @@ GenericState * PurchaseSelected::onUserPurchase(GenericEvent * e)
 
 GenericState * PurchaseSelected::onGoToPurchase(GenericEvent * ev)
 {
+	((SkirmishEvent*)ev)->model()->clearActions();
 	return new UserPurchasing();
 }
 
@@ -45,10 +49,12 @@ GenericState * PurchaseSelected::onPurchaseSelection(GenericEvent * ev)
 
 GenericState * PurchaseSelected::onUnitSelection(GenericEvent * ev)
 {
+	((SkirmishEvent*)ev)->model()->clearActions();
 	return new UserPurchasing();
 }
 
 GenericState * PurchaseSelected::onUnselect(GenericEvent * ev)
 {
+	((SkirmishEvent*)ev)->model()->clearActions();
 	return new UserPurchasing();
 }

@@ -14,15 +14,17 @@ UnitSelected::UnitSelected(Point selection) : GenericState(UNIT_SELECTED), selec
 	;
 }
 
-GenericState * UnitSelected::onTimeout(GenericEvent * e)
+GenericState * UnitSelected::onTimeout(GenericEvent * ev)
 {
-	skirmishHandler::nextTurn((SkirmishEvent *)e);
+	((SkirmishEvent*)ev)->model()->clearActions();
+	skirmishHandler::nextTurn((SkirmishEvent *)ev);
 	return new OpponentMoving();
 }
 
-GenericState * UnitSelected::onUserPass(GenericEvent *e)
+GenericState * UnitSelected::onUserPass(GenericEvent * ev)
 {
-	skirmishHandler::nextTurn((SkirmishEvent *)e);
+	((SkirmishEvent*)ev)->model()->clearActions();
+	skirmishHandler::nextTurn((SkirmishEvent *)ev);
 	return new OpponentMoving();
 }
 
