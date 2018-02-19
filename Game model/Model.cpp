@@ -119,10 +119,10 @@ GenericEvent * Model::getTileEvent(Point p)
 	case UNIT_SELECTED: {
 		for (std::list<Action>::iterator it = actions.begin(); it != actions.end() && e == nullptr; it++) {
 			if (it->whereTo == p) {
-				if (it->type == ACT_ATTACK) {
+				if (it->basicType() == ACT_ATTACK) {
 					e = new UserAttack(p);
 				}
-				else {
+				else if (it->basicType()){
 					e = new UserMove(p);
 				}
 			}
@@ -246,14 +246,16 @@ bool Model::registerAttack(Point origin, Point target, unsigned int dice)
 	Unit * u = m.getUnit(origin);
 	//this->target = target; 
 	
-	if (u->attack(Action(ACT_ATTACK, target), dice)) {
-		valid = true;
-		checkForUnitDeath(target);
-		m.notifyTileObserver(target);
-	}
-	else if (u->startCapture(Action(ACT_CAPTURE, target))) {
-		//si no hay una unidad en el target, si o si tiene que ser una captura!
-		valid = true;
+	if (u != nullptr) {
+		if (u->attack(Action(ACT_ATTACK, target), dice)) {
+			valid = true;
+			checkForUnitDeath(target);
+			m.notifyTileObserver(target);
+		}
+		else if (u->startCapture(Action(ACT_CAPTURE, target))) {
+			//si no hay una unidad en el target, si o si tiene que ser una captura!
+			valid = true;
+		}
 	}
 
 	if (valid) {
