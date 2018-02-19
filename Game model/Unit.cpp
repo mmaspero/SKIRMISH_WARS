@@ -296,7 +296,7 @@ bool Unit::startCapture(Action capt)
 {
 	bool valid = false; 
 
-	if (capt.type == ACT_CAPTURE && capt.mps == isActionValid(capt) && map->updateUnitPos(this, capt.whereTo)) {
+	if (capt.type == ACT_CAPTURE && isActionValid(capt) != CANT_REACH && map->updateUnitPos(this, capt.whereTo)) {
 		position = capt.whereTo;
 		movingPoints -= capt.mps;
 		state = POST_ACTIVE; //despues de una captura no puedo moverme mas! es como un ataque

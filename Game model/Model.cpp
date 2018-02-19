@@ -122,7 +122,7 @@ GenericEvent * Model::getTileEvent(Point p)
 				if (it->basicType() == ACT_ATTACK) {
 					e = new UserAttack(p);
 				}
-				else if (it->basicType()){
+				else if (it->basicType() == ACT_MOVE){
 					e = new UserMove(p);
 				}
 			}

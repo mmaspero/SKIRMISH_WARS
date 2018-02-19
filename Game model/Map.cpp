@@ -221,6 +221,9 @@ bool Map::updateUnitPos(Unit * u, Point p)
 				((Apc *)board[p.row][p.col]->u)->load(u); //unico caso que puede haber mas de una unidad en una tile
 				board[p.row][p.col]->notifyObserver(); //me saltie a la tile! notificar!
 			}
+			else {
+				valid = false;
+			}
 		}
 		else {
 			if (u->getBasicType() == FOOT && canCapture(p, u->getPlayer())) {
