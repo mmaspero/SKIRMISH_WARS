@@ -310,7 +310,7 @@ bool Unit::loadIntoApc(Action load)
 {
 	bool valid = false;
 
-	if (load.type == ACT_LOAD && isActionValid(load) == load.mps && map->updateUnitPos(this, load.whereTo)) {
+	if (getBasicType() == FOOT && load.type == ACT_LOAD && isActionValid(load) == load.mps && map->updateUnitPos(this, load.whereTo)) {
 		position = load.whereTo;
 		movingPoints -= load.mps;
 		state = MOVING; 

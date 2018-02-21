@@ -297,6 +297,9 @@ bool Model::registerMove(Point p0, Point pf)
 			case ACT_MOVE: case ACT_LOAD: {
 				valid = u->move(moves.front());
 			} break;
+			case ACT_LOAD: {
+				valid = u->loadIntoApc(moves.front());
+			} break;
 			case ACT_UNLOAD: {
 				if (p0 == pf) {
 					valid = ((Apc *)u)->startUnloading();
