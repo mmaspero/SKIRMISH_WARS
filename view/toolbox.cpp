@@ -14,7 +14,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 	{
 		displaySectionType = TOOLBOX;
 
-		status = SHOWING_ALL_PRODUCTS;
+		status = EMPTY;
 
 		bool buttonValid = true;
 		float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
@@ -36,7 +36,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			}
 		}
 
-		simpleButton * simpleBuy = new simpleButton(BUY, contentStartX + contentWidth / 2, contentStartY + contentHeight * 0.9,
+		simpleButton * simpleBuy = new simpleButton(BUY, contentStartX, contentStartY + contentHeight * 0.9,
 			contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simpleBuy);
 		if(!buttonList.back()->isValid())
@@ -44,7 +44,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			buttonValid = false;
 		}
 
-		simpleButton * simpleBack = new simpleButton(BACK, contentStartX, contentStartY + contentHeight * 0.9,
+		simpleButton * simpleBack = new simpleButton(BACK, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
 					contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simpleBack);
 		if (!buttonList.back()->isValid())
@@ -52,7 +52,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			buttonValid = false;
 		}
 
-		simpleButton * simplePass = new simpleButton(PASS_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
+		simpleButton * simplePass = new simpleButton(PASS_BUTTON, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
 			contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simplePass);
 		if (!buttonList.back()->isValid())
@@ -105,6 +105,18 @@ void toolbox::drawContent()
 	switch (status)
 	{
 	case EMPTY:
+		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+		{
+			if ((*it)->isValid())
+			{
+				button * b = (*it);
+				if (b->getType() == SIMPLE_BUTTON && 
+					(((simpleButton*)b)->isItBuy() || ((simpleButton*)b)->isItPass()) )
+				{
+					b->draw();
+				}
+			}	//TODO: hacer mas compacto pero no croto
+		}
 		break;
 	case SHOWING_ALL_PRODUCTS:
 		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)

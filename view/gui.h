@@ -22,6 +22,10 @@ class Tile;
 
 //TODO: ponerle types a los botones
 
+
+
+
+
 class gui
 {
 public:
@@ -44,7 +48,7 @@ tileObserver * : -puntero al tileObserver de la tile recibida si no hay errores
 	tileObserver * tileObserverFactory(Tile * t);
 
 /*******************************************************************************************************
-tileObserverFactory
+playerObserverFactory
 
 Recibe:
 Tile * t: tile de la cual se quiere obtener un tileObserver
@@ -117,9 +121,9 @@ acknowledgeResize
 
 Actualiza las dimensiones de todos los elementos del display a las dimensiones actuales del display.
 ********************************************************************************************************/
-	void acknowledgeResize();
+	void acknowledgeResize();	//TODO: haver privda
 
-	void selectUnit(unit_t unit);	//TODO: sacar, es de debug
+	//void selectUnit(unit_t unit);	//TODO: sacar, es de debug
 
 private:
 	std::list<contentBox *> displaySections;
@@ -130,3 +134,14 @@ private:
 	bool valid; 
 };
 
+/*
+EVENTOS MALU MATI::::::::
+-EV_DISPLAY_RESIZE
+-win/lose (Enhorabuena!)
+-EV_HOVER
+-press / release
+-tiempo que queda
+
+
+
+*/

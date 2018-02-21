@@ -303,15 +303,15 @@ void gui::acknowledgeResize()
 		(*it)->acknowledgeResize();
 	}
 }
-
-//TODO: sacar, es de debug
-void gui::selectUnit(unit_t unit)
-{
-	list<contentBox *>::iterator itToolbox = displaySections.begin();
-
-	//Avanzar hasta que se halle el Toolbox * o hasta recorrer toda la lista.
-	for (itToolbox = displaySections.begin();
-		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
-		itToolbox++) {}
-	((toolbox *)(*itToolbox))->selectProduct((unit_t)3);
-}
+//
+////TODO: sacar, es de debug
+//void gui::selectUnit(unit_t unit)
+//{
+//	list<contentBox *>::iterator itToolbox = displaySections.begin();
+//
+//	//Avanzar hasta que se halle el Toolbox * o hasta recorrer toda la lista.
+//	for (itToolbox = displaySections.begin();
+//		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
+//		itToolbox++) {}
+//	((toolbox *)(*itToolbox))->selectProduct((unit_t)3);
+//}
