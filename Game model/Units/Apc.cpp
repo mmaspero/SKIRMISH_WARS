@@ -58,9 +58,11 @@ bool Apc::canBoard(bool player)
 		return false;
 }
 
-unsigned int Apc::nLoadedUnits()
+unsigned int Apc::canUnload()
 {
-	return loadedUnits.size();
+	std::list<Action> ul;
+	getPossibleUnloads(ul);
+	return ul.size();
 }
 
 bool Apc::healLoadedUnits()

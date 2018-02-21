@@ -294,7 +294,7 @@ bool Model::registerMove(Point p0, Point pf)
 
 		if (moves.size()) {
 			switch (moves.front().type) {
-			case ACT_MOVE: case ACT_LOAD: {
+			case ACT_MOVE: {
 				valid = u->move(moves.front());
 			} break;
 			case ACT_LOAD: {

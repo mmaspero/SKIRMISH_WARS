@@ -12,7 +12,7 @@ public:
 	virtual unsigned int getAttackMod(basicUnitType_t basicType);	//devuelve el mod, dependiendo de si la unit esta o no reducida
 
 	bool canBoard(bool player);
-	unsigned int nLoadedUnits();
+	unsigned int canUnload();
 	bool healLoadedUnits();
 	bool startUnloading();
 
