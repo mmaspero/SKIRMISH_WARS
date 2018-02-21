@@ -294,11 +294,8 @@ bool Model::registerMove(Point p0, Point pf)
 
 		if (moves.size()) {
 			switch (moves.front().type) {
-			case ACT_MOVE: {
+			case ACT_MOVE: case ACT_LOAD: {
 				valid = u->move(moves.front());
-			} break;
-			case ACT_LOAD: {
-				valid = m.updateUnitPos(u, pf);
 			} break;
 			case ACT_UNLOAD: {
 				if (p0 == pf) {

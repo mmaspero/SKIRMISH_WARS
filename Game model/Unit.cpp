@@ -306,6 +306,20 @@ bool Unit::startCapture(Action capt)
 	return valid;
 }
 
+bool Unit::loadIntoApc(Action load)
+{
+	bool valid = false;
+
+	if (load.type == ACT_LOAD && isActionValid(load) == load.mps && map->updateUnitPos(this, load.whereTo)) {
+		position = load.whereTo;
+		movingPoints -= load.mps;
+		state = MOVING; 
+		valid = true;
+	}
+
+	return valid;
+}
+
 void Unit::getPossibleActions(std::list<Action>& actions)
 {
 	if (map == nullptr)
@@ -370,7 +384,7 @@ void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, u
 		//mps que cuesta esta accion: los que tiene la unidad, menos los que me quedan
 
 		bool newTile = true;	//para saber si ya habia un camino a esta tile o no
-		if (start != curr && (actionType < N_ACTIONS)) { //no calculo camino optimo si la distancia es 0
+		if (actionType < N_ACTIONS) { //calculo camino optimo
 
 			for (std::list<Action>::iterator it = moves.begin(); it != moves.end() && newTile == true; it++) {
 				if (it->whereTo == curr) {
