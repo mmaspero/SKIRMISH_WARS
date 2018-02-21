@@ -49,7 +49,7 @@ public:
 	Point getPosition();
 
 	void endTurn();		//pasar a post active, si ya hizo alguna accion
-	void nextTurn();	//pasar a idle
+	virtual void nextTurn();	//pasar a idle
 	bool heal();	//true si se modificaron los hps
 
 	int isActionValid(Action act); //devuelve los mps que cuesta, o -1 si no es valida

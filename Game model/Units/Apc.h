@@ -7,6 +7,7 @@ public:
 	Apc(Point position, bool isMine);
 	~Apc();
 
+	virtual void nextTurn();
 	virtual unsigned int restoreMPs();
 	virtual unsigned int getTerrainMod(terrain_t t);
 	virtual unsigned int getAttackMod(basicUnitType_t basicType);	//devuelve el mod, dependiendo de si la unit esta o no reducida

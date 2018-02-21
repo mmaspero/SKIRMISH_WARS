@@ -16,13 +16,19 @@ Apc::~Apc()
 	}
 }
 
+void Apc::nextTurn()
+{
+	state = IDLE;
+	restoreMPs();
+	for (std::list<Unit *>::iterator it = loadedUnits.begin(); it != loadedUnits.end(); it++) {
+		(*it)->nextTurn();
+	}
+
+}
+
 unsigned int Apc::restoreMPs()
 {
 	movingPoints = AP_MP;
-	for (std::list<Unit *>::iterator it = loadedUnits.begin(); it != loadedUnits.end(); it++) {
-		(*it)->restoreMPs();
-	}
-
 	return movingPoints;
 }
 
