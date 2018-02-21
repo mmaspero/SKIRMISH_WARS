@@ -67,10 +67,11 @@ GenericEvent * Model::validateOpponentAttack(attack * att)
 {
 	GenericEvent * e = nullptr;
 	
-	if ( att != nullptr && (fsm.state() == OPP_MOVING && m.hasUnit(att->getOrigin()) && m.getUnit(att->getOrigin())->getPlayer() == OPPONENT
-			&& m.getUnit(att->getOrigin())->isActionValid(Action(ACT_ATTACK, att->getDestination()))) != -1 || //ataque
-			(fsm.state() == WAITING_ATTACK_TURN_OVER || fsm.state() == USER_ATTACKING && //contraataque
-			((UserAttacking *)fsm.getState())->isWaitingFor(att->getOrigin(), att->getDestination())) ) {
+	if ( att != nullptr &&
+		( (fsm.state() == OPP_MOVING && m.hasUnit(att->getOrigin()) && m.getUnit(att->getOrigin())->getPlayer() == OPPONENT
+			&& m.getUnit(att->getOrigin())->isActionValid(Action(ACT_ATTACK, att->getDestination())) != -1 ) || //ataque del oponente
+			( (fsm.state() == WAITING_ATTACK_TURN_OVER || fsm.state() == USER_ATTACKING) && //contraataque
+			((UserAttacking *)fsm.getState())->isWaitingFor(att->getOrigin(), att->getDestination())) ) ) {
 		e = new OpponentAttack(att->getOrigin(), att->getDestination(), att->getDice());
 	}
 	
@@ -297,15 +298,15 @@ bool Model::registerMove(Point p0, Point pf)
 				valid = u->move(moves.front());
 			} break;
 			case ACT_LOAD: {
+				valid = m.updateUnitPos(u, pf);
+			} break;
+			case ACT_UNLOAD: {
 				if (p0 == pf) {
 					valid = ((Apc *)u)->startUnloading();
 				}
 				else {
-					valid = m.updateUnitPos(u, pf);
+					valid = ((Apc *)m.getUnit(pf))->unload(moves.front().whereTo);
 				}
-			} break;
-			case ACT_UNLOAD: {
-				valid = ((Apc *)m.getUnit(pf))->unload(moves.front().whereTo);
 			} break;
 				//default: valid queda en false
 			}
