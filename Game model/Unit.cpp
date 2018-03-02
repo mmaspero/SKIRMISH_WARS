@@ -320,6 +320,16 @@ bool Unit::loadIntoApc(Action load)
 	return valid;
 }
 
+bool Unit::updatePosition(Point newPos)
+{
+	bool valid = false;
+	if (getTerrainMod(map->getTerrain(newPos)) < getMaxMps(type)) {
+		position = newPos;
+		valid = true;
+	}
+	return valid;
+}
+
 void Unit::getPossibleActions(std::list<Action>& actions)
 {
 	if (map == nullptr)

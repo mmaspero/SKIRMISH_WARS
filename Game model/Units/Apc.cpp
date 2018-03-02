@@ -96,6 +96,7 @@ void Apc::getPossibleUnloads(std::list<Action>& ul)
 {
 	if (!loadedUnits.empty()) {
 		Unit * u = loadedUnits.back();
+		u->updatePosition(position);
 		std::list<Action> a;
 		u->getPossibleActions(a);
 		

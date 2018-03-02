@@ -64,6 +64,7 @@ public:
 	//devuelve cuantos hps le quedan al enemigo: si es 0 murio, si es <0 no es valido el ataque
 	bool startCapture(Action capt);
 	bool loadIntoApc(Action load);
+	bool updatePosition(Point newPos);
 
 	void getPossibleActions(std::list<Action>& actions);
 

@@ -34,15 +34,17 @@ void Tile::update(player_t next)
 	if (u != nullptr) {
 		u->nextTurn();
 
-		if (b != nullptr) { //los edificios solo hacen cosas si tienen units
-			if (u->getPlayer() == b->getPlayer()) {
-				//si la unit y el building son del mismo equipo: la unidad se cura
-				mustUpdate = u->heal();
-			}
-			else if (u->getBasicType() == FOOT && next == u->getPlayer()) {
-				//las unidades tipo FOOT pueden capturar edificios del enemigo o neutrales
-				b->capture(u->isReduced(), u->getPlayer());
-				mustUpdate = true; 
+		if (next == u->getPlayer()) {
+			if (b != nullptr) { //los edificios solo hacen cosas si tienen units
+				if (next == b->getPlayer()) {
+					//si la unit y el building son del mismo equipo: la unidad se cura
+					mustUpdate = u->heal();
+				}
+				else if (u->getBasicType() == FOOT) {
+					//las unidades tipo FOOT pueden capturar edificios del enemigo o neutrales
+					b->capture(u->isReduced(), u->getPlayer());
+					mustUpdate = true;
+				}
 			}
 		}
 	}
