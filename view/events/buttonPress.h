@@ -5,7 +5,12 @@
 class buttonPress : public SkirmishEvent
 {
 public:
-	buttonPress();
+	buttonPress(button * b);
 	~buttonPress();
+
+	button * getButton();
+
+private:
+	button * b;
 };
 

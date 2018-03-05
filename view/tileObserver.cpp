@@ -24,6 +24,15 @@ tileObserver::tileObserver(Tile * t, tileButton * tButton, toolbox * tBox)
 	this->t = t;
 	this->tBox = tBox;
 	this->tButton = tButton;
+
+	if (t && tBox && tButton)
+	{
+		valid = true;	//Si ninguno de los punteros es nullptr.
+	}
+	else
+	{
+		valid = false;
+	}
 }
 
 

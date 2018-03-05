@@ -8,11 +8,13 @@ class eventObserver :
 	public obs
 {
 public:
-	eventObserver(GenericEvent * events);
+	eventObserver(GenericEvent * events, gui * g);
 	~eventObserver();
 
 	virtual void update();
+
 private:
-	GenericEvent * events;
+	GenericEvent * event;
+	gui * g;
 };
 

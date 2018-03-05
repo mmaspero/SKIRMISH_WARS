@@ -8,7 +8,7 @@ typedef enum {TILE_BUTTON, PRODUCT_BUTTON, SIMPLE_BUTTON, BUTTON_TYPES_N} button
 
 
 /*
-NO toma ownership del ALLEGRO_BITMAP * bmp, sino que crea una copia.
+No toma ownership del ALLEGRO_BITMAP * bmp, sino que crea una copia.
 */
 class button
 {
@@ -61,7 +61,7 @@ public:
 	float getWidth();
 	float getHeight();
 
-	bool isItHere(int xPixel, int yPixel);	//TODO: hacer que isItHEre no falle con product button cuando este hidden. setear width y height en 0?
+	bool isItHere(int xPixel, int yPixel);	//TODO: hacer que isItHere no falle con product button cuando este hidden. setear width y height en 0?
 	void setUnformattedBmp(ALLEGRO_BITMAP * unformattedBmp);
 	void resize(float scalingFactor);
 	void resize(float width, float height);

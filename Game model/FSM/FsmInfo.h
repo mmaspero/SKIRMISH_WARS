@@ -8,7 +8,11 @@ typedef enum events {
 						EV_WAIT_FOR_YOU_WON, EV_YOU_WON,
 
 						EV_ERROR, EV_QUIT,				//ESTOS NO LLEGAN A LA FSM!!
-						EV_USER_WON, EV_OPPONENT_WON,	
+						EV_USER_WON, EV_OPPONENT_WON,
+						EV_HOVER, EV_UNHOVER,
+						EV_PRESS, EV_RELEASED,
+						EV_TOGGLE_SELECT, EV_TIME_LEFT,
+						EV_DISPLAY_RESIZE,
 						N_EVENTS 
 					} event_t; 
 

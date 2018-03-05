@@ -10,7 +10,7 @@ class playerObserver :
 	public obs
 {
 public:
-	playerObserver(Player * p, scoreBoard * sB, toolbox * t);
+	playerObserver(Player * p, scoreBoard * sB, toolbox * t);	//no modifica p, sB, ni t
 	~playerObserver();
 	
 	virtual void update();

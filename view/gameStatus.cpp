@@ -76,6 +76,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 			return;
 		}
 	}
+	al_get_display_event_source
 }
 
 gameStatus::~gameStatus()

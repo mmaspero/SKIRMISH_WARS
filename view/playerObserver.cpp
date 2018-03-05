@@ -7,6 +7,15 @@ playerObserver::playerObserver(Player * p, scoreBoard * sB, toolbox * t)
 	this->p = p;
 	this->sB = sB;
 	this->t = t;
+	
+	if (p && sB && t)		//Si ninguno de los punteros es nullptr
+	{
+		valid = true;
+	}
+	else
+	{
+		valid = false;
+	}
 }
 
 playerObserver::~playerObserver()

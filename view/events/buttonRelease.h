@@ -2,12 +2,14 @@
 
 #include "../../Game model/FSM/SkirmishEvent.h"
 
-class buttonRelease
+class buttonRelease : public SkirmishEvent
 {
 public:
-	buttonRelease();
+	buttonRelease(button * b);
 	~buttonRelease();
 
-private:
+	button * getButton();
 
+private:
+	button * b;
 };

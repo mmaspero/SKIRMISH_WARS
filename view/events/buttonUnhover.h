@@ -1,8 +1,16 @@
 #pragma once
-class buttonUnhover
+
+#include "../../Game model/FSM/SkirmishEvent.h"
+
+class buttonUnhover : public SkirmishEvent
 {
 public:
-	buttonUnhover();
+	buttonUnhover(button * b);
 	~buttonUnhover();
+
+	button * getButton();
+
+private:
+	button * b;
 };
 

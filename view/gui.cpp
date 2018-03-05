@@ -215,13 +215,24 @@ tileObserver * gui::tileObserverFactory(Tile * t)
 	
 	boardP->setTileButton(t);
 	
+	//Si no se pudo crear correctamente el tileButton, indicar que hubo error
 	tileButton * tileButtonP = boardP->getTileButton(tileRow, tileCol);
 	if(tileButtonP == nullptr || !tileButtonP->isValid())	//por lazy, solo se llama la funcion si se creo el tileButton
 	{
-		cout << "No se pudo crear tileObserveren (row,col) = (" << tileRow << "," << tileCol << ") ya que no se pudo crear el boton en esta posicion" << endl;
+		cout << "No se pudo crear tileObserver en (row,col) = (" << tileRow << "," << tileCol << ") ya que no se pudo crear el boton en esta posicion" << endl;
 		return nullptr;
 	}
-	return new tileObserver(t, boardP->getTileButton(tileRow, tileCol), toolboxP);
+
+	//Crear tile observer y devolver si no hubo error. Sino se crea correctamente, indicar que hubo error
+	tileObserver * to = new tileObserver(t, boardP->getTileButton(tileRow, tileCol), toolboxP);
+	if (to->isValid())
+	{
+		return to;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 playerObserver * gui::playerObserverFactory(Player * p)
@@ -239,13 +250,31 @@ playerObserver * gui::playerObserverFactory(Player * p)
 		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
 		itToolbox++) {}
 
-	//TODO: validacion de parametros enviados, y validacion de que no haya problemas en el constructor
-	return new playerObserver(p, (scoreBoard *)(*itScoreboard), (toolbox *)(*itToolbox));
+	//TODO: chequear que los iteradores no esten en end();
+
+	//Crear player observer y devolver si no hubo error. Sino se crea correctamente, indicar que hubo error
+	playerObserver * po = new playerObserver(p, (scoreBoard *)(*itScoreboard), (toolbox *)(*itToolbox));
+	if (po->isValid())
+	{
+		return po;
+	}
+	else 
+	{
+		return nullptr;
+	}
 }
 
-eventObserver * gui::eventObserverFactory(GenericEvent * e)
+eventObserver * gui::eventObserverFactory(GenericEvent * e)	//TODO: hacer puntero a puntero a evento
 {
-	return new eventObserver(e);
+	eventObserver * eo = new eventObserver(e, this);
+	if (eo->isValid())
+	{
+		return eo;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 bool gui::isValid()
@@ -284,6 +313,27 @@ contentBox * gui::getDisplaySection(unsigned int xPixel, unsigned int yPixel)
 	return contentBoxSelected;
 }
 
+ALLEGRO_EVENT_SOURCE * gui::getDisplayEventSource()
+{
+	if (display == nullptr)
+	{
+		cout << "No se puede obtener el display event source porque display es nullptr" << endl;
+	}
+	return al_get_display_event_source(display);
+}
+
+ALLEGRO_EVENT_SOURCE * gui::getMenuEventSource()
+{
+	if (display == nullptr)
+	{
+		cout << "No se puede obtener el menu event source porque display es nullptr" << endl;
+	}
+	else
+	{
+		//TODO: googlear como era esto. No tengo internet :(
+	}
+}
+
 void gui::draw()
 {
 	al_clear_to_color({ 1,1,0,1 });
@@ -303,6 +353,51 @@ void gui::acknowledgeResize()
 		(*it)->acknowledgeResize();
 	}
 }
+
+contentBox * gui::getDisplaySection(displaySection_t displaySection)
+{
+	list<contentBox *>::iterator it = displaySections.begin();
+
+	//Avanzar hasta que se halle el Scoreboard * o hasta recorrer toda la lista.
+	for (it = displaySections.begin();
+		it != displaySections.end() && (*it)->getType() != displaySection;
+		it++) {}
+	if (it == displaySections.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+		return (*it);
+	}
+}
+
+void gui::appendToTextlog(const char * msg)
+{
+	list<contentBox *>::iterator it = displaySections.begin();
+
+	//Avanzar hasta que se halle el textlog * o hasta recorrer toda la lista.
+	for (it = displaySections.begin();
+		it != displaySections.end() && (*it)->getType() != TEXTLOG;
+		it++) {}
+	if (it != displaySections.end())	//Si se encontro el textlog
+	{
+		((textlog *)(*it))->append(msg);
+	}
+}
+
+void gui::appendToTextlog(std::string msg)
+{
+	appendToTextlog(msg.c_str());
+}
+
+void gui::setTimeLeft(unsigned int timeLeft)
+{
+	//TODO:
+}
+
+//TODO: una funcion que te devuelva la display section que necesitas???
+
 //
 ////TODO: sacar, es de debug
 //void gui::selectUnit(unit_t unit)

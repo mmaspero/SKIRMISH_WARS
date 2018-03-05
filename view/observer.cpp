@@ -10,3 +10,8 @@ obs::obs()
 obs::~obs()
 {
 }
+
+bool obs::isValid()
+{
+	return valid;
+}
