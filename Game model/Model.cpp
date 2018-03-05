@@ -305,7 +305,7 @@ bool Model::registerMove(Point p0, Point pf)
 					valid = ((Apc *)u)->startUnloading();
 				}
 				else {
-					valid = ((Apc *)m.getUnit(pf))->unload(moves.front().whereTo);
+					valid = ((Apc *)m.getUnit(p0))->unload(pf);
 				}
 			} break;
 				//default: valid queda en false

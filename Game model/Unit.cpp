@@ -260,7 +260,7 @@ bool Unit::move(Action mov)
 {
 	bool valid = false;
 
-	if (mov.type == ACT_MOVE && mov.mps == isActionValid(mov) && map->updateUnitPos(this, mov.whereTo)) {
+	if (mov.basicType() == ACT_MOVE && mov.mps == isActionValid(mov) && map->updateUnitPos(this, mov.whereTo)) {
 		position = mov.whereTo;
 		movingPoints -= mov.mps;
 		state = MOVING; // la unica accion que no prohibe mas movs es MOVE
