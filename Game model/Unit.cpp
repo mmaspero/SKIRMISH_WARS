@@ -337,6 +337,10 @@ void Unit::getPossibleActions(std::list<Action>& actions)
 
 	if (state <= MOVING) {
 		getPossibleMoves(actions, position, position, movingPoints);
+
+		if (type == APC && ((Apc *)this)->canUnload()) {
+			actions.push_back(Action(ACT_UNLOAD, position));
+		}
 	}
 
 	if (state == IDLE || (state == MOVING && maxRange == 1)) {
@@ -381,10 +385,6 @@ void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, u
 	}
 	else {
 		mod = 0;	//no necesito mps para moverme a la casilla donde estoy (para que no haya errores en la primera llamada)
-
-		if (type == APC && ((Apc *)this)->canUnload()) {
-			actionType = ACT_UNLOAD; //si soy un apc mi misma casilla es unload
-		}
 	}
 
 
