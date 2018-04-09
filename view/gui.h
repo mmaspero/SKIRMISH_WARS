@@ -71,7 +71,7 @@ public:
 
 	//TODO: hacer bien
 	********************************************************************************************************/
-	eventObserver * eventObserverFactory(GenericEvent * e);
+	eventObserver * eventObserverFactory(GenericEvent ** e);
 	
 	bool isValid();
 
@@ -119,7 +119,6 @@ public:
 
 	//void selectUnit(unit_t unit);	//TODO: sacar, es de debug
 
-private:
 	/*******************************************************************************************************
 	draw
 
@@ -128,6 +127,8 @@ private:
 	se dibujen todos los elementos con las dimensiones correctas
 	********************************************************************************************************/
 	void draw();
+
+private:
 
 	/*******************************************************************************************************
 	acknowledgeResize

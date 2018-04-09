@@ -1,7 +1,7 @@
 #include "buttonHover.h"
 
 
-buttonHover::buttonHover(button * b) : SkirmishEvent(EV_HOVER)
+buttonHover::buttonHover(button * b) : SkirmishEvent(EV_BUTTON_HOVER)
 {
 	this->b = b;	//TODO: no tiene validacion de parametros de entrada
 }

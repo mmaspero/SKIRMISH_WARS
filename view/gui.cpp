@@ -264,7 +264,7 @@ playerObserver * gui::playerObserverFactory(Player * p)
 	}
 }
 
-eventObserver * gui::eventObserverFactory(GenericEvent * e)	//TODO: hacer puntero a puntero a evento
+eventObserver * gui::eventObserverFactory(GenericEvent ** e)	//TODO: hacer puntero a puntero a evento
 {
 	eventObserver * eo = new eventObserver(e, this);
 	if (eo->isValid())
@@ -332,6 +332,7 @@ ALLEGRO_EVENT_SOURCE * gui::getMenuEventSource()
 	{
 		//TODO: googlear como era esto. No tengo internet :(
 	}
+	return nullptr;
 }
 
 void gui::draw()

@@ -2,7 +2,7 @@
 
 
 
-buttonPress::buttonPress(button * b) : SkirmishEvent(EV_HOVER)
+buttonPress::buttonPress(button * b) : SkirmishEvent(EV_BUTTON_PRESS)
 {
 	this->b = b;	//TODO: no tiene validacion de parametros de entrada
 }

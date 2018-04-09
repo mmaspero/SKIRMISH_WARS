@@ -41,13 +41,13 @@ simpleButton::simpleButton(simpleButtonType_t simpleType, float leftX, float top
 		case PASS_BUTTON:
 			text = string(PASS_TEXT);
 			break;
-		case BUY:
+		case BUY_BUTTON:
 			text = string(BUY_TEXT);
 			break;
-		case CANCEL:
+		case CANCEL_BUTTON:
 			text = string(CANCEL_TEXT);
 			break;		
-		case BACK:
+		case BACK_BUTTON:
 			text = string(BACK_TEXT);
 			break;
 		default:
@@ -97,17 +97,17 @@ bool simpleButton::isItPass()
 
 bool simpleButton::isItBuy()
 {
-	return BUY == simpleType;
+	return BUY_BUTTON == simpleType;
 }
 
 bool simpleButton::isItCancel()
 {
-	return CANCEL == simpleType;
+	return CANCEL_BUTTON == simpleType;
 }
 
 bool simpleButton::isItBack()
 {
-	return BACK == simpleType;
+	return BACK_BUTTON == simpleType;
 }
 
 bool simpleButton::isItThisSimpleType(simpleButtonType_t simpleType)

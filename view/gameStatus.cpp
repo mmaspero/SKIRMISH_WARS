@@ -24,7 +24,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 	{
 		displaySectionType = GAMESTATUS;
 		timeStat.value = unitStat.value = moneyStat.value = 0;
-		
+
 		ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
 
 		//crear un bitmap con el tamanio adecuado (cuadrado de maxima altura posible)
@@ -32,7 +32,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 		ALLEGRO_BITMAP * auxBmp = al_load_bitmap(TIME_BMP);
 		if (auxBmp == nullptr)
 		{
-			cout << "No se pudo cargar la imagen del reloj " << TIME_BMP << endl; 
+			cout << "No se pudo cargar la imagen del reloj " << TIME_BMP << endl;
 			valid = false;
 			return;
 		}
@@ -40,7 +40,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 		al_set_target_bitmap(timeStat.bmp);
 		al_draw_scaled_bitmap(auxBmp, 0, 0, al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
 			0, 0, al_get_bitmap_width(timeStat.bmp), al_get_bitmap_height(timeStat.bmp), 0);
-		
+
 		//lo mismo para las imagenes de plata y de unidades
 		auxBmp = al_load_bitmap(UNIT_BMP);
 		if (auxBmp == nullptr)
@@ -65,7 +65,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 		al_set_target_bitmap(moneyStat.bmp);
 		al_draw_scaled_bitmap(auxBmp, 0, 0, al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
 			0, 0, al_get_bitmap_width(moneyStat.bmp), al_get_bitmap_height(moneyStat.bmp), 0);
-		
+
 		al_set_target_bitmap(backupBmp);
 
 		font = al_load_font(DEFAULT_FONT, -contentHeight * FONT_HEIGHT_IN_BITMAP_HEIGHT, 0);
@@ -76,7 +76,6 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 			return;
 		}
 	}
-	al_get_display_event_source
 }
 
 gameStatus::~gameStatus()

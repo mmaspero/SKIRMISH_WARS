@@ -3,15 +3,14 @@
 #include "../../Game model/FSM/SkirmishEvent.h"
 #include "../button.h"
 
-class buttonUnhover : public SkirmishEvent
+class buttonUnselect : public SkirmishEvent
 {
 public:
-	buttonUnhover(button * b);
-	~buttonUnhover();
+	buttonUnselect(button * b);
+	~buttonUnselect();
 
 	button * getButton();
 
 private:
 	button * b;
 };
-

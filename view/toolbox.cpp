@@ -36,7 +36,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			}
 		}
 
-		simpleButton * simpleBuy = new simpleButton(BUY, contentStartX, contentStartY + contentHeight * 0.9,
+		simpleButton * simpleBuy = new simpleButton(BUY_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
 			contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simpleBuy);
 		if(!buttonList.back()->isValid())
@@ -44,7 +44,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			buttonValid = false;
 		}
 
-		simpleButton * simpleBack = new simpleButton(BACK, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
+		simpleButton * simpleBack = new simpleButton(BACK_BUTTON, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
 					contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simpleBack);
 		if (!buttonList.back()->isValid())
@@ -70,6 +70,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 
 toolbox::~toolbox()
 {
+	//TODO:
 }
 
 void toolbox::selectProduct(unit_t unitSpecificType)
