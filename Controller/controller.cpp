@@ -129,6 +129,7 @@ void Controller::run()
 
 bool Controller::sendPackage(genericPackage * package)
 {
+	std::cout << "Controller envio el paquete " << package->getType() << std::endl;
 	bool state = false;
 	if ((net->getCurrentState()) == CONNECTED)
 	{

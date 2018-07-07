@@ -74,7 +74,7 @@ bool attackValidator(char * data, unsigned int size)
 	{
 		if (data[PACKAGE_TYPE_POSS] == ATTACK && colValidator(data[COL_OR_POS]) && colValidator(data[COL_DES_POS]) && filValidator(data[FILA_OR_POS]) && filValidator(data[FILA_DES_POS]))
 		{
-			if((data[SIZE_ATTACK_PACKAGE-1]<=0X06)&&(data[SIZE_ATTACK_PACKAGE - 1] >= 0X06))//dado
+			if((data[SIZE_ATTACK_PACKAGE-1]<=0X06)&&(data[SIZE_ATTACK_PACKAGE - 1] >= 0X01))//dado
 			{
 				return true;
 			}

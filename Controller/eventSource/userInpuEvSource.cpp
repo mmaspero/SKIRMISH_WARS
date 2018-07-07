@@ -85,7 +85,18 @@ GenericEvent * userInputEvSource::getEvent()
 			{
 				return NULL;
 			}
+			//eventos de realease
 			break;
+		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+			buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
+			//aca evento de press
+			break;
+		case ALLEGRO_EVENT_MOUSE_AXES:
+			buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
+			//aca eventos de hover
+			break;
+			
+
 		default:
 			return NULL;
 			break;

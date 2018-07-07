@@ -118,6 +118,7 @@ attack::~attack()
 ack::ack()
 {
 	type = ACK;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 
@@ -131,6 +132,7 @@ ack::~ack()
 name::name()
 {
 	type = NAME;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -143,6 +145,7 @@ name::~name()
 youStart::youStart()
 {
 	type = YOU_START;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -155,6 +158,7 @@ youStart::~youStart()
 iStart::iStart()
 {
 	type = I_START;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 
@@ -168,6 +172,7 @@ iStart::~iStart()
 pass::pass()
 {
 	type = PASS;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -180,6 +185,7 @@ pass::~pass()
 youWon::youWon()
 {
 	type = YOU_WON;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -192,6 +198,7 @@ youWon::~youWon()
 playAgain::playAgain()
 {
 	type = PLAY_AGAIN;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -204,6 +211,7 @@ playAgain::~playAgain()
 gameOver::gameOver()
 {
 	type = GAME_OVER;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -216,6 +224,7 @@ gameOver::~gameOver()
 error::error()
 {
 	type = ERROR;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
@@ -228,6 +237,7 @@ error::~error()
 quit::quit()
 {
 	type = QUIT;
+	this->sizeBuff = 1;
 	setBuff(new char);
 	(getBuff())[PACKAGE_TYPE_POSS] = type;
 }
