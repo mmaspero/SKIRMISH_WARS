@@ -5,7 +5,7 @@
 
 #include <allegro5\allegro_font.h>
 
-typedef enum { PASS_BUTTON, BUY_BUTTON, CANCEL_BUTTON, BACK_BUTTON, SIMPLE_BUTTON_TYPES_N } simpleButtonType_t;	//botones que son solo una palabra y no hacen nada magico. Other quiere decir que no es niguno de los que ya estan estipulados
+typedef enum { PASS_BUTTON, STORE_BUTTON, BUY_BUTTON, CANCEL_BUTTON, BACK_BUTTON, SIMPLE_BUTTON_TYPES_N } simpleButtonType_t;	//botones que son solo una palabra y no hacen nada magico. Other quiere decir que no es niguno de los que ya estan estipulados
 
 
 class simpleButton :
@@ -23,6 +23,7 @@ public:
 	bool isItBuy();
 	bool isItCancel();
 	bool isItBack();
+	bool isItStore();
 	bool isItThisSimpleType(simpleButtonType_t simpleType);
 
 private:

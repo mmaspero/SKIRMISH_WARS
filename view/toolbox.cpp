@@ -44,6 +44,14 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 			buttonValid = false;
 		}
 
+		simpleButton * simpleStore = new simpleButton(STORE_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
+			contentWidth / 2, contentHeight * 0.1);
+		buttonList.push_back(simpleStore);
+		if (!buttonList.back()->isValid())
+		{
+			buttonValid = false;
+		}
+
 		simpleButton * simpleBack = new simpleButton(BACK_BUTTON, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
 					contentWidth / 2, contentHeight * 0.1);
 		buttonList.push_back(simpleBack);
@@ -59,6 +67,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 		{
 			buttonValid = false;
 		}
+
 
 		if (!buttonValid)	//Si hubo un error en el constructor de algun boton, eliminar toda la lista
 		{
@@ -112,7 +121,7 @@ void toolbox::drawContent()
 			{
 				button * b = (*it);
 				if (b->getType() == SIMPLE_BUTTON && 
-					(((simpleButton*)b)->isItBuy() || ((simpleButton*)b)->isItPass()) )
+					(((simpleButton*)b)->isItStore() || ((simpleButton*)b)->isItPass()) )
 				{
 					b->draw();
 				}

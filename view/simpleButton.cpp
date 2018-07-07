@@ -14,6 +14,7 @@
 #define BUTTON_CORNER_ROUNDNESS 10
 
 #define PASS_TEXT "PASS"
+#define STORE_TEXT "STORE"
 #define BUY_TEXT "BUY"
 #define CANCEL_TEXT "CANCEL"
 #define BACK_TEXT "BACK"
@@ -40,6 +41,9 @@ simpleButton::simpleButton(simpleButtonType_t simpleType, float leftX, float top
 		{
 		case PASS_BUTTON:
 			text = string(PASS_TEXT);
+			break;
+		case STORE_BUTTON:
+			text = string(STORE_TEXT);
 			break;
 		case BUY_BUTTON:
 			text = string(BUY_TEXT);
@@ -108,6 +112,11 @@ bool simpleButton::isItCancel()
 bool simpleButton::isItBack()
 {
 	return BACK_BUTTON == simpleType;
+}
+
+bool simpleButton::isItStore()
+{
+	return STORE_BUTTON == simpleType;
 }
 
 bool simpleButton::isItThisSimpleType(simpleButtonType_t simpleType)

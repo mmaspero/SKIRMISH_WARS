@@ -16,6 +16,8 @@
 #include "drawingFunctions.h"
 #include "paths.h"
 
+#define DEGARAD(n) ((n)*2.0*ALLEGRO_PI/360.0)
+
 #define DEFAULT_SCREEN_W 1200.0f
 #define DEFAULT_SCREEN_H 800.0f
 
@@ -59,6 +61,9 @@ gui::gui()
 		valid = false;
 	}
 
+	
+
+
 	////////////////////////creacion y personalizacion display/////////////////////////////
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -87,6 +92,69 @@ gui::gui()
 		al_set_display_icon(display, icon);
 	}
 	al_set_window_title(display, "Skirmish Wars");	//TODO: sacarlo de config
+
+
+	{
+
+		//unsigned int n = 5;
+		//unsigned int radius = 200;
+		//float paso = DEGARAD(0.7);	//giro del circulo en radianes.
+
+		//const ALLEGRO_TRANSFORM * t_backup = al_get_current_transform();
+		//ALLEGRO_TRANSFORM t;
+		//al_clear_to_color(al_map_rgb_f(1,1,1));
+
+		//for (int j = 0; ; j++)
+		//{
+		//	al_clear_to_color(al_map_rgb_f(1, 1, 1));
+		//	{
+		//		//hacer backup del blender y del target bitmap actuales
+		//		int op, src, dst;
+		//		al_get_blender(&op, &src, &dst);	//TODO: hacer backup sin el separate blender del alpha
+		//											//Esta configuracion de colores sirve como "mascara" para despues quedarse solo con un circulo de lo que sea que 
+		//											//se le dibuje arriba
+		//		al_clear_to_color(al_map_rgba_f(1, 1, 1, 1));
+		//		al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ZERO);	//sirve para mantener la transparencia del circulo dibujado
+
+		//		for (int i = 0; i < n; i++)
+		//		{
+		//			al_identity_transform(&t);
+		//			al_rotate_transform(&t, j * paso + 2 * ALLEGRO_PI* i / n);
+		//			al_translate_transform(&t, al_get_display_width(display) / 2.0, al_get_display_height(display) / 2.0);
+		//			al_use_transform(&t);
+		//			al_draw_filled_circle(radius, 0, 70, al_map_rgba_f(0, 0, 0, 0));
+		//			al_identity_transform(&t);
+		//			al_use_transform(&t);
+		//		}
+
+		//		//setear blender para que solo se mantenga la parte de bmp que se va a dibujar sobre el circulo. 
+		//		//Lo demas es transparente.
+		//		al_set_blender(ALLEGRO_SRC_MINUS_DEST, ALLEGRO_ONE, ALLEGRO_ONE);
+		//		//dibujar de manera que coincida sourceCenterX y sourceCenterY con el centro de roundBmp
+
+
+		//		
+		//		//al_draw_filled_rectangle(0, 0, 1000, 1000, al_map_rgb_f(1, 1, 0));
+		//		drawGradientRectangle(  al_get_display_width(display) / 2.0 - 250, 
+		//								al_get_display_height(display) / 2.0 - 250, 
+		//								al_get_display_width(display) / 2.0 + 250, 
+		//								al_get_display_height(display) / 2.0 + 250, 
+		//								al_map_rgb_f(1, 0, 0), 
+		//								al_map_rgb_f(0, 1, 0), 
+		//								al_map_rgb_f(0, 0, 1), 
+		//								al_map_rgb_f(1, 0, 1) );
+
+		//		//Reestablecer el blender y el target bitmap iniciales
+		//		al_set_blender(op, src, dst);
+		//		//al_set_target_bitmap(targetBmpBackup);
+
+		//		//al_draw_bitmap(roundBmp, 0, 0, 0);
+		//	}
+		//	al_flip_display();
+		//	al_rest(0.03);
+		//}
+	}
+
 
 	displaySections.push_back((contentBox *) new Board(display, 0, 0.3, 0.7, 0.7));
 	if (!displaySections.back()->isValid())

@@ -29,7 +29,7 @@ eventObserver::eventObserver(GenericEvent ** event, gui * g)
 	this->g = g;
 	if (this->event == nullptr)
 	{
-		cout << "Error: el genericEvent ** enviado al constructor de eventObeserver es nullptr" << endl;
+		cout << "Error: el genericEvent ** enviado al constructor de eventObserver es nullptr" << endl;
 		valid = false;
 	}	
 	if (this->g == nullptr)
