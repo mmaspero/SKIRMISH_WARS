@@ -77,8 +77,29 @@ GenericEvent * userInputEvSource::getEvent()
 					recivedEvent = packageValidator->getTileEvent(((tileButton*)buttonSelected)->getTilePosition());
 					return recivedEvent;
 				}
-				else if (buttonSelected->getType() == SIMPLE_BUTTON && ((simpleButton*)buttonSelected)->isItPass()) {
-					return new SkirmishEvent(EV_USER_PASS);
+				else if (buttonSelected->getType() == SIMPLE_BUTTON) {
+					simpleButtonType_t simpleType = ((simpleButton*)buttonSelected)->getSimpleType();
+					switch (simpleType)
+					{
+					case PASS_BUTTON:
+						return new SkirmishEvent(EV_USER_PASS);
+						break;
+					case STORE_BUTTON:
+						return new SkirmishEvent(EV_GO_TO_PURCHASE);
+						break;
+					case BUY_BUTTON:
+						return new SkirmishEvent(EV_USER_PURCHASE);
+						break;
+					case BACK_BUTTON:
+						
+						break;
+					case CANCEL_BUTTON:
+
+						break;
+					default:
+						break;
+					}
+					
 				}
 			}
 			else//no se preciono nada valido
