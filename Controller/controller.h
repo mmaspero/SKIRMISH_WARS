@@ -28,7 +28,7 @@ public:
 	void resetPlayTimer();
 	void stopPlayTimer();
 	void run();
-	
+	gui * getGui() { return usserInterface;};
 private:
 	network * net;
 	bool sendPackage(genericPackage * package);

@@ -113,6 +113,7 @@ void Controller::stopPlayTimer()
 void Controller::run()
 {
 	GenericEvent * recivedEvent = NULL;
+	eventObserver * evOb=  (this->getGui())->eventObserverFactory(&recivedEvent);
 	do
 	{
 		if (recivedEvent != NULL)
@@ -122,7 +123,9 @@ void Controller::run()
 		}
 		this->generadorDeEventos->updateEventQueue();
 		recivedEvent =this->generadorDeEventos->getNextEvent();
+		evOb->update();
 		mod->dispatch(recivedEvent);
+		
 
 	} while ((recivedEvent == NULL) || (recivedEvent->getType() != EV_ERROR));
 }
