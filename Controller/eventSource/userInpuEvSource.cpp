@@ -5,15 +5,6 @@
 #include"../../Game model/FSM/SkirmishEvent.h"
 #include"../../Game model/FSM/FsmInfo.h"
 #include "../../view/simpleButton.h"
-#include "../../view/events/buttonRelease.h"
-#include "../../view/events/buttonHover.h"
-#include "../../view/events/buttonPress.h"
-#include "../../view/events/buttonSelect.h"
-#include "../../view/events/buttonUnhover.h"
-#include "../../view/events/buttonUnselect.h"
-#include "../../view/events/displayResize.h"
-#include "../../view/events/timeLeft.h"
-
 
 
 
@@ -23,7 +14,6 @@ userInputEvSource::userInputEvSource(ALLEGRO_DISPLAY * window, gui * usserInterf
 	this->window = window;
 	this->usserInterface = usserInterface;
 	this->packageValidator = packageValidator;
-	this->eventToSend = NULL;
 	eventQueue = al_create_event_queue();
 	if (eventQueue)
 	{
@@ -73,23 +63,15 @@ GenericEvent * userInputEvSource::getEvent()
 {
 	button * buttonSelected = nullptr;
 	GenericEvent * recivedEvent = NULL;
-	if (this->eventToSend != NULL)
-	{
-		recivedEvent = this->eventToSend;
-		this->eventToSend = NULL;
-		return recivedEvent;
-	}
+
 	if (al_get_next_event(eventQueue, &(this->event)))
 	{
-		buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
 		switch (event.type)
 		{
-		case ALLEGRO_EVENT_MOUSE_BUTTON_UP://se solto una tecla del mouse
-			//buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
+		case ALLEGRO_EVENT_MOUSE_BUTTON_UP://se solto una tecla del mause
+			buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
 			if (buttonSelected != nullptr)
 			{
-				this->eventToSend = new buttonRelease(buttonSelected);
-
 				if (buttonSelected->getType() == TILE_BUTTON)
 				{
 					recivedEvent = packageValidator->getTileEvent(((tileButton*)buttonSelected)->getTilePosition());
@@ -124,18 +106,15 @@ GenericEvent * userInputEvSource::getEvent()
 			{
 				return NULL;
 			}
-			/*eventos de realease*/
+			//eventos de realease
 			break;
 		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-			//buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
+			buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
 			//aca evento de press
 			break;
 		case ALLEGRO_EVENT_MOUSE_AXES:
-			//buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
+			buttonSelected = usserInterface->getButton(event.mouse.x, event.mouse.y);
 			//aca eventos de hover
-			break;
-		case ALLEGRO_EVENT_DISPLAY_RESIZE:
-			return ((GenericEvent *) new displayResize);
 			break;
 			
 
