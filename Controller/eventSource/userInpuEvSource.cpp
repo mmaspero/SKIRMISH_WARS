@@ -75,6 +75,7 @@ GenericEvent * userInputEvSource::getEvent()
 	GenericEvent * recivedEvent = NULL;
 	if (this->eventToSend != NULL)
 	{
+
 		recivedEvent = this->eventToSend;
 		this->eventToSend = NULL;
 		return recivedEvent;
