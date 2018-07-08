@@ -24,6 +24,7 @@ private:
 	ALLEGRO_EVENT event;
 	gui * usserInterface;
 	Model * packageValidator;
+	GenericEvent * eventToSend;
 
 };
 
