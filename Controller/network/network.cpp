@@ -136,3 +136,30 @@ network::~network()
 	int i = 0;
 
 }
+
+bool network::fastConnection(connectionMode mode)
+{
+	if (this->getCurrentState() != CONNECTED)
+	{
+		if (mode == SERVER_N)
+		{
+			this->server = new servidor(this->portNumber.getPortAsInt());
+			this->server->waitForCliente();
+			this->currentState = CONNECTED;
+			this->imclient = false;
+		}
+		else
+		{
+			this->client = new cliente();
+			while (!(this->client->ConectToServer(this->ipNumber.getIp().c_str(), this->portNumber.getPortAsString().c_str())))
+			{
+
+			}
+			
+			this->currentState = CONNECTED;
+			this->imclient = true;
+		}
+		}
+
+	return false;
+}

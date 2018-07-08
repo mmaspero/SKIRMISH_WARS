@@ -12,6 +12,7 @@ IN_CONECTION_STAGE_CLIENT,//etapa de intentar conectarse con un servidor
 IN_CONECTION_STAGE_SERVER,//etapa de intewntar conectarse con un cliente
 N_NET_STATE}netState;
 
+typedef enum {SERVER_N,CLIENT_N}connectionMode;
 class  network
 {
 public:
@@ -38,6 +39,8 @@ public:
 	 devuelve false si no se pudo enviar la infromcaion, esto ocurre si hubo un error entre cliente y servidor*/
 	 bool sendData(char * dataToSend, int sizeDataToSend);
 	 ~ network();
+
+	 bool fastConnection(connectionMode mode);
 
 
 private:
