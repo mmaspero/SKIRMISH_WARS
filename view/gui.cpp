@@ -191,7 +191,6 @@ gui::gui()
 	}
 
 	displaySections.push_back((contentBox *) new toolbox(display, 0.7, 0, 0.3, 0.5));
-//	((toolbox *)displaySections.back())->selectProduct((unit_t)3);	//TODO: volar, es de debug
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display Toolbox" << endl;
@@ -405,7 +404,7 @@ ALLEGRO_EVENT_SOURCE * gui::getMenuEventSource()
 
 void gui::draw()
 {
-	al_clear_to_color({ 1,1,0,1 });
+	al_clear_to_color({ 0.7f,1,0,1 });	//TODO: magic number
 
 	for (list<contentBox *>::iterator it = displaySections.begin(); it != displaySections.end(); it++)
 	{
@@ -452,6 +451,7 @@ void gui::appendToTextlog(const char * msg)
 	if (it != displaySections.end())	//Si se encontro el textlog
 	{
 		((textlog *)(*it))->append(msg);
+		((textlog *)(*it))->draw();
 	}
 }
 

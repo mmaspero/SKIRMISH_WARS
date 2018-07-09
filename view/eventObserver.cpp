@@ -11,7 +11,7 @@
 
 #include "productButton.h"
 #include "textlog.h"
-
+#include "simpleButton.h"
 #include "gui.h"
 
 //TODO: hacer unos mensajes un poco mas prolijos
@@ -49,47 +49,53 @@ eventObserver::~eventObserver()
 
 void eventObserver::update()
 {
-	switch ((*event)->getType())
+	if ((*event) != nullptr)
 	{
-	case EV_ERROR:
-		onError();
-		break;
-	case EV_QUIT:
-		onQuit();
-		break;
-	case EV_USER_WON:
-		onUserWon();
-		break;
-	case EV_OPPONENT_WON:
-		onOpponentWon();
-		break;
-	case EV_BUTTON_HOVER:
-		onButtonHover();
-		break;
-	case EV_BUTTON_UNHOVER:
-		onButtonUnhover();
-		break;
-	case EV_BUTTON_PRESS:
-		onButtonPress();
-		break;
-	case EV_BUTTON_RELEASE:
-		onButtonRelease();
-		break;
-	case EV_BUTTON_SELECT:
-		onButtonSelect();
-		break;
-	case EV_BUTTON_UNSELECT:
-		onButtonSelect();
-		break;
-	case EV_TIME_LEFT:
-		onTimeLeft();
-		break;
-	case EV_DISPLAY_RESIZE:
-		onDisplayResize();
-		break;
-	default:
-		//TODO:
-		break;
+		//TODO: debug
+		std::cout << "eventObserver recibio el evento " << (*event)->getType() << std::endl;
+
+		switch ((*event)->getType())
+		{
+		case EV_ERROR:
+			onError();
+			break;
+		case EV_QUIT:
+			onQuit();
+			break;
+		case EV_USER_WON:
+			onUserWon();
+			break;
+		case EV_OPPONENT_WON:
+			onOpponentWon();
+			break;
+		case EV_BUTTON_HOVER:
+			onButtonHover();
+			break;
+		case EV_BUTTON_UNHOVER:
+			onButtonUnhover();
+			break;
+		case EV_BUTTON_PRESS:
+			onButtonPress();
+			break;
+		case EV_BUTTON_RELEASE:
+			onButtonRelease();
+			break;
+		case EV_BUTTON_SELECT:
+			onButtonSelect();
+			break;
+		case EV_BUTTON_UNSELECT:
+			onButtonSelect();
+			break;
+		case EV_TIME_LEFT:
+			onTimeLeft();
+			break;
+		case EV_DISPLAY_RESIZE:
+			onDisplayResize();
+			break;
+		default:
+			//TODO:
+			break;
+		}
 	}
 }
 
@@ -115,37 +121,28 @@ void eventObserver::onOpponentWon()
 
 void eventObserver::onButtonHover()
 {
-	g->appendToTextlog("Llego evento button hover");	//TODO: sacar de debug
 	((buttonHover *)(*event))->getButton()->hoveredOn();
 }
 
 void eventObserver::onButtonUnhover()
 {
-	g->appendToTextlog("Llego evento button unhover");	//TODO: sacar de debug
 	((buttonUnhover *)(*event))->getButton()->hoveredOff();
 }
 
 void eventObserver::onButtonPress()
 {
-	g->appendToTextlog("Llego evento button press");	//TODO: sacar de debug
 	((buttonPress *)(*event))->getButton()->pressedOn();
 }
 
 void eventObserver::onButtonRelease()
 {
-	g->appendToTextlog("Llego evento button RELEASE");	//TODO: sacar de debug
-	((buttonRelease *)(*event))->getButton()->pressedOff();
-}
-
-void eventObserver::onButtonSelect()
-{
-	//TODO: hacer menos cabeza
-	g->appendToTextlog("Llego evento button select");	//TODO: sacar de debug
+	((buttonRelease *)(*event))->getButton()->pressedOff();	//TODO: arreglar
 
 	button * b = ((buttonSelect *)(*event))->getButton();	//TODO: control de error
 
 	if (b->getType() == PRODUCT_BUTTON)
 	{
+
 		toolbox * toolboxP = ((toolbox *)g->getDisplaySection(TOOLBOX));
 		if (toolboxP == nullptr)
 		{
@@ -154,17 +151,55 @@ void eventObserver::onButtonSelect()
 		else
 		{
 			toolboxP->selectProduct(((productButton *)b)->getUnitSpecificType());
+			toolboxP->draw();
+			g->appendToTextlog("Deberia estar el toolbox en SHOWING ONE PRODUCT");
 		}
+		g->getDisplaySection(TOOLBOX)->draw();
+	}
+	else if (b->getType() == SIMPLE_BUTTON)
+	{
+		g->appendToTextlog("Release de simple button");
+
+		switch (((simpleButton *)b)->getSimpleType())
+		{
+		case CANCEL_BUTTON:
+			break;
+		case BUY_BUTTON: case BACK_BUTTON:
+			if (((toolbox *)(g->getDisplaySection(TOOLBOX)))->getStatus() == SHOWING_ONE_PRODUCT)
+			{
+				((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToStore();
+			}
+			break;
+		case STORE_BUTTON:
+			if (((toolbox *)(g->getDisplaySection(TOOLBOX)))->getStatus() == EMPTY)
+			{
+				((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToStore();
+			}
+			break;
+		case PASS_BUTTON:
+			break;
+		default:
+			break;
+		}
+		g->getDisplaySection(TOOLBOX)->draw();
 	}
 	else
 	{
 		b->selectedOn();
 	}
+
+
+
+
+}
+
+void eventObserver::onButtonSelect()
+{
+	//TODO: hacer menos cabeza
 }
 
 void eventObserver::onButtonUnselect()
 {
-	g->appendToTextlog("Llego evento button unselect");	//TODO: sacar de debug
 
 	button * b = ((buttonUnselect *)(*event))->getButton();	//TODO: control de error
 	if (b->getType() != PRODUCT_BUTTON)
@@ -175,12 +210,10 @@ void eventObserver::onButtonUnselect()
 
 void eventObserver::onTimeLeft()
 {
-	g->appendToTextlog("Llego evento button time left");	//TODO: sacar de debug
 	g->setTimeLeft(((timeLeft *)(*event))->getTime());
 }
 
 void eventObserver::onDisplayResize()
 {
-	g->appendToTextlog("Llego evento button hover");	//TODO: sacar de debug
 	g->acknowledgeResize();
 }

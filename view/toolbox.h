@@ -16,6 +16,10 @@ public:
 
 	void selectProduct(unit_t unitSpecificType);
 	void deselectAllProducts();
+	void setStatus(toolboxStatus_t status);
+	toolboxStatus_t getStatus();
+	virtual button * getButton(unsigned int xPixel, unsigned int yPixel);
+	void goToStore();
 
 private:
 	toolboxStatus_t status;

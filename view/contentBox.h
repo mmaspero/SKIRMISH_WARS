@@ -28,7 +28,7 @@ public:
 	bool isItHere(unsigned int xPixel, unsigned int yPixel);
 
 	//undefined behaviour si hay dos botones en el mismo pixel!!!!!!!!!!!!
-	button * getButton(unsigned int xPixel, unsigned int yPixel);
+	virtual button * getButton(unsigned int xPixel, unsigned int yPixel);
 	displaySection_t getType();
 
 protected:
