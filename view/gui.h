@@ -117,8 +117,6 @@ public:
 
 	ALLEGRO_EVENT_SOURCE * getMenuEventSource();	//TODO: googlear la funcion de allegro que devuelve el menu event source
 
-	//void selectUnit(unit_t unit);	//TODO: sacar, es de debug
-
 	/*******************************************************************************************************
 	draw
 

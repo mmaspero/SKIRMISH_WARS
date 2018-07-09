@@ -8,7 +8,7 @@
 #include "paths.h"
 
 #define FONT_NAME "PressStart2P.ttf"
-#define DEFAULT_BG_COLOR "white"		//TODO: unificar palettes.
+#define DEFAULT_BG_COLOR "lawngreen"		//TODO: unificar palettes.
 #define DEFAULT_FONT_COLOR "black"
 
 #define BUTTON_CORNER_ROUNDNESS 10

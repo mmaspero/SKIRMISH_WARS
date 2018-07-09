@@ -1,20 +1,22 @@
 #include "playerObserver.h"
 
+#include <iostream>
 
-
-playerObserver::playerObserver(Player * p, scoreBoard * sB, toolbox * t)
+playerObserver::playerObserver(Player * p, scoreBoard * sB, toolbox * t, gameStatus * gs)
 {
 	this->p = p;
 	this->sB = sB;
 	this->t = t;
+	this->gs = gs;
 	
-	if (p && sB && t)		//Si ninguno de los punteros es nullptr
+	if (p && sB && t && gs)		//Si ninguno de los punteros es nullptr
 	{
 		valid = true;
 	}
 	else
 	{
 		valid = false;
+		std::cout << "No se pudo crear el player observer" << std::endl;
 	}
 }
 
@@ -33,13 +35,16 @@ void playerObserver::update()
 	else if (p->who == USER)
 	{
 		sB->getMyHQHPbar()->setCurrentHP(p->capturePointsHQ);
-		sB->setMyMoney(p->money);
-		sB->setMyUnits(p->nUnits);
-		sB->setMyCities(p->nCities);
+		gs->setMoney(p->money);
+		gs->setUnitCount(p->nUnits);
+		gs->setCityCount(p->nCities);
 		sB->draw();
+		gs->draw();
 
-		if (p->status == PURCHASING)
+		if (p->status == WAITING)
 		{
+			
+
 			//TODO: !!!!!!!!!!!!!!!!!!!!!!! EN EL HEADER DE RO DECIA UNIT, NO UNIT *
 //			std::list<Unit *> possiblePurchases = p->getPossiblePurchases();
 			

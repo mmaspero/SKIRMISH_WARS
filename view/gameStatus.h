@@ -19,6 +19,7 @@ public:
 		float width, float height, bool isBoxTransparent = false);
 	void setTime(unsigned int time);
 	void setUnitCount(unsigned int unitCount);
+	void setCityCount(unsigned int cityCount);
 	void setMoney(unsigned int money);
 
 	~gameStatus();
@@ -27,6 +28,7 @@ private:
 	void resizeContent();
 	stat_t timeStat;
 	stat_t unitStat;
+	stat_t cityStat;
 	stat_t moneyStat;
 	ALLEGRO_FONT * font;
 };

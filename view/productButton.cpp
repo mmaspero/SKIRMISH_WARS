@@ -561,7 +561,7 @@ void productButton::setExpandedHeight(float eHeight)
 
 void productButton::setExpandedDimensions(float eLeftX, float eTopY, float eWidth, float eHeight)
 {
-
+	setAllDimensions(rLeftX, rTopY, rWidth, rHeight, eLeftX, eTopY, eWidth, eHeight);
 }
 
 void productButton::getExpandedDimensions(float * eLeftX, float * eTopY, float * eWidth, float * eHeight)

@@ -13,6 +13,8 @@
 #include "optionBox.h"
 #include "gameStatus.h"
 
+#include "config\gui_config.h"
+
 #include "drawingFunctions.h"
 #include "paths.h"
 
@@ -306,6 +308,8 @@ playerObserver * gui::playerObserverFactory(Player * p)
 {
 	list<contentBox *>::iterator itScoreboard = displaySections.begin();
 	list<contentBox *>::iterator itToolbox = displaySections.begin();
+	list<contentBox *>::iterator itGameStatus = displaySections.begin();
+
 
 	//Avanzar hasta que se halle el Scoreboard * o hasta recorrer toda la lista.
 	for (itScoreboard = displaySections.begin();
@@ -317,10 +321,16 @@ playerObserver * gui::playerObserverFactory(Player * p)
 		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
 		itToolbox++) {}
 
+	//Avanzar hasta que se halle el Toolbox * o hasta recorrer toda la lista.
+	for (itGameStatus = displaySections.begin();
+		itGameStatus != displaySections.end() && (*itGameStatus)->getType() != GAMESTATUS;
+		itGameStatus++) {
+	}
+
 	//TODO: chequear que los iteradores no esten en end();
 
 	//Crear player observer y devolver si no hubo error. Sino se crea correctamente, indicar que hubo error
-	playerObserver * po = new playerObserver(p, (scoreBoard *)(*itScoreboard), (toolbox *)(*itToolbox));
+	playerObserver * po = new playerObserver(p, (scoreBoard *)(*itScoreboard), (toolbox *)(*itToolbox), (gameStatus*)(*itGameStatus));
 	if (po->isValid())
 	{
 		return po;
@@ -404,7 +414,7 @@ ALLEGRO_EVENT_SOURCE * gui::getMenuEventSource()
 
 void gui::draw()
 {
-	al_clear_to_color({ 0.7f,1,0,1 });	//TODO: magic number
+	al_clear_to_color(GUI_DEFAULT_BACKGROUND_COLOR);	//TODO: magic number
 
 	for (list<contentBox *>::iterator it = displaySections.begin(); it != displaySections.end(); it++)
 	{
@@ -420,6 +430,7 @@ void gui::acknowledgeResize()
 	{
 		(*it)->acknowledgeResize();
 	}
+	draw();
 }
 
 contentBox * gui::getDisplaySection(displaySection_t displaySection)
@@ -465,17 +476,3 @@ void gui::setTimeLeft(unsigned int timeLeft)
 	//TODO:
 }
 
-//TODO: una funcion que te devuelva la display section que necesitas???
-
-//
-////TODO: sacar, es de debug
-//void gui::selectUnit(unit_t unit)
-//{
-//	list<contentBox *>::iterator itToolbox = displaySections.begin();
-//
-//	//Avanzar hasta que se halle el Toolbox * o hasta recorrer toda la lista.
-//	for (itToolbox = displaySections.begin();
-//		itToolbox != displaySections.end() && (*itToolbox)->getType() != TOOLBOX;
-//		itToolbox++) {}
-//	((toolbox *)(*itToolbox))->selectProduct((unit_t)3);
-//}

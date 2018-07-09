@@ -7,9 +7,10 @@
 #define TIME_BMP IMAGE_PATH "clock.png"
 #define UNIT_BMP IMAGE_PATH "manSprite.png"
 #define COIN_BMP IMAGE_PATH "coin.png"
+#define CITY_BMP IMAGE_PATH "buildingSprite.png"
 
 #define DEFAULT_FONT FONT_PATH "PressStart2P.ttf"
-#define FONT_COLOR "black"
+#define FONT_COLOR "lawngreen"
 #define FONT_HEIGHT_IN_BITMAP_HEIGHT (3.0/4.0)
 
 using namespace std;
@@ -23,6 +24,9 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 	if (valid)
 	{
 		displaySectionType = GAMESTATUS;
+
+		this->isBoxTransparent = isBoxTransparent;
+
 		timeStat.value = unitStat.value = moneyStat.value = 0;
 
 		ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
@@ -41,7 +45,7 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 		al_draw_scaled_bitmap(auxBmp, 0, 0, al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
 			0, 0, al_get_bitmap_width(timeStat.bmp), al_get_bitmap_height(timeStat.bmp), 0);
 
-		//lo mismo para las imagenes de plata y de unidades
+		//lo mismo para las imagenes de plata, ciudades y de unidades
 		auxBmp = al_load_bitmap(UNIT_BMP);
 		if (auxBmp == nullptr)
 		{
@@ -65,6 +69,19 @@ gameStatus::gameStatus(ALLEGRO_DISPLAY * display, float startX, float startY,
 		al_set_target_bitmap(moneyStat.bmp);
 		al_draw_scaled_bitmap(auxBmp, 0, 0, al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
 			0, 0, al_get_bitmap_width(moneyStat.bmp), al_get_bitmap_height(moneyStat.bmp), 0);
+
+		auxBmp = al_load_bitmap(CITY_BMP);
+		if (auxBmp == nullptr)
+		{
+			cout << "No se pudo cargar la imagen de la ciudad " << CITY_BMP << endl;
+			valid = false;
+			return;
+		}
+		cityStat.bmp = al_create_bitmap(contentHeight, contentHeight);
+		al_set_target_bitmap(cityStat.bmp);
+		al_draw_scaled_bitmap(auxBmp, 0, 0, al_get_bitmap_width(auxBmp), al_get_bitmap_height(auxBmp),
+			0, 0, al_get_bitmap_width(cityStat.bmp), al_get_bitmap_height(cityStat.bmp), 0);
+
 
 		al_set_target_bitmap(backupBmp);
 
@@ -108,6 +125,11 @@ void gameStatus::setUnitCount(unsigned int unitCount)
 	unitStat.value = unitCount;
 }
 
+void gameStatus::setCityCount(unsigned int cityCount)
+{
+	cityStat.value = cityCount;
+}
+
 void gameStatus::setMoney(unsigned int money)
 {
 	moneyStat.value = money;
@@ -115,19 +137,26 @@ void gameStatus::setMoney(unsigned int money)
 
 void gameStatus::drawContent()
 {
-	int row = contentStartX, col = contentStartY;
-	al_draw_bitmap(timeStat.bmp, row, col, 0);
-	row += al_get_bitmap_width(timeStat.bmp);
-	al_draw_textf(font, al_color_name(FONT_COLOR), row, col, 0, "%d", timeStat.value);
-	row += (getDigitCount(timeStat.value) + 1) * al_get_text_width(font, "_");	//multiplico la cantidad de digitos por el ancho de un caracter en pixeles
-	al_draw_bitmap(unitStat.bmp, row, col, 0);
-	row += al_get_bitmap_width(unitStat.bmp);
-	al_draw_textf(font, al_color_name(FONT_COLOR), row, col, 0, "%d", unitStat.value);
-	row += getDigitCount(unitStat.value) * al_get_text_width(font, "_");
-	al_draw_bitmap(moneyStat.bmp, row, col, 0);
-	row += al_get_bitmap_width(moneyStat.bmp);
-	al_draw_textf(font, al_color_name(FONT_COLOR), row, col, 0, "%d", moneyStat.value);
+	int col = contentStartX, row = contentStartY;
 
+	al_draw_bitmap(timeStat.bmp, col, row, 0);
+	col += al_get_bitmap_width(timeStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), col, row, 0, "%d", timeStat.value);
+	col += (getDigitCount(timeStat.value) + 1) * al_get_text_width(font, "_");	//multiplico la cantidad de digitos por el ancho de un caracter en pixeles
+	
+	al_draw_bitmap(unitStat.bmp, col, row, 0);
+	col += al_get_bitmap_width(unitStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), col, row, 0, "%d", unitStat.value);
+	col += (getDigitCount(unitStat.value) + 1) * al_get_text_width(font, "_");
+	
+	al_draw_bitmap(moneyStat.bmp, col, row, 0);
+	col += al_get_bitmap_width(moneyStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), col, row, 0, "%d", moneyStat.value);
+	col += (getDigitCount(moneyStat.value) + 1) * al_get_text_width(font, "_");
+	
+	al_draw_bitmap(cityStat.bmp, col, row, 0);
+	col += al_get_bitmap_width(cityStat.bmp);
+	al_draw_textf(font, al_color_name(FONT_COLOR), col, row, 0, "%d", cityStat.value);
 }
 
 void gameStatus::resizeContent()

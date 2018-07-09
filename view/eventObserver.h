@@ -18,6 +18,21 @@ private:
 	GenericEvent ** event;
 	gui * g;
 
+	void onTimeout();
+	void onAck();
+	void onGoToPurchase();
+	void onUserPass();
+	void onUserAttack();
+	void onUserMove();
+	void onUserPurchase();
+	void onOppPass();
+	void onOppAttack();
+	void onOppMove();
+	void onOppPurchase();
+	void onUnitSelection();
+	void onUnselect();
+	void onWaitForYouWon();
+	void onYouWon();
 	void onError();
 	void onQuit();
 	void onUserWon();

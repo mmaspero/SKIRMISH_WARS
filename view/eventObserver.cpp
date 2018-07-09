@@ -20,6 +20,9 @@
 #define ERROR_MSG "Hubo un error"
 #define QUIT_MSG "El oponente se fue del juego"
 
+#define YOU_PASS_MSG "Pasaste tu turno"
+#define THEY_PASS_MSG "Es tu turno"
+
 
 using namespace std;
 
@@ -56,6 +59,39 @@ void eventObserver::update()
 
 		switch ((*event)->getType())
 		{
+		case EV_TIMEOUT:
+			break;
+		case EV_ACK:
+			break;
+		case EV_GO_TO_PURCHASE:
+			break;
+		case EV_USER_PASS:
+			break;
+		case EV_USER_ATTACK:
+			break;
+		case EV_USER_MOVE:
+			break;
+		case EV_USER_PURCHASE:
+			break;
+		case EV_OPP_PASS:
+			onOppPass();
+			break;
+		case EV_OPP_ATTACK:
+			break;
+		case EV_OPP_MOVE:
+			break;
+		case EV_OPP_PURCHASE:
+			break;
+		case EV_PURCH_SELECTION:
+			break;
+		case EV_UNIT_SELECTION:
+			break;
+		case EV_UNSELECT:
+			break;
+		case EV_WAIT_FOR_YOU_WON:
+			break;
+		case EV_YOU_WON:
+			break;
 		case EV_ERROR:
 			onError();
 			break;
@@ -97,6 +133,13 @@ void eventObserver::update()
 			break;
 		}
 	}
+}
+
+void eventObserver::onOppPass()
+{
+	((toolbox*)(g->getDisplaySection(TOOLBOX)))->goToMyTurn();
+	((toolbox*)(g->getDisplaySection(TOOLBOX)))->draw();
+	g->appendToTextlog(THEY_PASS_MSG);
 }
 
 void eventObserver::onError()
@@ -171,12 +214,14 @@ void eventObserver::onButtonRelease()
 			}
 			break;
 		case STORE_BUTTON:
-			if (((toolbox *)(g->getDisplaySection(TOOLBOX)))->getStatus() == EMPTY)
+			if (((toolbox *)(g->getDisplaySection(TOOLBOX)))->getStatus() == EMPTY_MY_TURN)
 			{
 				((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToStore();
 			}
 			break;
 		case PASS_BUTTON:
+			((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToTheirTurn();
+			g->appendToTextlog(YOU_PASS_MSG);
 			break;
 		default:
 			break;
@@ -187,10 +232,6 @@ void eventObserver::onButtonRelease()
 	{
 		b->selectedOn();
 	}
-
-
-
-
 }
 
 void eventObserver::onButtonSelect()
@@ -217,3 +258,4 @@ void eventObserver::onDisplayResize()
 {
 	g->acknowledgeResize();
 }
+

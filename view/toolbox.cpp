@@ -14,7 +14,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 	{
 		displaySectionType = TOOLBOX;
 
-		status = EMPTY;
+		status = EMPTY_MY_TURN;
 
 		bool buttonValid = true;
 		float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
@@ -22,24 +22,17 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 
 		for (int i = 0; i < N_UNIT_TYPES; i++)
 		{
-			int aux = (i % BUTTONS_PER_ROW);
-
-			float rWidth = contentWidth / (float)BUTTONS_PER_ROW;
-			float rHeight = productButtonSectionHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
-			float rLeftX = contentStartX + rWidth * aux;
-			float rTopY = contentStartY + rHeight * (i / (int)BUTTONS_PER_ROW);
-
 			b = new productButton(//Unit * u
-				rLeftX, rTopY, rWidth, rHeight,
-				contentStartX, contentStartY, contentWidth, productButtonSectionHeight, (unit_t)i);
+				1,1,1,1,1,1,1,1, (unit_t)i);
 			b->hiddenOn();
-
+			b->selectedOff();
 			buttonList.push_back(b);
 			if (!buttonList.back()->isValid())
 			{
 				buttonValid = false;
 			}
 		}
+		resizeContent();
 
 		simpleButton * simpleBuy = new simpleButton(BUY_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
 			contentWidth / 2, contentHeight * 0.1);
@@ -108,21 +101,6 @@ void toolbox::selectProduct(unit_t unitSpecificType)
 	status = SHOWING_ONE_PRODUCT;
 }
 
-void toolbox::deselectAllProducts()
-{
-	for (std::list<button*>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
-	{
-		((productButton *)(*it))->selectedOff();
-		((productButton *)(*it))->hiddenOff();
-	}
-	status = SHOWING_ALL_PRODUCTS;
-}
-
-void toolbox::setStatus(toolboxStatus_t status)
-{
-	this->status = status;
-}
-
 toolboxStatus_t toolbox::getStatus()
 {
 	return status;
@@ -139,7 +117,7 @@ button * toolbox::getButton(unsigned int xPixel, unsigned int yPixel)
 		{
 			switch (status)
 			{
-			case EMPTY:
+			case EMPTY_MY_TURN:
 				if ((*it)->getType() == SIMPLE_BUTTON && 
 					(((simpleButton *)(*it))->getSimpleType() == STORE_BUTTON || ((simpleButton *)(*it))->getSimpleType() == PASS_BUTTON))
 				{
@@ -171,7 +149,7 @@ button * toolbox::getButton(unsigned int xPixel, unsigned int yPixel)
 
 void toolbox::goToStore()
 {
-	if (status == EMPTY || status == SHOWING_ONE_PRODUCT)
+	if (status == EMPTY_MY_TURN || status == SHOWING_ONE_PRODUCT)
 	{
 		status = SHOWING_ALL_PRODUCTS;
 		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
@@ -185,11 +163,37 @@ void toolbox::goToStore()
 	}
 }
 
+void toolbox::goToMyTurn()
+{
+	status = EMPTY_MY_TURN;
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->getType() == PRODUCT_BUTTON)
+		{
+			((productButton *)(*it))->hiddenOn();
+			((productButton *)(*it))->selectedOff();
+		}
+	}
+}
+
+void toolbox::goToTheirTurn()
+{
+	status = EMPTY_THEIR_TURN;
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->getType() == PRODUCT_BUTTON)
+		{
+			((productButton *)(*it))->hiddenOff();
+			((productButton *)(*it))->selectedOff();
+		}
+	}
+}
+
 void toolbox::drawContent()
 {
-	switch (status)
+	switch (status)	//EMPTY_THEIR_TURN no tiene nada que dibujar
 	{
-	case EMPTY:
+	case EMPTY_MY_TURN:
 		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 		{
 			if ((*it)->isValid())
@@ -249,22 +253,30 @@ void toolbox::drawContent()
 
 void toolbox::resizeContent()
 {
-	int i = 0; //TODO: sacar!!! hacer solo con unitSpecificType
+
+	float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
+
 	for (std::list<button*>::iterator it = buttonList.begin(); 
 		it != buttonList.end(); 
 		it++)
 	{
 		unit_t unitSpecificType = ((productButton*)(*it))->getUnitSpecificType();
 
+
+		int aux = (unitSpecificType % BUTTONS_PER_ROW);
+
 		float rWidth = contentWidth / (float)BUTTONS_PER_ROW;
-		float rHeight = contentHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
-		float rLeftX = contentStartX + rWidth * (i % BUTTONS_PER_ROW);//(unitSpecificType % BUTTONS_PER_ROW);
-		float rTopY = contentStartY + rHeight * (i / (int)BUTTONS_PER_ROW);//((int)unitSpecificType / (int)BUTTONS_PER_ROW);
+		float rHeight = productButtonSectionHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
+		float rLeftX = contentStartX + rWidth * aux;
+		float rTopY = contentStartY + rHeight * (unitSpecificType / (int)BUTTONS_PER_ROW);
 
 
-		((productButton *)(*it))->setAllDimensions(//Unit * u
-			rLeftX, rTopY, rWidth, rHeight,
-			contentStartX, contentStartY, contentWidth, contentHeight);
-		i++;
+		if ((*it)->getType() == PRODUCT_BUTTON)
+		{
+			((productButton *)(*it))->setAllDimensions(//Unit * u
+				rLeftX, rTopY, rWidth, rHeight,
+				contentStartX, contentStartY, contentWidth, contentHeight);
+		}
+
 	}
 }
