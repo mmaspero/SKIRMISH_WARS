@@ -19,13 +19,24 @@
 
 #define ANTIAIR_SPRITE_R		SPRITE_PATH "antiair_r.png"
 #define APC_SPRITE_R			SPRITE_PATH "apc_r.png"
-#define ARTILLERY_SPRITE_R	SPRITE_PATH "artillery_r.png"
+#define ARTILLERY_SPRITE_R		SPRITE_PATH "artillery_r.png"
 #define INFANTRY_SPRITE_R		SPRITE_PATH "infantry_r.png"
 #define MECH_SPRITE_R			SPRITE_PATH	"mech_r.png"
 #define MEDTANK_SPRITE_R		SPRITE_PATH "medtank_r.png"
-#define RECON_SPRITE_R		SPRITE_PATH "recon_r.png"
-#define ROCKET_SPRITE_R		SPRITE_PATH "rockets_r.png"
+#define RECON_SPRITE_R			SPRITE_PATH "recon_r.png"
+#define ROCKET_SPRITE_R			SPRITE_PATH "rocket_r.png"
 #define TANK_SPRITE_R			SPRITE_PATH "tank_r.png"
+
+
+#define ANTIAIR_SPRITE_B		SPRITE_PATH "antiair_b.png"
+#define APC_SPRITE_B			SPRITE_PATH "apc_b.png"
+#define ARTILLERY_SPRITE_B		SPRITE_PATH "artillery_b.png"
+#define INFANTRY_SPRITE_B		SPRITE_PATH "infantry_b.png"
+#define MECH_SPRITE_B			SPRITE_PATH	"mech_b.png"
+#define MEDTANK_SPRITE_B		SPRITE_PATH "medtank_b.png"
+#define RECON_SPRITE_B			SPRITE_PATH "recon_b.png"
+#define ROCKET_SPRITE_B			SPRITE_PATH "rocket_b.png"
+#define TANK_SPRITE_B			SPRITE_PATH "tank_b.png"
 
 using namespace std;
 
@@ -134,15 +145,51 @@ void tileObserver::update()
 		{
 			switch (t->getUnit()->getType())
 			{
-			case RECON: { unitBmp = al_load_bitmap(RECON_SPRITE_R); } break;
-			case ROCKET: { unitBmp = al_load_bitmap(ROCKET_SPRITE_R); } break;
-			case MECH: { unitBmp = al_load_bitmap(MECH_SPRITE_R); } break;
-			case INFANTRY: { unitBmp = al_load_bitmap(INFANTRY_SPRITE_R); } break;
-			case TANK: { unitBmp = al_load_bitmap(TANK_SPRITE_R); } break;
-			case ARTILLERY: { unitBmp = al_load_bitmap(ARTILLERY_SPRITE_R); } break;
-			case ANTIAIR: { unitBmp = al_load_bitmap(ANTIAIR_SPRITE_R); } break;
-			case APC: { unitBmp = al_load_bitmap(APC_SPRITE_R); } break;
-			case MEDTANK: { unitBmp = al_load_bitmap(MEDTANK_SPRITE_R); }	break;
+			case RECON: 
+			{ 
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? RECON_SPRITE_R : RECON_SPRITE_B); 
+			} 
+			break;
+			case ROCKET: 
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ROCKET_SPRITE_R : ROCKET_SPRITE_B);
+			}
+			break;
+			case MECH:
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? MECH_SPRITE_R : MECH_SPRITE_B);
+			}
+			break;
+			case INFANTRY:
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? INFANTRY_SPRITE_R : INFANTRY_SPRITE_B);
+			}
+			break;
+			case TANK: 
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? TANK_SPRITE_R : TANK_SPRITE_B);
+			}
+		    break;
+			case ARTILLERY:
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ARTILLERY_SPRITE_R : ARTILLERY_SPRITE_B);
+			}
+			break;
+			case ANTIAIR:
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ANTIAIR_SPRITE_R : ANTIAIR_SPRITE_B);
+			}
+			break;
+			case APC:
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? APC_SPRITE_R : APC_SPRITE_B);
+			}
+			break;
+			case MEDTANK:
+			{
+				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? MEDTANK_SPRITE_R : MEDTANK_SPRITE_B);
+			}
+			break;
 			}
 			switch (unitBasicType);
 		}
