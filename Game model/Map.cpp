@@ -197,7 +197,7 @@ bool Map::canBoard(Point p, player_t player)
 
 	if (valid && isInMap(p) && hasUnit(p) && getUnit(p)->getType() == APC) {
 		Apc * apc = (Apc *)getUnit(p);
-		ans = apc->canBoard(player);
+		ans = apc->canBoard(player==USER);
 	}
 
 	return ans;

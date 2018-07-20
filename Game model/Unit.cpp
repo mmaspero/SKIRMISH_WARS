@@ -273,7 +273,8 @@ bool Unit::move(Action mov)
 bool Unit::attack(Action att, unsigned int diceRoll)
 {
 	bool valid = false;
-	if (att.type == ACT_ATTACK && isActionValid(att) && 1 <= diceRoll && diceRoll <= 6) {
+	if (att.type == ACT_ATTACK && isActionValid(att) && map->hasUnit(att.whereTo) &&
+		map->getUnitPlayer(att.whereTo)!=getPlayer() && 1 <= diceRoll && diceRoll <= 6) {
 		valid = true;
 		Unit * enemy = map->getUnit(att.whereTo);
 		terrain_t t = map->getTerrain(att.whereTo);

@@ -131,6 +131,7 @@ bool Apc::unload(Point whereTo)
 		Unit * u = loadedUnits.back();
 		loadedUnits.pop_back();
 		u->move(Action(ACT_UNLOAD, whereTo, 0));
+		valid = true;
 	}
 	state = MOVING;
 	movingPoints = 0; //el apc no se puede mover despues de descargar!
