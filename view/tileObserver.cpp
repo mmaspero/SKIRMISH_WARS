@@ -17,6 +17,16 @@
 
 #define FOG_COLOR "hotpink"
 
+#define ANTIAIR_SPRITE_R		SPRITE_PATH "antiair_r.png"
+#define APC_SPRITE_R			SPRITE_PATH "apc_r.png"
+#define ARTILLERY_SPRITE_R	SPRITE_PATH "artillery_r.png"
+#define INFANTRY_SPRITE_R		SPRITE_PATH "infantry_r.png"
+#define MECH_SPRITE_R			SPRITE_PATH	"mech_r.png"
+#define MEDTANK_SPRITE_R		SPRITE_PATH "medtank_r.png"
+#define RECON_SPRITE_R		SPRITE_PATH "recon_r.png"
+#define ROCKET_SPRITE_R		SPRITE_PATH "rockets_r.png"
+#define TANK_SPRITE_R			SPRITE_PATH "tank_r.png"
+
 using namespace std;
 
 tileObserver::tileObserver(Tile * t, tileButton * tButton, toolbox * tBox)
@@ -120,10 +130,20 @@ void tileObserver::update()
 		}
 
 		//Cargar bitmap de la unidad presente
-		std::string name;
 		if (t->hasUnit())
 		{
-			name = getUnitString(t->getUnit()->getType());
+			switch (t->getUnit()->getType())
+			{
+			case RECON: { unitBmp = al_load_bitmap(RECON_SPRITE_R); } break;
+			case ROCKET: { unitBmp = al_load_bitmap(ROCKET_SPRITE_R); } break;
+			case MECH: { unitBmp = al_load_bitmap(MECH_SPRITE_R); } break;
+			case INFANTRY: { unitBmp = al_load_bitmap(INFANTRY_SPRITE_R); } break;
+			case TANK: { unitBmp = al_load_bitmap(TANK_SPRITE_R); } break;
+			case ARTILLERY: { unitBmp = al_load_bitmap(ARTILLERY_SPRITE_R); } break;
+			case ANTIAIR: { unitBmp = al_load_bitmap(ANTIAIR_SPRITE_R); } break;
+			case APC: { unitBmp = al_load_bitmap(APC_SPRITE_R); } break;
+			case MEDTANK: { unitBmp = al_load_bitmap(MEDTANK_SPRITE_R); }	break;
+			}
 			switch (unitBasicType);
 		}
 
@@ -177,7 +197,7 @@ void tileObserver::update()
 		{
 			al_draw_scaled_bitmap(unitBmp, 0, 0, al_get_bitmap_width(unitBmp), al_get_bitmap_height(unitBmp),
 				0, 0, bmpW, bmpH, 0);
-			al_destroy_bitmap(terrainBmp);
+			al_destroy_bitmap(unitBmp);
 		}
 		{
 			ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 2, 0);
@@ -189,7 +209,6 @@ void tileObserver::update()
 				}
 				else
 				{
-					al_draw_text(font, al_color_name("pink"), 0, 0, 0, name.c_str());
 					al_draw_text(font, al_color_name("white"), 0, bmpH / 2.0, 0, name2.c_str());
 					al_destroy_font(font);
 				}

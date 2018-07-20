@@ -28,7 +28,7 @@
 
 #define COIN_IMG "coin.png"
 
-#define ANTIAIR_SPRITE SPRITE_PATH "antiair_red.png"
+#define ANTIAIR_SPRITE_R SPRITE_PATH "antiair_red.png"
 #define ANTIAIR_NAME "ANTIAIR"
 
 #define TREAD_LOGO_BMP IMAGE_PATH "tread_logo.png"
@@ -79,7 +79,7 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 		case ARTILLERY:
 			break;
 		case ANTIAIR:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case APC:
 			break;
@@ -90,7 +90,7 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 		}
 		if (unformattedBmp == nullptr)
 		{
-			cout << "No se pudo cargar el sprite " << ANTIAIR_SPRITE << endl;
+			cout << "No se pudo cargar el sprite " << ANTIAIR_SPRITE_R << endl;
 			valid = false;
 			return;
 		}
@@ -146,38 +146,38 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 		switch (unitSpecificType)
 		{
 		case RECON:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case ROCKET:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case MECH:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case INFANTRY:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case TANK:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case ARTILLERY:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case ANTIAIR:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case APC:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		case MEDTANK:
-			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE);
+			unformattedBmp = al_load_bitmap(ANTIAIR_SPRITE_R);
 			break;
 		default:
 			break;
 		}
 		if (unformattedBmp == nullptr)
 		{
-			cout << "No se pudo cargar el sprite " << ANTIAIR_SPRITE << endl;
+			cout << "No se pudo cargar el sprite " << ANTIAIR_SPRITE_R << endl;
 			valid = false;
 			return;
 		}

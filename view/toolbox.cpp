@@ -101,6 +101,18 @@ void toolbox::selectProduct(unit_t unitSpecificType)
 	status = SHOWING_ONE_PRODUCT;
 }
 
+unit_t toolbox::getSelectedProduct()
+{
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->getType() == PRODUCT_BUTTON && ((productButton *)(*it))->isSelected())
+		{
+			return ((productButton *)(*it))->getUnitSpecificType();
+		}
+	}
+	return N_UNIT_TYPES;
+}
+
 toolboxStatus_t toolbox::getStatus()
 {
 	return status;

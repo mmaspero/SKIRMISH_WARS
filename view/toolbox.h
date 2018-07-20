@@ -15,6 +15,11 @@ public:
 	~toolbox();
 
 	void selectProduct(unit_t unitSpecificType);
+	/* getSelectedProduct:
+	si hay una unidad seleccionada, devuelve el unit_t correspondiente
+	si no hay unidades seleccionadas, devuelve N_UNIT_TYPES
+	*/
+	unit_t getSelectedProduct();
 	toolboxStatus_t getStatus();
 	virtual button * getButton(unsigned int xPixel, unsigned int yPixel);
 	void goToStore();

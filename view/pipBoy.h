@@ -7,7 +7,6 @@
 #include <allegro5\allegro_ttf.h>
 #include <allegro5\allegro_primitives.h>
 
-typedef enum{WELCOME, INSERTING_NAME, TRYING_IP, RETRYING_IP, WAITING_CONNECTION}pipBoyStatus_t;
 
 class pipBoy : public contentBox
 {

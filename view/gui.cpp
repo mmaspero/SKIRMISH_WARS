@@ -20,11 +20,6 @@
 
 #define DEGARAD(n) ((n)*2.0*ALLEGRO_PI/360.0)
 
-#define DEFAULT_SCREEN_W 1200.0f
-#define DEFAULT_SCREEN_H 800.0f
-
-#define MIN_SCREEN_W 1024.0f
-#define MIN_SCREEN_H  768.0f
 
 using namespace std;
 
