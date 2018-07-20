@@ -1,8 +1,5 @@
 #include "Building.h"
 
-#define HQ_CP			8
-#define DEFAULT_CP		4
-
 #define	CP_PER_TURN		2
 #define RED_CP_PER_TURN	1	//reduced capture points
 
@@ -72,7 +69,7 @@ bool Building::isBeingCaptured()
 void setCapturePoints(building_t type, unsigned int& cp)
 { 
 	if (type == HEADQUARTERS)
-		cp = HQ_CP;
+		cp = CP_HQ;
 	else
-		cp = DEFAULT_CP;
+		cp = CP_DEFAULT;
 }

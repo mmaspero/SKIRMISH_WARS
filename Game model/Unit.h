@@ -52,7 +52,7 @@ public:
 	virtual void nextTurn();	//pasar a idle
 	bool heal();	//true si se modificaron los hps
 
-	int isActionValid(Action act); //devuelve los mps que cuesta, o -1 si no es valida
+	bool isActionValid(Action act); //devuelve los mps que cuesta, o -1 si no es valida
 
 	virtual unsigned int getTerrainMod(terrain_t t) = 0; // si es UINT MAX es que no puede pasar
 	virtual unsigned int getAttackMod(basicUnitType_t basicType) = 0;	//devuelve el mod, dependiendo de si la unit esta o no reducida

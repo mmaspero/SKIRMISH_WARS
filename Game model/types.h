@@ -12,6 +12,9 @@ typedef enum tileStatus { VISIBLE, FOG, UNIT_REVEALED, SELECTED, CAN_ATTACK, CAN
 typedef enum actions { ACT_MOVE, ACT_LOAD, ACT_UNLOAD, ACT_ATTACK, ACT_CAPTURE, N_ACTIONS} action_t;
 
 typedef enum buildings { HEADQUARTERS, FACTORY, CITY, N_BUILDINGS } building_t;
+#define CP_HQ			8
+#define CP_DEFAULT		4
+
 #define FACTORY_CHR	'm'	//ademas se especifica el jugador para todos los edificios
 #define	HQ_CHR		'q'
 #define CITY_CHR	'c'

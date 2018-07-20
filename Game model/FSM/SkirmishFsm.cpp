@@ -30,6 +30,7 @@ void SkirmishFSM::dispatch(GenericEvent * ev)
 	case EV_USER_PASS:			{ newState = currentState->onUserPass(ev); }			break;
 	case EV_USER_ATTACK:		{ newState = currentState->onUserAttack(ev); }			break;
 	case EV_USER_MOVE:			{ newState = currentState->onUserMove(ev); }			break;
+	case EV_GO_TO_PURCHASE:		{ newState = currentState->onGoToPurchase(ev); }		break;
 	case EV_USER_PURCHASE:		{ newState = currentState->onUserPurchase(ev); }		break;
 	case EV_OPP_PASS:			{ newState = currentState->onOpponentPass(ev); }		break;
 	case EV_OPP_ATTACK:			{ newState = currentState->onOpponentAttack(ev); }		break;

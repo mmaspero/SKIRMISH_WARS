@@ -240,27 +240,27 @@ void Unit::nextTurn()
 	restoreMPs();
 }
 
-int Unit::isActionValid(Action act)
+bool Unit::isActionValid(Action act)
 {
-	int mps = CANT_REACH;
+	bool valid = false;
 
 	std::list<Action> actList;
 	getPossibleActions(actList);
 
-	for (std::list<Action>::iterator it = actList.begin(); it != actList.end() && mps == CANT_REACH; it++) {
+	for (std::list<Action>::iterator it = actList.begin(); it != actList.end() && !valid; it++) {
 		if (it->whereTo == act.whereTo && it->basicType() == act.basicType()) {
-			mps = it->mps;
+			valid = true;
 		}
 	}
 
-	return mps;
+	return valid;
 }
 
 bool Unit::move(Action mov)
 {
 	bool valid = false;
 
-	if (mov.basicType() == ACT_MOVE && mov.mps == isActionValid(mov) && map->updateUnitPos(this, mov.whereTo)) {
+	if (mov.basicType() == ACT_MOVE && isActionValid(mov) && map->updateUnitPos(this, mov.whereTo)) {
 		position = mov.whereTo;
 		movingPoints -= mov.mps;
 		state = MOVING; // la unica accion que no prohibe mas movs es MOVE
@@ -273,7 +273,7 @@ bool Unit::move(Action mov)
 bool Unit::attack(Action att, unsigned int diceRoll)
 {
 	bool valid = false;
-	if (att.type == ACT_ATTACK && att.mps == isActionValid(att) && 1 <= diceRoll && diceRoll <= 6) {
+	if (att.type == ACT_ATTACK && isActionValid(att) && 1 <= diceRoll && diceRoll <= 6) {
 		valid = true;
 		Unit * enemy = map->getUnit(att.whereTo);
 		terrain_t t = map->getTerrain(att.whereTo);
@@ -296,7 +296,7 @@ bool Unit::startCapture(Action capt)
 {
 	bool valid = false; 
 
-	if (capt.type == ACT_CAPTURE && isActionValid(capt) != CANT_REACH && map->updateUnitPos(this, capt.whereTo)) {
+	if (capt.type == ACT_CAPTURE && isActionValid(capt) && map->updateUnitPos(this, capt.whereTo)) {
 		position = capt.whereTo;
 		movingPoints -= capt.mps;
 		state = POST_ACTIVE; //despues de una captura no puedo moverme mas! es como un ataque
@@ -310,7 +310,7 @@ bool Unit::loadIntoApc(Action load)
 {
 	bool valid = false;
 
-	if (getBasicType() == FOOT && load.type == ACT_LOAD && isActionValid(load) == load.mps && map->updateUnitPos(this, load.whereTo)) {
+	if (getBasicType() == FOOT && load.type == ACT_LOAD && isActionValid(load) && map->updateUnitPos(this, load.whereTo)) {
 		position = load.whereTo;
 		movingPoints -= load.mps;
 		state = POST_ACTIVE; 
