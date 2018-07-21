@@ -213,6 +213,21 @@ void tileObserver::update()
 		/////////////////////DIBUJO EDIFICIO////////////////////
 		if (t->hasBuilding())
 		{
+			ALLEGRO_COLOR buildingColor;
+
+			switch (t->getBuilding()->getPlayer())
+			{
+			case USER:
+				buildingColor = al_color_name("red");
+				break;
+			case OPPONENT:
+				buildingColor = al_color_name("blue");
+				break;
+			case NEUTRAL:
+				buildingColor = al_color_name("grey");
+				break;
+			}
+
 			switch (t->b->getType())
 			{
 			case HEADQUARTERS:
@@ -225,13 +240,12 @@ void tileObserver::update()
 				buildingName = "CITY";
 				break;
 			}
-			al_draw_text(font,
-				al_color_name(t->getBuilding()->getPlayer() == USER ? "red" : "blue"),
+
+			al_draw_text(font, buildingColor,
 				0, bmpH / 2.0, 0, buildingName.c_str());
 
 			hp = std::to_string(t->getBuilding()->getCapturePoints());
-			al_draw_text(font,
-				al_color_name(t->getBuilding()->getPlayer() == USER ? "red" : "blue"),
+			al_draw_text(font, buildingColor,
 				bmpW / 2.0, 0, 0, hp.c_str());
 
 		}
