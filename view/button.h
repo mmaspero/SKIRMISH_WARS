@@ -61,10 +61,14 @@ public:
 	float getWidth();
 	float getHeight();
 
+	void setLeftX(unsigned int leftX);
+	void setTopY(unsigned int topY);
+
 	bool isItHere(int xPixel, int yPixel);	//TODO: hacer que isItHere no falle con product button cuando este hidden. setear width y height en 0?
 	void setUnformattedBmp(ALLEGRO_BITMAP * unformattedBmp);
 	void resize(float scalingFactor);
 	void resize(float width, float height);
+
 
 protected:
 	buttonType_t buttonType;

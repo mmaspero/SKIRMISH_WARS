@@ -203,6 +203,17 @@ float button::getHeight()
 	return height;
 }
 
+void button::setLeftX(unsigned int leftX)
+{
+	this->leftX = leftX;
+}
+
+void button::setTopY(unsigned int topY)
+{
+	this->topY = topY;
+}
+
+
 bool button::isItHere(int xPixel, int yPixel)
 {
 	return(leftX < xPixel && xPixel < leftX + width

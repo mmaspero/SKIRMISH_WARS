@@ -69,6 +69,11 @@ unsigned int Unit::getCost()
 	return cost;
 }
 
+unsigned int Unit::getHP()
+{
+	return healthPoints;
+}
+
 Unit * Unit::factory(unit_t type, Point p, bool isMine)
 {
 	Unit * u = nullptr;

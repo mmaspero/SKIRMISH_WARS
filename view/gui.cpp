@@ -468,6 +468,6 @@ void gui::appendToTextlog(std::string msg)
 
 void gui::setTimeLeft(unsigned int timeLeft)
 {
-	//TODO:
+	((gameStatus *)getDisplaySection(GAMESTATUS))->setTime(timeLeft);
 }
 

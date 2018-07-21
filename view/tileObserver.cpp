@@ -9,34 +9,10 @@
 
 #include "paths.h"
 
-#define GRASS_TEXTURE "grassTexture.png"
-#define RIVER_TEXTURE "riverTexture.png"
-#define ROAD_TEXTURE  "roadTexture.png"
-#define FOREST_TEXTURE "forestTexture.jpg"
-#define HILL_TEXTURE "hillTexture.png"
-
-#define FOG_COLOR "hotpink"
-
-#define ANTIAIR_SPRITE_R		SPRITE_PATH "antiair_r.png"
-#define APC_SPRITE_R			SPRITE_PATH "apc_r.png"
-#define ARTILLERY_SPRITE_R		SPRITE_PATH "artillery_r.png"
-#define INFANTRY_SPRITE_R		SPRITE_PATH "infantry_r.png"
-#define MECH_SPRITE_R			SPRITE_PATH	"mech_r.png"
-#define MEDTANK_SPRITE_R		SPRITE_PATH "medtank_r.png"
-#define RECON_SPRITE_R			SPRITE_PATH "recon_r.png"
-#define ROCKET_SPRITE_R			SPRITE_PATH "rocket_r.png"
-#define TANK_SPRITE_R			SPRITE_PATH "tank_r.png"
+#include "config\sprite_config.h"
+#include "config\board_config.h"
 
 
-#define ANTIAIR_SPRITE_B		SPRITE_PATH "antiair_b.png"
-#define APC_SPRITE_B			SPRITE_PATH "apc_b.png"
-#define ARTILLERY_SPRITE_B		SPRITE_PATH "artillery_b.png"
-#define INFANTRY_SPRITE_B		SPRITE_PATH "infantry_b.png"
-#define MECH_SPRITE_B			SPRITE_PATH	"mech_b.png"
-#define MEDTANK_SPRITE_B		SPRITE_PATH "medtank_b.png"
-#define RECON_SPRITE_B			SPRITE_PATH "recon_b.png"
-#define ROCKET_SPRITE_B			SPRITE_PATH "rocket_b.png"
-#define TANK_SPRITE_B			SPRITE_PATH "tank_b.png"
 
 using namespace std;
 
@@ -92,7 +68,18 @@ void tileObserver::update()
 		ALLEGRO_BITMAP * tileStatusBmp = nullptr;
 		ALLEGRO_COLOR marginColor;
 
-		ALLEGRO_COLOR tc;;	//En caso de que no se pueda cargar un bitmap del terreno, se pinta el fondo del bitmap de un color que lo represente
+		std::string hp;
+		std::string buildingName;	//TODO: hacer con foto
+
+		ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 2, 0);
+		if (font == nullptr)
+		{
+			cout << "malu sus alta gilastra y no se cargo la font " << FONT_PATH << "ttf.ttf" << endl;
+			return;
+		}
+
+		////////////////////DIBUJO TERRENO//////////////////////
+		ALLEGRO_COLOR tc;	//En caso de que no se pueda cargar un bitmap del terreno, se pinta el fondo del bitmap de un color que lo represente
 		switch (terrainType)
 		{
 		case GRASS:
@@ -139,80 +126,117 @@ void tileObserver::update()
 		default:
 			break;
 		}
+		if (terrainBmp != nullptr)
+		{
+			al_draw_scaled_bitmap(terrainBmp, 0, 0, al_get_bitmap_width(terrainBmp), al_get_bitmap_height(terrainBmp),
+				0, 0, bmpW, bmpH, 0);
+			al_destroy_bitmap(terrainBmp);
+		}
+		else
+		{
+			al_clear_to_color(tc);
+		}
 
-		//Cargar bitmap de la unidad presente
+
+		/////////////////DIBUJO UNIDAD Y BASIC TYPE/////////////
 		if (t->hasUnit())
 		{
 			switch (t->getUnit()->getType())
 			{
-			case RECON: 
-			{ 
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? RECON_SPRITE_R : RECON_SPRITE_B); 
-			} 
-			break;
-			case ROCKET: 
+				case RECON: 
+				{ 
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? RECON_SPRITE_R : RECON_SPRITE_B); 
+				} 
+				break;
+				case ROCKET: 
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ROCKET_SPRITE_R : ROCKET_SPRITE_B);
+				}
+				break;
+				case MECH:
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? MECH_SPRITE_R : MECH_SPRITE_B);
+				}
+				break;
+				case INFANTRY:
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? INFANTRY_SPRITE_R : INFANTRY_SPRITE_B);
+				}
+				break;
+				case TANK: 
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? TANK_SPRITE_R : TANK_SPRITE_B);
+				}
+				break;
+				case ARTILLERY:
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ARTILLERY_SPRITE_R : ARTILLERY_SPRITE_B);
+				}
+				break;
+				case ANTIAIR:
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ANTIAIR_SPRITE_R : ANTIAIR_SPRITE_B);
+				}
+				break;
+				case APC:
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? APC_SPRITE_R : APC_SPRITE_B);
+				}
+				break;
+				case MEDTANK:
+				{
+					unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? MEDTANK_SPRITE_R : MEDTANK_SPRITE_B);
+				}
+				break;
+			}
+			hp = std::to_string(t->getUnit()->getHP());
+
+			if (unitBmp != nullptr)
 			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ROCKET_SPRITE_R : ROCKET_SPRITE_B);
+				al_draw_scaled_bitmap(unitBmp, 0, 0, al_get_bitmap_width(unitBmp), al_get_bitmap_height(unitBmp),
+					0, 0, bmpW, bmpH, 0);
+				al_destroy_bitmap(unitBmp);
 			}
-			break;
-			case MECH:
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? MECH_SPRITE_R : MECH_SPRITE_B);
-			}
-			break;
-			case INFANTRY:
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? INFANTRY_SPRITE_R : INFANTRY_SPRITE_B);
-			}
-			break;
-			case TANK: 
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? TANK_SPRITE_R : TANK_SPRITE_B);
-			}
-		    break;
-			case ARTILLERY:
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ARTILLERY_SPRITE_R : ARTILLERY_SPRITE_B);
-			}
-			break;
-			case ANTIAIR:
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? ANTIAIR_SPRITE_R : ANTIAIR_SPRITE_B);
-			}
-			break;
-			case APC:
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? APC_SPRITE_R : APC_SPRITE_B);
-			}
-			break;
-			case MEDTANK:
-			{
-				unitBmp = al_load_bitmap(t->getUnit()->getPlayer() == USER ? MEDTANK_SPRITE_R : MEDTANK_SPRITE_B);
-			}
-			break;
-			}
+			al_draw_text(font,
+				al_color_name(t->getUnit()->getPlayer() == USER ? "red" : "blue"),
+				0, 0, 0, hp.c_str());
+
 			switch (unitBasicType);
+			if (unitBasicTypeBmp != nullptr)
+			{
+				al_draw_scaled_bitmap(unitBasicTypeBmp, 0, 0, al_get_bitmap_width(unitBasicTypeBmp), al_get_bitmap_height(unitBasicTypeBmp),
+					0, 0, bmpW, bmpH, 0);
+				al_destroy_bitmap(unitBasicTypeBmp);
+			}
 		}
 
-		std::string name2;
-		//TODO: sacar a la mierda
+		/////////////////////DIBUJO EDIFICIO////////////////////
 		if (t->hasBuilding())
 		{
 			switch (t->b->getType())
 			{
 			case HEADQUARTERS:
-				name2 = "HQ";
+				buildingName = "HQ";
 				break;
 			case FACTORY:
-				name2 = "FACT";
+				buildingName = "FACT";
 				break;
 			case CITY:
-				name2 = "CITY";
+				buildingName = "CITY";
 				break;
 			}
+			al_draw_text(font,
+				al_color_name(t->getBuilding()->getPlayer() == USER ? "red" : "blue"),
+				0, bmpH / 2.0, 0, buildingName.c_str());
+
+			hp = std::to_string(t->getBuilding()->getCapturePoints());
+			al_draw_text(font,
+				al_color_name(t->getBuilding()->getPlayer() == USER ? "red" : "blue"),
+				bmpW / 2.0, 0, 0, hp.c_str());
+
 		}
 
-
+		/////////////////////DIBUJO MARGEN//////////////////////
 		switch (tileStatus)
 		{
 		case SELECTED:		//TODO: cambiar 
@@ -228,54 +252,9 @@ void tileObserver::update()
 			marginColor = al_map_rgba_f(0, 0, 0, 0);	//no se ve ningun margen
 			break;
 		}
-
-		if (terrainBmp != nullptr)
-		{
-			al_draw_scaled_bitmap(terrainBmp, 0, 0, al_get_bitmap_width(terrainBmp), al_get_bitmap_height(terrainBmp),
-				0, 0, bmpW, bmpH, 0);
-			al_destroy_bitmap(terrainBmp);
-		}
-		else 
-		{
-			al_clear_to_color(tc);
-		}
-
-		if (unitBmp != nullptr)
-		{
-			al_draw_scaled_bitmap(unitBmp, 0, 0, al_get_bitmap_width(unitBmp), al_get_bitmap_height(unitBmp),
-				0, 0, bmpW, bmpH, 0);
-			al_destroy_bitmap(unitBmp);
-		}
-		{
-			ALLEGRO_FONT * font = al_load_font(FONT_PATH "ttf.ttf", -bmpH / 2, 0);
-			{
-				if (font == nullptr)
-				{
-					cout << "malu sus alta gilastra y no se cargo la font " << FONT_PATH << "ttf.ttf" << endl;
-					return;
-				}
-				else
-				{
-					al_draw_text(font, al_color_name("white"), 0, bmpH / 2.0, 0, name2.c_str());
-					al_destroy_font(font);
-				}
-			}
-		}
-		if (unitBasicTypeBmp != nullptr)
-		{
-			al_draw_scaled_bitmap(unitBasicTypeBmp, 0, 0, al_get_bitmap_width(unitBasicTypeBmp), al_get_bitmap_height(unitBasicTypeBmp),
-				0, 0, bmpW, bmpH, 0);
-			al_destroy_bitmap(terrainBmp);
-		}
-		if (tileStatusBmp != nullptr)
-		{
-			al_draw_scaled_bitmap(tileStatusBmp, 0, 0, al_get_bitmap_width(tileStatusBmp), al_get_bitmap_height(tileStatusBmp),
-				0, 0, bmpW, bmpH, 0);
-			al_destroy_bitmap(tileStatusBmp);
-		}
-
 		al_draw_rectangle(0, 0, bmpW, bmpH, marginColor, 5);	//TODO: sacar magic numbers
-		//TODO: agregar la vida
+
+		al_destroy_font(font);
 	}
 
 	tButton->setUnformattedBmp(buttonBmp);

@@ -41,6 +41,7 @@ public:
 	unit_t getType();		//infantry, mech, tank...
 	basicUnitType_t getBasicType();	//tread, foot or wheel
 	unsigned int getCost();
+	unsigned int getHP();
 
 	bool isAlive();
 	virtual bool isReduced();

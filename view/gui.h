@@ -126,6 +126,9 @@ public:
 	********************************************************************************************************/
 	void draw();
 
+	void appendToTextlog(const char * msg);
+	void appendToTextlog(std::string msg);
+
 private:
 
 	/*******************************************************************************************************
@@ -136,9 +139,6 @@ private:
 	void acknowledgeResize();
 
 	contentBox * getDisplaySection(displaySection_t displaySection);
-
-	void appendToTextlog(const char * msg);
-	void appendToTextlog(std::string msg);
 
 	void setTimeLeft(unsigned int timeLeft);
 

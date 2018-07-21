@@ -79,6 +79,9 @@ void Board::resizeContent()
 	tileSide = min(contentWidth / B_W, contentHeight / B_H);
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 	{
+		Point tilePos = ((tileButton *)(*it))->getTilePosition();
 		(*it)->resize(tileSide, tileSide);
+		(*it)->setLeftX(BOARD_LEFT_X + tilePos.col * tileSide);
+		(*it)->setTopY(BOARD_TOP_Y + tilePos.row * tileSide);
 	}
 }

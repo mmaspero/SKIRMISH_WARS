@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include "paths.h"
+#include "../Game model/types.h"
 
-#define MAX_HP 1000	//TODO: mover de aca
+#define MAX_HP_ROUND_AVATAR 1000	//TODO: mover de aca
 #define MAX_HQ_HP 25
 
 #define HQ_HP_FONT_NAME FONT_PATH "ttf.ttf"
@@ -47,9 +48,9 @@ scoreBoard::scoreBoard(ALLEGRO_DISPLAY * display, float startX, float startY, fl
 		//////creacion de los avatares formateados//////
 		int radius = contentHeight / 2;					//El diametro es toda la altura disponible del contentBox
 		
-		myAvatar_f = new avatarRoundHP(myAvatarBmp, radius, MAX_HP, 
+		myAvatar_f = new avatarRoundHP(myAvatarBmp, radius, MAX_HP_ROUND_AVATAR,
 								contentStartX + radius, contentStartY + radius);
-		theirAvatar_f = new avatarRoundHP(theirAvatarBmp, radius, MAX_HP, 
+		theirAvatar_f = new avatarRoundHP(theirAvatarBmp, radius, MAX_HP_ROUND_AVATAR,
 								contentStartX + contentWidth - radius, contentStartY + radius);
 		if (!myAvatar_f->isValid())
 		{
@@ -96,14 +97,14 @@ scoreBoard::scoreBoard(ALLEGRO_DISPLAY * display, float startX, float startY, fl
 		}
 		myHQHPbar = new HPbar(contentStartX + 2 * radius + HPbarMargin, 
 							contentStartY + (contentHeight - HPbarHeight) / 2,
-							HPbarWidth, HPbarHeight, MAX_HQ_HP, hpPal, false);
+							HPbarWidth, HPbarHeight, CP_HQ, hpPal, false);
 		{
 			hpPal.background = { 0, 0, 0.5, 1 };
 			hpPal.hp = { 0, 0, 1, 1 };
 		}
 		theirHQHPbar = new HPbar(contentStartX + contentWidth / 2 + HPbarTitleLength / 2 + HPbarMargin, 
 							contentStartY + (contentHeight - HPbarHeight) / 2, 
-							HPbarWidth, HPbarHeight, MAX_HQ_HP, hpPal, true);
+							HPbarWidth, HPbarHeight, CP_HQ, hpPal, true);
 
 		if (!myHQHPbar->isValid())
 		{
