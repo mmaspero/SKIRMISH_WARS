@@ -74,11 +74,11 @@ gui::gui()
 		cout << "No se pudo crear el display" << endl;
 		valid = false;
 	}
-	al_set_window_constraints(display, MIN_SCREEN_W, MIN_SCREEN_H, 0, 0);	//TODO: por config
+	al_set_window_constraints(display, MIN_SCREEN_W, MIN_SCREEN_H, 0, 0);
 	al_apply_window_constraints(display, true);
 
 	al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR | ALLEGRO_MIPMAP);
-	ALLEGRO_BITMAP * icon = al_load_bitmap(IMAGE_PATH "myAvatar1.png");	//TODO: sacarlo de config
+	ALLEGRO_BITMAP * icon = al_load_bitmap(DISPLAY_ICON);
 	if (icon == nullptr)
 	{
 		//No se pone valid en false ya que el programa puede correr sin el icono de la ventana
@@ -88,72 +88,39 @@ gui::gui()
 	{
 		al_set_display_icon(display, icon);
 	}
-	al_set_window_title(display, "Skirmish Wars");	//TODO: sacarlo de config
+	al_set_window_title(display, WINDOW_TITLE);	
 
+	//creacion del menu
+	ALLEGRO_MENU_INFO menu_info[] = {
+		ALLEGRO_START_OF_MENU("&Opciones", 1),
+	{ "&Mute/Unmute", 2, 0, NULL },	//TODO: hacer que cambie de mute a unmute
+	ALLEGRO_START_OF_MENU("Toggle warnings",3),
+	{ "Before buying", 4, 0, NULL },
+	{ "Before attacking", 5, 0, NULL },
+	ALLEGRO_END_OF_MENU,
+	ALLEGRO_MENU_SEPARATOR,
+	{ "Quit", 6, 0, NULL },
+	ALLEGRO_END_OF_MENU,
+	ALLEGRO_END_OF_MENU
+	};
 
-	{
+	menu = al_build_menu(menu_info);
 
-		//unsigned int n = 5;
-		//unsigned int radius = 200;
-		//float paso = DEGARAD(0.7);	//giro del circulo en radianes.
+	//if (!(valid = al_set_display_menu(display, menu)))
+	//{
+	//	cout << "No se pudo anexar el menu al display" << endl;
+	//	valid = false;
+	//	return;
+	//}
 
-		//const ALLEGRO_TRANSFORM * t_backup = al_get_current_transform();
-		//ALLEGRO_TRANSFORM t;
-		//al_clear_to_color(al_map_rgb_f(1,1,1));
+	
+	////////////////////creacion de las contentBox //////////////////////////
 
-		//for (int j = 0; ; j++)
-		//{
-		//	al_clear_to_color(al_map_rgb_f(1, 1, 1));
-		//	{
-		//		//hacer backup del blender y del target bitmap actuales
-		//		int op, src, dst;
-		//		al_get_blender(&op, &src, &dst);	//TODO: hacer backup sin el separate blender del alpha
-		//											//Esta configuracion de colores sirve como "mascara" para despues quedarse solo con un circulo de lo que sea que 
-		//											//se le dibuje arriba
-		//		al_clear_to_color(al_map_rgba_f(1, 1, 1, 1));
-		//		al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ZERO);	//sirve para mantener la transparencia del circulo dibujado
-
-		//		for (int i = 0; i < n; i++)
-		//		{
-		//			al_identity_transform(&t);
-		//			al_rotate_transform(&t, j * paso + 2 * ALLEGRO_PI* i / n);
-		//			al_translate_transform(&t, al_get_display_width(display) / 2.0, al_get_display_height(display) / 2.0);
-		//			al_use_transform(&t);
-		//			al_draw_filled_circle(radius, 0, 70, al_map_rgba_f(0, 0, 0, 0));
-		//			al_identity_transform(&t);
-		//			al_use_transform(&t);
-		//		}
-
-		//		//setear blender para que solo se mantenga la parte de bmp que se va a dibujar sobre el circulo. 
-		//		//Lo demas es transparente.
-		//		al_set_blender(ALLEGRO_SRC_MINUS_DEST, ALLEGRO_ONE, ALLEGRO_ONE);
-		//		//dibujar de manera que coincida sourceCenterX y sourceCenterY con el centro de roundBmp
-
-
-		//		
-		//		//al_draw_filled_rectangle(0, 0, 1000, 1000, al_map_rgb_f(1, 1, 0));
-		//		drawGradientRectangle(  al_get_display_width(display) / 2.0 - 250, 
-		//								al_get_display_height(display) / 2.0 - 250, 
-		//								al_get_display_width(display) / 2.0 + 250, 
-		//								al_get_display_height(display) / 2.0 + 250, 
-		//								al_map_rgb_f(1, 0, 0), 
-		//								al_map_rgb_f(0, 1, 0), 
-		//								al_map_rgb_f(0, 0, 1), 
-		//								al_map_rgb_f(1, 0, 1) );
-
-		//		//Reestablecer el blender y el target bitmap iniciales
-		//		al_set_blender(op, src, dst);
-		//		//al_set_target_bitmap(targetBmpBackup);
-
-		//		//al_draw_bitmap(roundBmp, 0, 0, 0);
-		//	}
-		//	al_flip_display();
-		//	al_rest(0.03);
-		//}
-	}
-
-
-	displaySections.push_back((contentBox *) new Board(display, 0, 0.3, 0.7, 0.7));
+	displaySections.push_back((contentBox *) new Board(display, 
+													BOARD_LEFT_X, 
+													BOARD_TOP_Y, 
+													BOARD_W, 
+													BOARD_H));
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display Board" << endl;
@@ -161,9 +128,14 @@ gui::gui()
 		return;
 	}
 	
-	displaySections.push_back((contentBox *) new scoreBoard(display, 0, 0.1, 0.7, 0.2,
-		al_load_bitmap(IMAGE_PATH "myAvatar1.png"), al_load_bitmap(IMAGE_PATH "theirAvatar.png"),
-		8, 0, 0, 0));	//TODO: sacar magic numbers, validacion de parametros de ALLEGRO_BITMAP * 
+	displaySections.push_back((contentBox *) new scoreBoard(display, 
+															SCOREBOARD_LEFT_X, 
+															SCOREBOARD_TOP_Y, 
+															SCOREBOARD_W, 
+															SCOREBOARD_H,
+															al_load_bitmap(MY_AVATAR), 
+															al_load_bitmap(THEIR_AVATAR),
+		8, 0, 0, 0));	//TODO: sacar magic numbers,
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display ScoreBoard" << endl;
@@ -171,7 +143,12 @@ gui::gui()
 		return;
 	}
 
-	displaySections.push_back((contentBox *) new gameStatus(display, 0, 0, 0.7, 0.1, 0));	
+	displaySections.push_back((contentBox *) new gameStatus(display, 
+															GAMESTATUS_LEFT_X, 
+															GAMESTATUS_TOP_Y,
+															GAMESTATUS_W, 
+															GAMESTATUS_H, 
+															0));	
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display gameStatus" << endl;
@@ -179,7 +156,11 @@ gui::gui()
 		return;
 	}
 
-	displaySections.push_back((contentBox *) new textlog(display, 0.7, 0.5, 0.3, 0.5));
+	displaySections.push_back((contentBox *) new textlog(display, 
+														TEXTLOG_LEFT_X, 
+														TEXTLOG_TOP_Y, 
+														TEXTLOG_W, 
+														TEXTLOG_H));
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display Textlog" << endl;
@@ -187,7 +168,11 @@ gui::gui()
 		return;
 	}
 
-	displaySections.push_back((contentBox *) new toolbox(display, 0.7, 0, 0.3, 0.5));
+	displaySections.push_back((contentBox *) new toolbox(display, 
+														TOOLBOX_LEFT_X, 
+														TOOLBOX_TOP_Y, 
+														TOOLBOX_W, 
+														TOOLBOX_H));
 	if (!displaySections.back()->isValid())
 	{
 		cout << "No se pudo construir la seccion del display Toolbox" << endl;
@@ -195,27 +180,6 @@ gui::gui()
 		return;
 	}//TODO: controlar que se destruyan todos los contentBoxes de ser que alguno tiene valid = false;
 
-	ALLEGRO_MENU_INFO menu_info[] = {
-	ALLEGRO_START_OF_MENU("&Opciones", 1),
-		{ "&Mute/Unmute", 2, 0, NULL },	//TODO: hacer que cambie de mute a unmute
-		ALLEGRO_START_OF_MENU("Toggle warnings",3),
-			{"Before buying", 4, 0, NULL},
-			{"Before attacking", 5, 0, NULL},
-		ALLEGRO_END_OF_MENU,
-		ALLEGRO_MENU_SEPARATOR,
-		{ "Quit", 6, 0, NULL },
-		ALLEGRO_END_OF_MENU,
-	ALLEGRO_END_OF_MENU
-	};
-
-	menu = al_build_menu(menu_info);
-
-	if (!(valid = al_set_display_menu(display, menu)))
-	{
-		cout << "No se pudo anexar el menu al display" << endl;
-		valid = false;
-		return;
-	}
 }	//TODO: un control mas cercano de valid
 
 gui::~gui()
@@ -471,3 +435,65 @@ void gui::setTimeLeft(unsigned int timeLeft)
 	((gameStatus *)getDisplaySection(GAMESTATUS))->setTime(timeLeft);
 }
 
+
+
+/*
+
+	//unsigned int n = 5;
+	//unsigned int radius = 200;
+	//float paso = DEGARAD(0.7);	//giro del circulo en radianes.
+
+	//const ALLEGRO_TRANSFORM * t_backup = al_get_current_transform();
+	//ALLEGRO_TRANSFORM t;
+	//al_clear_to_color(al_map_rgb_f(1,1,1));
+
+	//for (int j = 0; ; j++)
+	//{
+	//	al_clear_to_color(al_map_rgb_f(1, 1, 1));
+	//	{
+	//		//hacer backup del blender y del target bitmap actuales
+	//		int op, src, dst;
+	//		al_get_blender(&op, &src, &dst);	//TODO: hacer backup sin el separate blender del alpha
+	//											//Esta configuracion de colores sirve como "mascara" para despues quedarse solo con un circulo de lo que sea que 
+	//											//se le dibuje arriba
+	//		al_clear_to_color(al_map_rgba_f(1, 1, 1, 1));
+	//		al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ZERO);	//sirve para mantener la transparencia del circulo dibujado
+
+	//		for (int i = 0; i < n; i++)
+	//		{
+	//			al_identity_transform(&t);
+	//			al_rotate_transform(&t, j * paso + 2 * ALLEGRO_PI* i / n);
+	//			al_translate_transform(&t, al_get_display_width(display) / 2.0, al_get_display_height(display) / 2.0);
+	//			al_use_transform(&t);
+	//			al_draw_filled_circle(radius, 0, 70, al_map_rgba_f(0, 0, 0, 0));
+	//			al_identity_transform(&t);
+	//			al_use_transform(&t);
+	//		}
+
+	//		//setear blender para que solo se mantenga la parte de bmp que se va a dibujar sobre el circulo. 
+	//		//Lo demas es transparente.
+	//		al_set_blender(ALLEGRO_SRC_MINUS_DEST, ALLEGRO_ONE, ALLEGRO_ONE);
+	//		//dibujar de manera que coincida sourceCenterX y sourceCenterY con el centro de roundBmp
+
+
+	//		
+	//		//al_draw_filled_rectangle(0, 0, 1000, 1000, al_map_rgb_f(1, 1, 0));
+	//		drawGradientRectangle(  al_get_display_width(display) / 2.0 - 250, 
+	//								al_get_display_height(display) / 2.0 - 250, 
+	//								al_get_display_width(display) / 2.0 + 250, 
+	//								al_get_display_height(display) / 2.0 + 250, 
+	//								al_map_rgb_f(1, 0, 0), 
+	//								al_map_rgb_f(0, 1, 0), 
+	//								al_map_rgb_f(0, 0, 1), 
+	//								al_map_rgb_f(1, 0, 1) );
+
+	//		//Reestablecer el blender y el target bitmap iniciales
+	//		al_set_blender(op, src, dst);
+	//		//al_set_target_bitmap(targetBmpBackup);
+
+	//		//al_draw_bitmap(roundBmp, 0, 0, 0);
+	//	}
+	//	al_flip_display();
+	//	al_rest(0.03);
+	//}
+	*/

@@ -11,11 +11,11 @@ class productButton :
 	public button
 {
 public:
-//	productButton(Unit * u, float rLeftX, float rTopY, float rWidth, float rHeight,
+
+
 	productButton(float rLeftX, float rTopY, float rWidth, float rHeight,
-		float eLeftX, float eTopY, float eWidth, float eHeight);
-	productButton(float rLeftX, float rTopY, float rWidth, float rHeight,
-		float eLeftX, float eTopY, float eWidth, float eHeight, unit_t unitSpecificType);	//BORRAR
+		float eLeftX, float eTopY, float eWidth, float eHeight, unit_t unitSpecificType);
+
 	~productButton();
 
 	virtual void draw();
@@ -79,6 +79,9 @@ private:
 	//para cuando esta reducido y para cuando esta expandido
 	ALLEGRO_BITMAP * reducedBmp;
 	ALLEGRO_BITMAP * expandedBmp;
+
+	ALLEGRO_BITMAP * basicTypeLogo;	//Logo del basicType
+	ALLEGRO_COLOR bgColor;			//color de fondo, depende del basicType
 
 	bool setReducedBmp();	//Devuelve true si no hubieron errores
 	bool setExpandedBmp();	//Devuelve true si no hubieron errores

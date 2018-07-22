@@ -1,25 +1,27 @@
 #include "toolbox.h"
 
+#include <iostream>
+
 #include "simpleButton.h"
 #include "productButton.h"
 
 #define BUTTONS_PER_ROW 3
-
+#define PRODUCT_SECTION_RELATIVE_H 0.9
 
 
 toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height)
-	: contentBox(display, startX, startY, width, height, false)	//TODO: sacar magic numbers
+	: contentBox(display, startX, startY, width, height, false)
 {
 	if (valid)
 	{
 		displaySectionType = TOOLBOX;
 
-		status = EMPTY_MY_TURN;
+		status = EMPTY_MY_TURN;	//TODO: que no empiece siempre en  mi turno.
 
 		bool buttonValid = true;
-		float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
 		productButton * b = nullptr;
 
+		//creo los product button con tamanios arbitrarios.
 		for (int i = 0; i < N_UNIT_TYPES; i++)
 		{
 			b = new productButton(//Unit * u
@@ -32,42 +34,11 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 				buttonValid = false;
 			}
 		}
+		//Seteo el tamanio de los productButtons y creo los simpleButtons
 		resizeContent();
 
-		simpleButton * simpleBuy = new simpleButton(BUY_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
-			contentWidth / 2, contentHeight * 0.1);
-		buttonList.push_back(simpleBuy);
-		if(!buttonList.back()->isValid())
-		{
-			buttonValid = false;
-		}
-
-		simpleButton * simpleStore = new simpleButton(STORE_BUTTON, contentStartX, contentStartY + contentHeight * 0.9,
-			contentWidth / 2, contentHeight * 0.1);
-		buttonList.push_back(simpleStore);
-		if (!buttonList.back()->isValid())
-		{
-			buttonValid = false;
-		}
-
-		simpleButton * simpleBack = new simpleButton(BACK_BUTTON, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
-					contentWidth / 2, contentHeight * 0.1);
-		buttonList.push_back(simpleBack);
-		if (!buttonList.back()->isValid())
-		{
-			buttonValid = false;
-		}
-
-		simpleButton * simplePass = new simpleButton(PASS_BUTTON, contentStartX + contentWidth / 2.0, contentStartY + contentHeight * 0.9,
-			contentWidth / 2, contentHeight * 0.1);
-		buttonList.push_back(simplePass);
-		if (!buttonList.back()->isValid())
-		{
-			buttonValid = false;
-		}
-
-
-		if (!buttonValid)	//Si hubo un error en el constructor de algun boton, eliminar toda la lista
+		//Si hubo un error en el constructor de algun boton, eliminar toda la lista
+		if (!buttonValid)	
 		{
 			buttonList.clear();
 		}
@@ -77,7 +48,7 @@ toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float wi
 
 toolbox::~toolbox()
 {
-	//TODO:
+	buttonList.clear();
 }
 
 void toolbox::selectProduct(unit_t unitSpecificType)
@@ -201,6 +172,66 @@ void toolbox::goToTheirTurn()
 	}
 }
 
+bool toolbox::createSimpleButtons()
+{
+	std::cout << "creo simple buttons" << std::endl;
+	bool buttonValid = true;		//indica si hubo un error en la creacion de alguno de los botones.
+
+	//dimensiones y coordenadas de los botones. 
+	//Lo unico que cambia en los diferentes simpleButtons la coordenada x
+	//(la coordenada y, el ancho, y el alto se mantienen)
+
+	float buttonHeight = contentHeight * (1 - PRODUCT_SECTION_RELATIVE_H);
+	float buttonWidth = contentWidth / 2.0;
+	float buttonTopY = contentStartY + contentHeight * PRODUCT_SECTION_RELATIVE_H;
+
+	simpleButton * simpleBuy = new simpleButton(BUY_BUTTON, 
+		contentStartX,
+		buttonTopY,
+		buttonWidth, 
+		buttonHeight);
+	buttonList.push_back(simpleBuy);
+	if (!buttonList.back()->isValid())
+	{
+		buttonValid = false;
+	}
+
+	simpleButton * simpleStore = new simpleButton(STORE_BUTTON, 
+		contentStartX, 
+		buttonTopY,
+		buttonWidth, 
+		buttonHeight);
+	buttonList.push_back(simpleStore);
+	if (!buttonList.back()->isValid())
+	{
+		buttonValid = false;
+	}
+
+	simpleButton * simpleBack = new simpleButton(BACK_BUTTON, 
+		contentStartX + contentWidth / 2.0, 
+		buttonTopY,
+		buttonWidth, 
+		buttonHeight);
+	buttonList.push_back(simpleBack);
+	if (!buttonList.back()->isValid())
+	{
+		buttonValid = false;
+	}
+
+	simpleButton * simplePass = new simpleButton(PASS_BUTTON, 
+		contentStartX + contentWidth / 2.0, 
+		buttonTopY,
+		buttonWidth, 
+		buttonHeight);
+	buttonList.push_back(simplePass);
+	if (!buttonList.back()->isValid())
+	{
+		buttonValid = false;
+	}
+
+	return buttonValid;
+}
+
 void toolbox::drawContent()
 {
 	switch (status)	//EMPTY_THEIR_TURN no tiene nada que dibujar
@@ -265,30 +296,40 @@ void toolbox::drawContent()
 
 void toolbox::resizeContent()
 {
-
-	float productButtonSectionHeight = 0.9 * contentHeight;	//TODO: sacar magic number
-
-	for (std::list<button*>::iterator it = buttonList.begin(); 
-		it != buttonList.end(); 
-		it++)
+	float productButtonSectionHeight = PRODUCT_SECTION_RELATIVE_H * contentHeight;
+	std::list<button*>::iterator it = buttonList.begin();
+	//for (std::list<button*>::iterator it = buttonList.begin(); 
+	//	it != buttonList.end(); 
+	//	it++)
+	do
 	{
-		unit_t unitSpecificType = ((productButton*)(*it))->getUnitSpecificType();
-
-
-		int aux = (unitSpecificType % BUTTONS_PER_ROW);
-
-		float rWidth = contentWidth / (float)BUTTONS_PER_ROW;
-		float rHeight = productButtonSectionHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
-		float rLeftX = contentStartX + rWidth * aux;
-		float rTopY = contentStartY + rHeight * (unitSpecificType / (int)BUTTONS_PER_ROW);
-
 
 		if ((*it)->getType() == PRODUCT_BUTTON)
 		{
-			((productButton *)(*it))->setAllDimensions(//Unit * u
+			unit_t unitSpecificType = ((productButton*)(*it))->getUnitSpecificType();
+
+			int aux = (unitSpecificType % BUTTONS_PER_ROW);
+
+			float rWidth  = contentWidth / (float)BUTTONS_PER_ROW;
+			float rHeight = productButtonSectionHeight / (N_UNIT_TYPES / (int)BUTTONS_PER_ROW);
+			float rLeftX  = contentStartX + rWidth * aux;
+			float rTopY   = contentStartY + rHeight * (unitSpecificType / (int)BUTTONS_PER_ROW);
+
+			((productButton *)(*it))->setAllDimensions(
 				rLeftX, rTopY, rWidth, rHeight,
 				contentStartX, contentStartY, contentWidth, contentHeight);
+			it++;
 		}
-
+		else if ((*it)->getType() == SIMPLE_BUTTON)
+		{
+			it = buttonList.erase(it);		//el iterador se incrementa en erase()
+			std::cout << "destruyo simple buttons " << std::endl;
+		}
 	}
+	while ( it != buttonList.end());
+	//como buttonList.erase(it) incrementa el iterador, no lo incremento en el statement de salida del while 
+
+	std::cout << "Cantidad de botones: " << buttonList.size() << " - ";
+	createSimpleButtons();
+	std::cout << buttonList.size() << std::endl; 
 }

@@ -29,6 +29,7 @@ public:
 private:
 	toolboxStatus_t status;
 
+	bool createSimpleButtons();
 	virtual void drawContent();
 	virtual void resizeContent();
 };
