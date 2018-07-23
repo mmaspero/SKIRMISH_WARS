@@ -1,6 +1,8 @@
 #include "pipBoy.h"
 
 #include <iostream>
+#include <vector>
+#include <string>
 
 #include "paths.h"
 
@@ -15,6 +17,9 @@ pipBoy::pipBoy(ALLEGRO_DISPLAY * display, std::vector<std::string> mapPaths)
 		{
 			valid = false;
 			std::cout << "No se pudo cargar la font " << PIPBOY_FONT_NAME << ". No se puedo crear el pip-boy" << std::endl;
+		}
+		for(std::vector<std::string>::iterator it = mapPaths.begin(); it != mapPaths.end(); it++)
+		{;
 		}
 	}
 }

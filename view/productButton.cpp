@@ -153,63 +153,6 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 
 		margin = BUTTON_MARGIN(rWidth, rHeight);	//definir el margen con las dimensiones del boton reducido
 
-		
-		//TODO: copiar toda la info necesaria y borrar lo de abajo
-		cost = Unit::getCost(unitSpecificType);
-		for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
-		{
-			firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t) i);
-			firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
-		}
-		for (int i = 0; i < N_TERRAINS; i++)
-		{
-			movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
-		}
-
-
-		//TODO: sacarlo de una funcion de Unit::
-		if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
-			unitBasicType = WHEEL;
-
-		else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
-			unitBasicType = FOOT;
-
-		else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
-			unitBasicType = TREAD;
-
-		//Cargo el color de fondo y el logo del basicType
-		switch (unitBasicType)
-		{
-		case WHEEL:
-			bgColor = al_color_name(WHEEL_BG_COLOR);
-			basicTypeLogo = al_load_bitmap(WHEEL_LOGO_BMP);
-			if (basicTypeLogo == nullptr)
-			{
-				cout << "No se cargo el logo de wheel" << endl;
-				valid = false;
-			}
-			break;
-		case TREAD:
-			bgColor = al_color_name(TREAD_BG_COLOR);
-			basicTypeLogo = al_load_bitmap(TREAD_LOGO_BMP);
-			if (basicTypeLogo == nullptr)
-			{
-				cout << "No se cargo el logo de tread" << endl;
-				valid = false;
-			}
-			break;
-		case FOOT:
-			bgColor = al_color_name(FOOT_BG_COLOR);
-			basicTypeLogo = al_load_bitmap(FOOT_LOGO_BMP);
-			if (basicTypeLogo == nullptr)
-			{
-				cout << "No se cargo el logo de foot" << endl;
-				valid = false;
-			}
-			break;
-		default:	//TODO: ???
-			break;
-		}
 
 		calculateCurrentDimensions();
 		setExpandedBmp();
@@ -233,12 +176,13 @@ productButton::~productButton()
 
 bool productButton::getCanBuy()
 {
-	return canBuy;
+//	return canBuy;
+	return true;
 }
 
 void productButton::setCanBuy(bool canBuy)
 {
-	this->canBuy = canBuy;
+//	this->canBuy = canBuy;
 }
 
 unit_t productButton::getUnitSpecificType()
@@ -330,6 +274,75 @@ bool productButton::isHidden()
 
 bool productButton::setReducedBmp()
 {
+
+	basicUnitType_t unitBasicType;
+	bool canBuy;
+	unsigned int cost;
+	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
+	unsigned int firepowerReduced[N_BASIC_U_TYPES];
+	unsigned int movingPoints[N_TERRAINS];
+
+
+
+	//TODO: copiar toda la info necesaria y borrar lo de abajo
+	cost = Unit::getCost(unitSpecificType);
+	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
+	{
+		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i);
+		firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
+	}
+	for (int i = 0; i < N_TERRAINS; i++)
+	{
+		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
+	}
+
+
+	//TODO: sacarlo de una funcion de Unit::
+	if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
+		unitBasicType = WHEEL;
+
+	else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
+		unitBasicType = FOOT;
+
+	else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
+		unitBasicType = TREAD;
+
+	//Cargo el color de fondo y el logo del basicType
+	switch (unitBasicType)
+	{
+	case WHEEL:
+		bgColor = al_color_name(WHEEL_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(WHEEL_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			cout << "No se cargo el logo de wheel" << endl;
+			valid = false;
+		}
+		break;
+	case TREAD:
+		bgColor = al_color_name(TREAD_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(TREAD_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			cout << "No se cargo el logo de tread" << endl;
+			valid = false;
+		}
+		break;
+	case FOOT:
+		bgColor = al_color_name(FOOT_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(FOOT_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			cout << "No se cargo el logo de foot" << endl;
+			valid = false;
+		}
+		break;
+	default:	//TODO: ???
+		break;
+	}
+
+
+
 	if (reducedBmp != nullptr)
 	{
 		al_destroy_bitmap(reducedBmp);
@@ -431,6 +444,79 @@ bool productButton::setReducedBmp()
 
 bool productButton::setExpandedBmp()
 {
+
+	basicUnitType_t unitBasicType;
+	bool canBuy;
+	unsigned int cost;
+	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
+	unsigned int firepowerReduced[N_BASIC_U_TYPES];
+	unsigned int movingPoints[N_TERRAINS];
+
+
+
+	//TODO: copiar toda la info necesaria y borrar lo de abajo
+	cost = Unit::getCost(unitSpecificType);
+	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
+	{
+		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i);
+		firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
+	}
+	for (int i = 0; i < N_TERRAINS; i++)
+	{
+		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
+	}
+
+
+	//TODO: sacarlo de una funcion de Unit::
+	if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
+		unitBasicType = WHEEL;
+
+	else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
+		unitBasicType = FOOT;
+
+	else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
+		unitBasicType = TREAD;
+
+	//Cargo el color de fondo y el logo del basicType
+	switch (unitBasicType)
+	{
+	case WHEEL:
+		bgColor = al_color_name(WHEEL_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(WHEEL_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			cout << "No se cargo el logo de wheel" << endl;
+			valid = false;
+		}
+		break;
+	case TREAD:
+		bgColor = al_color_name(TREAD_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(TREAD_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			cout << "No se cargo el logo de tread" << endl;
+			valid = false;
+		}
+		break;
+	case FOOT:
+		bgColor = al_color_name(FOOT_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(FOOT_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			cout << "No se cargo el logo de foot" << endl;
+			valid = false;
+		}
+		break;
+	default:	//TODO: ???
+		break;
+	}
+
+
+
+
+
+
+
 	if (expandedBmp != nullptr)
 	{
 		al_destroy_bitmap(expandedBmp);	
@@ -578,7 +664,7 @@ void productButton::getAllDimensions(float * rLeftX, float * rTopY, float * rWid
 
 void productButton::setProductCost()
 {
-	cost = Unit::getCost(unitSpecificType);
+//	cost = Unit::getCost(unitSpecificType);
 }
 
 void productButton::calculateCurrentDimensions()
