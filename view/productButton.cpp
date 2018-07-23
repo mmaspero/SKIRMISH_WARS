@@ -576,6 +576,11 @@ void productButton::getAllDimensions(float * rLeftX, float * rTopY, float * rWid
 	getExpandedDimensions(eLeftX, eTopY, eWidth, eHeight);
 }
 
+void productButton::setProductCost()
+{
+	cost = Unit::getCost(unitSpecificType);
+}
+
 void productButton::calculateCurrentDimensions()
 {
 	if (selected)

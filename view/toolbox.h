@@ -25,6 +25,7 @@ public:
 	void goToStore();
 	void goToMyTurn();
 	void goToTheirTurn();
+	void setProductCosts();
 
 private:
 	toolboxStatus_t status;

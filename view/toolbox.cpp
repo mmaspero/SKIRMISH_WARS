@@ -172,6 +172,18 @@ void toolbox::goToTheirTurn()
 	}
 }
 
+void toolbox::setProductCosts()
+{
+	for (std::list<button*>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->getType() == PRODUCT_BUTTON)
+		{
+			((productButton *)(*it))->setProductCost();
+		}
+	}
+	acknowledgeResize();	//Para que se creen los bmps con el precio.
+}
+
 bool toolbox::createSimpleButtons()
 {
 	std::cout << "creo simple buttons" << std::endl;

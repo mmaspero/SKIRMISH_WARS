@@ -376,6 +376,11 @@ unit_t gui::getSelectedProduct()
 	return ((toolbox *)getDisplaySection(TOOLBOX))->getSelectedProduct();
 }
 
+void gui::setProductCosts()
+{
+	((toolbox *)getDisplaySection(TOOLBOX));
+}
+
 void gui::draw()
 {
 	al_clear_to_color(GUI_DEFAULT_BACKGROUND_COLOR);	//TODO: magic number

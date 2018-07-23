@@ -58,6 +58,8 @@ public:
 	void getAllDimensions(float * rLeftX, float * rTopY, float * rWidth, float * rHeight,
 		float * eLeftX, float * eTopY, float * eWidth, float * eHeight);
 
+	void setProductCost();
+
 private:
 	bool hidden;	//Indica si el boton esta visible o no. Por mas que este hidden, puede estar 
 					//expandido (selected = true) o reducido (selected = false).
