@@ -149,5 +149,11 @@ void Player::updateStats(unsigned int capturePointsHQ, unsigned int nFactories, 
 void Player::unitKilled()
 {
 	if (nUnits && status != PURCHASING)
+	{
 		nUnits--;
+		if (obs != nullptr)
+		{
+			obs->update();
+		}
+	}
 }

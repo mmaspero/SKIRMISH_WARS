@@ -371,6 +371,11 @@ ALLEGRO_EVENT_SOURCE * gui::getMenuEventSource()
 	return nullptr;
 }
 
+unit_t gui::getSelectedProduct()
+{
+	return ((toolbox *)getDisplaySection(TOOLBOX))->getSelectedProduct();
+}
+
 void gui::draw()
 {
 	al_clear_to_color(GUI_DEFAULT_BACKGROUND_COLOR);	//TODO: magic number

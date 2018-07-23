@@ -69,7 +69,7 @@ unsigned int Unit::getCost()
 	return cost;
 }
 
-unsigned int Unit::getHP()
+int Unit::getHP()
 {
 	return healthPoints;
 }
