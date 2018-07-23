@@ -81,7 +81,7 @@ protected:
 
 	unitState_t state;
 	unsigned int movingPoints;
-	unsigned int healthPoints;
+	int healthPoints;
 
 
 	//eventualmente las unidades pueden agregar mas variables: por ej que otras unidades estan cargando
