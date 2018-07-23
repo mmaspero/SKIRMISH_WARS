@@ -4,6 +4,7 @@
 #include"../../view/tileButton.h"
 #include"../../Game model/FSM/SkirmishEvent.h"
 #include"../../Game model/FSM/FsmInfo.h"
+#include "../../Game model/FSM/Events/PurchaseSelection.h"
 #include "../../view/simpleButton.h"
 #include "../../view/events/buttonRelease.h"
 #include "../../view/events/buttonHover.h"
@@ -107,7 +108,7 @@ GenericEvent * userInputEvSource::getEvent()
 						return new SkirmishEvent(EV_GO_TO_PURCHASE);
 						break;
 					case BUY_BUTTON:
-						return new SkirmishEvent(EV_USER_PURCHASE);
+						return new PurchaseSelection(this->usserInterface->getSelectedProduct());
 						break;
 					case BACK_BUTTON:
 						
@@ -115,6 +116,7 @@ GenericEvent * userInputEvSource::getEvent()
 					case CANCEL_BUTTON:
 
 						break;
+
 					default:
 						break;
 					}
