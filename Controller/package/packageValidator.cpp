@@ -6,7 +6,6 @@
 
 bool filValidator(unsigned char filNumb);
 bool colValidator(unsigned char colNumb);
-
 bool oneBytePackageValidator(char * data, unsigned int size, unsigned char key)
 {
 	if ((size == 1) && (data[0] == key))//el tamaño del paquete deve ser exactamente 1
@@ -93,7 +92,7 @@ bool purchaseValidator(char * data, unsigned int size)
 	{
 		tempId.push_back(data[1]);
 		tempId.push_back(data[2]);
-		if (colValidator(data[FILA_POSS_PURCHASE]) && filValidator(data[COL_POSS_PURCHASE]))
+		if (colValidator(data[COL_POSS_PURCHASE]) && filValidator(data[FILA_POSS_PURCHASE]))
 		{
 			for (int i = 0; i < N_UNIT_TYPES; i++)
 			{

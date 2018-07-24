@@ -5,6 +5,8 @@
 #include "../view/gui.h"
 #include "../Game model/Model.h"
 #include "eventSource\eventGenerator.h"
+#include "eventSource/timerEvSource.h"
+#include "eventSource\eventSource.h"
 
 class Controller
 {
@@ -29,13 +31,14 @@ public:
 	void stopPlayTimer();
 	void run();
 	gui * getGui() { return usserInterface;};
+	eventSource * getTurnTimer() { return &gameTimer; };
 private:
 	network * net;
 	bool sendPackage(genericPackage * package);
 	gui * usserInterface;
 	Model * mod;
 	eventGenerator * generadorDeEventos;
-	
+	timerEvSource gameTimer;
 	
 
 };

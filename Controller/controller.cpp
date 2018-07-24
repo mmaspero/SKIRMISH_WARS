@@ -1,6 +1,6 @@
 #include "controller.h"
 #include "../Game model/FSM/SkirmishEvent.h"
-
+#define TURN_TIME_SECONDS 60
 Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGenerator * generadorDeEventos)
 {
 	this->net = net;
@@ -9,6 +9,7 @@ Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGe
 	this->generadorDeEventos = generadorDeEventos;
 	SkirmishEvent::setController(this);
 	SkirmishEvent::setModel(mod);
+	this->gameTimer.setTime(TURN_TIME_SECONDS);
 
 
 }
@@ -100,14 +101,17 @@ bool Controller::sendOneBytePackage(unsigned char type)
 
 void Controller::startPlayTimer()
 {
+	this->gameTimer.startTimer();
 }
 
 void Controller::resetPlayTimer()
 {
+	this->gameTimer.resetTimer();
 }
 
 void Controller::stopPlayTimer()
 {
+	this->gameTimer.stopTimer();
 }
 
 void Controller::run()
@@ -123,6 +127,8 @@ void Controller::run()
 		}
 		this->generadorDeEventos->updateEventQueue();
 		recivedEvent =this->generadorDeEventos->getNextEvent();
+		this->usserInterface->setTimeLeft(this->gameTimer.getRestTimer());
+		this->usserInterface->draw();
 		evOb->update();
 		mod->dispatch(recivedEvent);
 		
