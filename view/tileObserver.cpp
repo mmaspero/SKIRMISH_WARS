@@ -47,7 +47,10 @@ void tileObserver::update()
 	al_set_target_bitmap(buttonBmp);
 
 
-
+	if (t->status == SELECTED)
+	{
+		tBox->goToShowingUnitInfo(t->getUnit());
+	}
 	if (t->status == FOG)
 	{
 		al_clear_to_color(al_color_name(FOG_COLOR));	//TODO: sacar magic number

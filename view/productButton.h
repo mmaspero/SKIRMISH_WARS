@@ -60,6 +60,9 @@ public:
 
 	void setProductCost();
 
+	//CEDE OWNERSHIP!!!!!!!!
+	ALLEGRO_BITMAP * getExpandedBmp();
+
 private:
 	bool hidden;	//Indica si el boton esta visible o no. Por mas que este hidden, puede estar 
 					//expandido (selected = true) o reducido (selected = false).

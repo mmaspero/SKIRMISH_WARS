@@ -647,6 +647,11 @@ void productButton::setProductCost()
 //	cost = Unit::getCost(unitSpecificType);
 }
 
+ALLEGRO_BITMAP * productButton::getExpandedBmp()
+{
+	return al_clone_bitmap(expandedBmp);
+}
+
 void productButton::calculateCurrentDimensions()
 {
 	if (selected)
