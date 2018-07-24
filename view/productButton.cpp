@@ -15,8 +15,6 @@
 
 #define	CONFIG_FILE "productButton.cfg"
 
-
-
 #define FONT_NAME "Minecraft.ttf"
 #define	BIG_FONT_SIZE    30
 
@@ -281,9 +279,9 @@ bool productButton::setReducedBmp()
 	unsigned int movingPoints[N_TERRAINS];
 
 
-
 	//TODO: copiar toda la info necesaria y borrar lo de abajo
 	cost = Unit::getCost(unitSpecificType);
+	unitBasicType = Unit::getBasicType(unitSpecificType);
 	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 	{
 		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, false);
@@ -294,16 +292,6 @@ bool productButton::setReducedBmp()
 		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
 	}
 
-
-	//TODO: sacarlo de una funcion de Unit::
-	if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
-		unitBasicType = WHEEL;
-
-	else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
-		unitBasicType = FOOT;
-
-	else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
-		unitBasicType = TREAD;
 
 	//Cargo el color de fondo y el logo del basicType
 	switch (unitBasicType)
@@ -451,9 +439,9 @@ bool productButton::setExpandedBmp()
 	unsigned int movingPoints[N_TERRAINS];
 
 
-
 	//TODO: copiar toda la info necesaria y borrar lo de abajo
 	cost = Unit::getCost(unitSpecificType);
+	unitBasicType = Unit::getBasicType(unitSpecificType);
 	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 	{
 		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, false);
@@ -464,16 +452,6 @@ bool productButton::setExpandedBmp()
 		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
 	}
 
-
-	//TODO: sacarlo de una funcion de Unit::
-	if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
-		unitBasicType = WHEEL;
-
-	else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
-		unitBasicType = FOOT;
-
-	else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
-		unitBasicType = TREAD;
 
 	//Cargo el color de fondo y el logo del basicType
 	switch (unitBasicType)

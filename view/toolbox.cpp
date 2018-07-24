@@ -7,12 +7,20 @@
 
 #include "simpleButton.h"
 #include "productButton.h"
+#include "config\sprite_config.h"
 #include "HPbar.h"
 #include "paths.h"	
 
 #define BUTTONS_PER_ROW 3
 #define PRODUCT_SECTION_RELATIVE_H 0.9
+#define BUTTON_MARGIN(w, h) (((w)>(h) ? h : w) / 20.0)
+#define BUTTON_CORNER_ROUNDNESS 10
 
+#define FONT_NAME "Minecraft.ttf"
+#define	BIG_FONT_SIZE    30
+
+
+using namespace std;
 
 toolbox::toolbox(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height)
 	: contentBox(display, startX, startY, width, height, false)
@@ -371,126 +379,205 @@ void toolbox::drawShowingOneProduct()
 
 void toolbox::drawShowingUnitInfo()
 {
-	//switch (status)
-	//{
-	//case SHOWING_UNIT_INFO:
-	//	unit_t unitSpecificType = u->getType();
-	//	basicUnitType_t unitBasicType = u->getBasicType();
-	//	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
-	//	unsigned int firepowerReduced[N_BASIC_U_TYPES];
-	//	unsigned int movingPoints[N_TERRAINS];
-	//	unsigned int range[2];	//Maximo y minimo rango
-	//	unsigned int healthPoints;
-
-	//	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
-	//	{
-	//		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i);
-	//		firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
-	//	}
-	//	for (int i = 0; i < N_TERRAINS; i++)
-	//	{
-	//		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
-	//	}
-	//	Unit::getRange(unitSpecificType, range[0], range[1]);
-
-	//	//HPbar hpBar();
+	unit_t unitSpecificType = u->getType();
+	basicUnitType_t unitBasicType = u->getBasicType();
+	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
+	unsigned int firepowerReduced[N_BASIC_U_TYPES];
+	unsigned int movingPoints[N_TERRAINS];
+	unsigned int range[2];	//Maximo y minimo rango
+	unsigned int healthPoints;
+	ALLEGRO_COLOR bgColor;
+	ALLEGRO_BITMAP * unitSprite;
+	ALLEGRO_BITMAP * basicTypeLogo = nullptr;
+	float width = contentWidth;
+	float height = contentHeight * PRODUCT_SECTION_RELATIVE_H;
+	float margin = BUTTON_MARGIN(width, height);
 
 
-	//	//TODO: sacarlo de una funcion de Unit::
-	//	if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
-	//		unitBasicType = WHEEL;
+	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
+	{
+		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, false);
+		firepowerReduced[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, false);
+	}
+	for (int i = 0; i < N_TERRAINS; i++)
+	{
+		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
+	}
+	Unit::getRange(unitSpecificType, range[0], range[1]);
 
-	//	else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
-	//		unitBasicType = FOOT;
+	//HPbar hpBar();
+	
+	//Cargar el sprite de la unidad seleccionada
+	switch (unitSpecificType)
+	{
+	case RECON:
+		unitSprite = al_load_bitmap(RECON_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << RECON_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case ROCKET:
+		unitSprite = al_load_bitmap(ROCKET_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << ROCKET_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case MECH:
+		unitSprite = al_load_bitmap(MECH_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << MECH_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case INFANTRY:
+		unitSprite = al_load_bitmap(INFANTRY_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << INFANTRY_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case TANK:
+		unitSprite = al_load_bitmap(TANK_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << TANK_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case ARTILLERY:
+		unitSprite = al_load_bitmap(ARTILLERY_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << ARTILLERY_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case ANTIAIR:
+		unitSprite = al_load_bitmap(ANTIAIR_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << ANTIAIR_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case APC:
+		unitSprite = al_load_bitmap(APC_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << APC_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	case MEDTANK:
+		unitSprite = al_load_bitmap(MEDTANK_SPRITE_R);
+		if (unitSprite == nullptr)
+		{
+			cout << "No se pudo cargar el sprite " << MEDTANK_SPRITE_R << endl;
+			valid = false;
+			return;
+		}
+		break;
+	default:
+		break;
+	}
 
-	//	else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
-	//		unitBasicType = TREAD;
+	//Cargo el color de fondo y el logo del basicType
+	switch (unitBasicType)
+	{
+	case WHEEL:
+		bgColor = al_color_name(WHEEL_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(WHEEL_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			std::cout << "No se cargo el logo de wheel" << std::endl;
+			valid = false;
+		}
+		break;
+	case TREAD:
+		bgColor = al_color_name(TREAD_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(TREAD_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			std::cout << "No se cargo el logo de tread" << std::endl;
+			valid = false;
+		}
+		break;
+	case FOOT:
+		bgColor = al_color_name(FOOT_BG_COLOR);
+		basicTypeLogo = al_load_bitmap(FOOT_LOGO_BMP);
+		if (basicTypeLogo == nullptr)
+		{
+			std::cout << "No se cargo el logo de foot" << std::endl;
+			valid = false;
+		}
+		break;
+	default:	//TODO: ???
+		break;
+	}
 
-	//	//Cargo el color de fondo y el logo del basicType
-	//	switch (unitBasicType)
-	//	{
-	//	case WHEEL:
-	//		bgColor = al_color_name(WHEEL_BG_COLOR);
-	//		basicTypeLogo = al_load_bitmap(WHEEL_LOGO_BMP);
-	//		if (basicTypeLogo == nullptr)
-	//		{
-	//			cout << "No se cargo el logo de wheel" << endl;
-	//			valid = false;
-	//		}
-	//		break;
-	//	case TREAD:
-	//		bgColor = al_color_name(TREAD_BG_COLOR);
-	//		basicTypeLogo = al_load_bitmap(TREAD_LOGO_BMP);
-	//		if (basicTypeLogo == nullptr)
-	//		{
-	//			cout << "No se cargo el logo de tread" << endl;
-	//			valid = false;
-	//		}
-	//		break;
-	//	case FOOT:
-	//		bgColor = al_color_name(FOOT_BG_COLOR);
-	//		basicTypeLogo = al_load_bitmap(FOOT_LOGO_BMP);
-	//		if (basicTypeLogo == nullptr)
-	//		{
-	//			cout << "No se cargo el logo de foot" << endl;
-	//			valid = false;
-	//		}
-	//		break;
-	//	default:	//TODO: ???
-	//		break;
-	//	}
+	al_draw_filled_rounded_rectangle(margin, margin,
+		width - margin,			height - margin,
+		BUTTON_CORNER_ROUNDNESS,	BUTTON_CORNER_ROUNDNESS,
+		bgColor);	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
+	al_draw_scaled_bitmap(unitSprite, 0, 0,
+		al_get_bitmap_width(unitSprite), al_get_bitmap_height(unitSprite),
+		margin * 2, margin * 2,
+		height / 3.0 - margin * 2, height / 3.0 - margin * 2,
+		0);
 
-	//	//hacer backup del target bitmap actual y dibujar el boton en expandedBmp
-	//	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
-	//	al_set_target_bitmap(expandedBmp);
+	float smallFontHeight = height / 15.0;	//TODO: sacar magic number
+	ALLEGRO_FONT * smallFont = al_load_font(FONT_PATH FONT_NAME, -smallFontHeight, 0);
+	if (smallFont == nullptr)
+	{
+		std::cout << "No se pudo crear el bitmap expandido del productButton de la unidad de tipo" << \
+			unitSpecificType << "porque no se pudo cargar la font " << FONT_PATH FONT_NAME << std::endl;
+	}
 
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0, 0, "FIREPOWER");	//TODO: sacar magic numbers
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 2 * smallFontHeight, 0, "REDUCED FIREPOWER");
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, height / 3.0 + 4 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
 
+	float fpSpacing = width / N_BASIC_U_TYPES;	//Distancia entre los valores para firepower
+	float fpX = fpSpacing / 2.0;		//Donde escribo el fp (centrado)
+	for (int i = 0; i < N_BASIC_U_TYPES; i++)
+	{
+		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, height / 3.0 + smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
+		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, height / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
+		fpX += fpSpacing;
+	}
+	float mpSpacing = width / N_TERRAINS;	//Distancia entre los valores para movingPoints
+	float mpX = mpSpacing / 2.0;		//Donde escribo el mp (centrado)
+	for (int i = 0; i < N_TERRAINS; i++)
+	{
+		al_draw_textf(smallFont, { 1,1,1,1 }, mpX, height / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
+		mpX += mpSpacing;
+	}
 
-	//	al_draw_filled_rounded_rectangle(margin, margin,
-	//		eWidth - margin, eHeight - margin,
-	//		BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
-	//		bgColor);	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
-	//	al_draw_scaled_bitmap(unformattedBmp, 0, 0,
-	//		al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
-	//		margin * 2, margin * 2,
-	//		eHeight / 3.0 - margin * 2, eHeight / 3.0 - margin * 2,
-	//		0);
-
-	//	float smallFontHeight = eHeight / 15.0;	//TODO: sacar magic number
-	//	ALLEGRO_FONT * smallFont = al_load_font(FONT_PATH FONT_NAME, -smallFontHeight, 0);
-	//	if (smallFont == nullptr)
-	//	{
-	//		cout << "No se pudo crear el bitmap expandido del productButton de la unidad de tipo" << \
-	//			unitSpecificType << "porque no se pudo cargar la font " << FONT_PATH FONT_NAME << endl;
-	//	}
-
-	//	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0, 0, "FIREPOWER");	//TODO: sacar magic numbers
-	//	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "REDUCED FIREPOWER");
-	//	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 4 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
-
-	//	float fpSpacing = eWidth / N_BASIC_U_TYPES;	//Distancia entre los valores para firepower
-	//	float fpX = fpSpacing / 2.0;		//Donde escribo el fp (centrado)
-	//	for (int i = 0; i < N_BASIC_U_TYPES; i++)
-	//	{
-	//		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
-	//		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
-	//		fpX += fpSpacing;
-	//	}
-	//	float mpSpacing = eWidth / N_TERRAINS;	//Distancia entre los valores para movingPoints
-	//	float mpX = mpSpacing / 2.0;		//Donde escribo el mp (centrado)
-	//	for (int i = 0; i < N_TERRAINS; i++)
-	//	{
-	//		al_draw_textf(smallFont, { 1,1,1,1 }, mpX, eHeight / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
-	//		mpX += mpSpacing;
-	//	}
-
-	//	if (smallFont != nullptr)
-	//	{
-	//		al_destroy_font(smallFont);
-	//	}
-	//	al_set_target_bitmap(backupBmp);
-
-	//	return true;
-	//}
-
+	if (smallFont != nullptr)
+	{
+		al_destroy_font(smallFont);
+	}
+	if (unitSprite != nullptr)
+	{
+		al_destroy_bitmap(unitSprite);
+	}
+	if (basicTypeLogo != nullptr)
+	{
+		al_destroy_bitmap(basicTypeLogo);
+	}
 }
+

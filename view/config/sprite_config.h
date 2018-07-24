@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../paths.h"
+
 #define ANTIAIR_SPRITE_R		SPRITE_PATH "antiair_r.png"
 #define APC_SPRITE_R			SPRITE_PATH "apc_r.png"
 #define ARTILLERY_SPRITE_R		SPRITE_PATH "artillery_r.png"
@@ -24,6 +26,10 @@
 #define WHEEL_BG_COLOR	"thistle"		//TODO: todos los colores o con nombres o con rgb
 #define TREAD_BG_COLOR  "aquamarine"	//TODO: unificar con los defines de toolbox.cpp
 #define FOOT_BG_COLOR	"beige"
+
+#define TREAD_LOGO_BMP IMAGE_PATH "tread_logo.png"
+#define FOOT_LOGO_BMP TREAD_LOGO_BMP
+#define WHEEL_LOGO_BMP TREAD_LOGO_BMP
 
 #define GRASS_TEXTURE "grassTexture.png"
 #define RIVER_TEXTURE "riverTexture.png"
