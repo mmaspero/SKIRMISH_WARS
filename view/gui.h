@@ -133,6 +133,8 @@ public:
 	void appendToTextlog(const char * msg);
 	void appendToTextlog(std::string msg);
 
+	void setTimeLeft(unsigned int timeLeft);
+
 private:
 
 	/*******************************************************************************************************
@@ -144,7 +146,6 @@ private:
 
 	contentBox * getDisplaySection(displaySection_t displaySection);
 
-	void setTimeLeft(unsigned int timeLeft);
 
 	std::list<contentBox *> displaySections;
 	ALLEGRO_DISPLAY * display;
