@@ -4,7 +4,7 @@
 void skirmishHandler::nextTurn(SkirmishEvent * ev)
 {
 	ev->model()->nextTurn();
-	//ev->contr()->resetPlayTimer();
+	ev->contr()->resetPlayTimer();
 	if (ev->getType() != EV_OPP_PASS) {
 		ev->contr()->sendOneBytePackage(PASS);
 	}

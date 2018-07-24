@@ -30,7 +30,7 @@ GenericState * PurchaseSelected::onUserPurchase(GenericEvent * e)
 {
 	((SkirmishEvent*)e)->model()->clearActions();
 	UserPurchase * ev = (UserPurchase *)e;
-	//ev->contr()->resetPlayTimer();
+	ev->contr()->resetPlayTimer();
 	ev->contr()->sendPurchase(getUnitString(selection), ev->p.row, ev->p.col);
 	ev->model()->registerPurchase(USER, ev->p, selection);
 	return new WaitingPurchaseAck();

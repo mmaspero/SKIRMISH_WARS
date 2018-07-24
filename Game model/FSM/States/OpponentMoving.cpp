@@ -15,8 +15,8 @@ OpponentMoving::OpponentMoving() : GenericState(OPP_MOVING)
 
 GenericState * OpponentMoving::onTimeout(GenericEvent * e)
 {
-	//SkirmishEvent * ev = (SkirmishEvent *)e;
-	//ev->contr()->stopPlayTimer(); ?
+	SkirmishEvent * ev = (SkirmishEvent *)e;
+	ev->contr()->stopPlayTimer(); ?
 	return new WaitingOpponentPass();
 }
 
@@ -45,7 +45,7 @@ GenericState * OpponentMoving::onOpponentAttack(GenericEvent * e)
 	if (!ev->model()->playerWon(OPPONENT)) {
 		dice = rand() % 6 + 1;
 		ev->model()->registerAttack(ev->target, ev->attacker, dice);
-		//ev->contr()->resetPlayTimer();
+		ev->contr()->resetPlayTimer();
 		ev->contr()->sendAttack(dice, ev->target.row, ev->target.col, ev->attacker.row, ev->attacker.col);
 	}
 	ev->model()->endAttack(ev->attacker);
@@ -65,7 +65,7 @@ GenericState * OpponentMoving::onOpponentPurchase(GenericEvent * e)
 {
 	OpponentPurchase * ev = (OpponentPurchase *)e;
 	ev->model()->registerPurchase(OPPONENT, ev->p, ev->type);
-	//ev->contr()->resetPlayTimer();
+	ev->contr()->resetPlayTimer();
 	ev->contr()->sendOneBytePackage(ACK);
 	return new OpponentPurchasing();
 }

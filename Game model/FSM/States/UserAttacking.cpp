@@ -23,7 +23,7 @@ GenericState * UserAttacking::onOpponentAttack(GenericEvent * e)
 {
 	OpponentAttack * ev = (OpponentAttack *)e;
 	ev->model()->registerAttack(ev->attacker, ev->target, ev->dice);
-	//ev->contr()->resetPlayTimer();
+	ev->contr()->resetPlayTimer();
 	ev->model()->endAttack(opponent);
 	return new UserMoving();
 }

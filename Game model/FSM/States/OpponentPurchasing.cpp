@@ -12,8 +12,8 @@ OpponentPurchasing::OpponentPurchasing() : GenericState(OPP_PURCHASING)
 
 GenericState * OpponentPurchasing::onTimeout(GenericEvent *)
 {
-	//SkirmishEvent * ev = (SkirmishEvent *)e;
-	//ev->contr()->stopPlayTimer(); ?
+	SkirmishEvent * ev = (SkirmishEvent *)e;
+	ev->contr()->stopPlayTimer(); 
 	return new WaitingOpponentPass();
 }
 
@@ -37,7 +37,7 @@ GenericState * OpponentPurchasing::onOpponentPurchase(GenericEvent * e)
 {
 	OpponentPurchase * ev = (OpponentPurchase *)e;
 	ev->model()->registerPurchase(OPPONENT, ev->p, ev->type);
-	//ev->contr()->resetPlayTimer();
+	ev->contr()->resetPlayTimer();
 	ev->contr()->sendOneBytePackage(ACK);
 	return this;
 }
