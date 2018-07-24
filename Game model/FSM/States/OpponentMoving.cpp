@@ -56,7 +56,7 @@ GenericState * OpponentMoving::onOpponentMove(GenericEvent * e)
 {
 	OpponentMove * ev = (OpponentMove *)e;
 	ev->model()->registerMove(ev->p0, ev->pf);
-	//ev->contr()->resetPlayTimer();
+	ev->contr()->resetPlayTimer();
 	ev->contr()->sendOneBytePackage(ACK);
 	return this;
 }

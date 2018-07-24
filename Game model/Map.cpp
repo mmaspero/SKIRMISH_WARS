@@ -205,7 +205,7 @@ bool Map::canBoard(Point p, player_t player)
 
 bool Map::canCapture(Point p, player_t player)
 {
-	return (valid && hasBuilding(p) && getBuildingPlayer(p) != player);
+	return (valid && !hasUnit(p) && hasBuilding(p) && getBuildingPlayer(p) != player);
 }
 
 bool Map::updateUnitPos(Unit * u, Point p)
