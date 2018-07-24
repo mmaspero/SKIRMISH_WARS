@@ -127,8 +127,7 @@ void Controller::run()
 		}
 		this->generadorDeEventos->updateEventQueue();
 		recivedEvent =this->generadorDeEventos->getNextEvent();
-		this->usserInterface->setTimeLeft(this->gameTimer.getRestTimer());
-		this->usserInterface->draw();
+		//this->usserInterface->setTimeLeft(this->gameTimer.getRestTimer());
 		evOb->update();
 		mod->dispatch(recivedEvent);
 		
