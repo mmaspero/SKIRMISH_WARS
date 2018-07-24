@@ -31,10 +31,11 @@ public:
 	//porque no pueden ir al agua, o los APCs devuelven UINT_MAX para attackMod porque no pueden atacar)
 	static unsigned int getCost(unit_t type);
 	static unsigned int getTerrainMod(unit_t type, terrain_t t);
-	static unsigned int getAttackMod(unit_t type, basicUnitType_t basicType);
+	static unsigned int getAttackMod(unit_t type, basicUnitType_t basicType, bool reduced);
 	static void getRange(unit_t type, unsigned int& minRange, unsigned int& maxRange);
 	static unsigned int getDefense(unit_t type);
 	static unsigned int getMaxMps(unit_t type);
+	static basicUnitType_t getBasicType(unit_t type);
 
 
 	//	INFO PARTICULAR DE CADA UNIDAD
@@ -44,7 +45,7 @@ public:
 	int getHP();
 
 	bool isAlive();
-	virtual bool isReduced();
+	bool isReduced();
 	bool hasValidActions();
 	player_t getPlayer();
 	Point getPosition();
@@ -56,7 +57,7 @@ public:
 	bool isActionValid(Action act); //devuelve los mps que cuesta, o -1 si no es valida
 
 	virtual unsigned int getTerrainMod(terrain_t t) = 0; // si es UINT MAX es que no puede pasar
-	virtual unsigned int getAttackMod(basicUnitType_t basicType) = 0;	//devuelve el mod, dependiendo de si la unit esta o no reducida
+	virtual unsigned int getAttackMod(basicUnitType_t basicType, bool reduced) = 0;	//devuelve el mod, dependiendo de si la unit esta o no reducida
 	virtual unsigned int restoreMPs() = 0;		//pone los mps en el maximo de la unidad, devuelve los mps
 
 	//move y attack hacen minimo control sobre si lo que le decis que hagan lo pueden hacer. la idea es que uses algo que vino de getPossibleActions
@@ -92,5 +93,5 @@ protected:
 	static std::unordered_map<unit_t, Unit *> info;
 
 	void getPossibleMoves(std::list<Action>& moves, Point start, Point curr, unsigned int movingPoints);
-	void getPossibleAttacks(std::list<Action>& attacks, Point position);
+	void getPossibleAttacks(std::list<Action>& attacks, Point position, unsigned int mps);
 };

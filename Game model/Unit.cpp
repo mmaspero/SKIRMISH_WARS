@@ -51,17 +51,7 @@ unit_t Unit::getType()
 
 basicUnitType_t Unit::getBasicType()
 {
-	if (FIRST_W <= type && type < FIRST_F)
-		return WHEEL;
-
-	else if (FIRST_F <= type && type < FIRST_T)
-		return FOOT;
-
-	else if (FIRST_T <= type && type < N_UNIT_TYPES)
-		return TREAD;
-
-	else
-		return N_BASIC_U_TYPES;
+	return Unit::getBasicType(type);
 }
 
 unsigned int Unit::getCost()
@@ -146,13 +136,13 @@ unsigned int Unit::getTerrainMod(unit_t type, terrain_t t)
 	return ans;
 }
 
-unsigned int Unit::getAttackMod(unit_t type, basicUnitType_t basicType)
+unsigned int Unit::getAttackMod(unit_t type, basicUnitType_t basicType, bool reduced)
 {
 	unsigned int ans = UINT_MAX;
 
 	std::unordered_map<unit_t, Unit *>::const_iterator it = info.find(type);
 	if (it != info.end()) {
-		ans = it->second->getAttackMod(basicType);
+		ans = it->second->getAttackMod(basicType, reduced);
 	}
 
 	return ans;
@@ -195,6 +185,21 @@ unsigned int Unit::getMaxMps(unit_t type)
 	return ans;
 }
 
+basicUnitType_t Unit::getBasicType(unit_t type)
+{
+		if (FIRST_W <= type && type < FIRST_F)
+		return WHEEL;
+
+	else if (FIRST_F <= type && type < FIRST_T)
+		return FOOT;
+
+	else if (FIRST_T <= type && type < N_UNIT_TYPES)
+		return TREAD;
+
+	else
+		return N_BASIC_U_TYPES;
+}
+
 bool Unit::isAlive()
 {
 	return (healthPoints > 0 && state != N_UNIT_STATES);
@@ -224,9 +229,7 @@ bool Unit::heal()
 			hpsChanged |= ((Apc *)this)->healLoadedUnits();
 		}
 
-		if (hpsChanged == true) {
-			map->notifyTileObserver(position);
-		}
+		map->notifyTileObserver(position);
 	}
 
 	return hpsChanged;
@@ -284,7 +287,7 @@ bool Unit::attack(Action att, unsigned int diceRoll)
 		Unit * enemy = map->getUnit(att.whereTo);
 		terrain_t t = map->getTerrain(att.whereTo);
 		building_t b = map->hasBuilding(att.whereTo) ? map->getBuilding(att.whereTo)->getType() : N_BUILDINGS;
-		int initDamage = getAttackMod(enemy->getBasicType()) - enemy->defense; //aca ya se tiene en cuenta si esta reducido o no
+		int initDamage = getAttackMod(enemy->getBasicType(), isReduced()) - enemy->defense; //aca ya se tiene en cuenta si esta reducido o no
 
 		enemy->healthPoints -= getDamage(initDamage, t, b, diceRoll);
 
@@ -329,7 +332,7 @@ bool Unit::loadIntoApc(Action load)
 bool Unit::updatePosition(Point newPos)
 {
 	bool valid = false;
-	if (getTerrainMod(map->getTerrain(newPos)) < getMaxMps(type)) {
+	if (map->isInMap(newPos)) {
 		position = newPos;
 		valid = true;
 	}
@@ -349,8 +352,21 @@ void Unit::getPossibleActions(std::list<Action>& actions)
 		}
 	}
 
-	if (state == IDLE || (state == MOVING && maxRange == 1)) {
-		getPossibleAttacks(actions, position); 
+	if (state == IDLE) {
+		getPossibleAttacks(actions, position, 0); 
+	}
+	else if (state <= MOVING && maxRange == 1) {
+		std::list<Action> attacks;
+		getPossibleAttacks(attacks, position, 0);
+		for (std::list<Action>::iterator it = actions.begin(); it != actions.end(); it++) {
+			if (it->type == ACT_MOVE) {
+				getPossibleAttacks(attacks, position, it->mps);
+			}
+		}
+		while (!attacks.empty()) {
+			actions.push_back(attacks.front());
+			attacks.pop_front();
+		}
 	}
 
 	if (state == UNLOADING) {
@@ -434,7 +450,7 @@ void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, u
 	}
 }
 
-void Unit::getPossibleAttacks(std::list<Action>& attacks, Point curr)
+void Unit::getPossibleAttacks(std::list<Action>& attacks, Point curr, unsigned int mps)
 {
 	if (map == nullptr)
 		return;
@@ -447,8 +463,22 @@ void Unit::getPossibleAttacks(std::list<Action>& attacks, Point curr)
 
 			if (minRange <= dist && dist <= maxRange && map->hasUnit(p)
 				&& (isMine ^ (map->getUnitPlayer(p) == USER)) && map->canSeeUnit(p, getPlayer())) {
-				//me fijo si esta casilla la puedo atacar con menos MPs desde otro lugar o no
-				attacks.push_back(Action(ACT_ATTACK, p));
+
+				bool newAttack = true;
+
+				for (std::list<Action>::iterator it = attacks.begin(); newAttack == true && it != attacks.end(); it++) {
+					//me fijo si esta casilla la puedo atacar con menos MPs desde otro lugar o no
+					if (it->type == ACT_ATTACK && it->whereTo == p) {
+						newAttack = false;
+						if (it->mps > mps) {
+							attacks.erase(it);
+							attacks.push_back(Action(ACT_ATTACK, p, mps));
+						}
+					}
+				}
+				if (newAttack == true) {
+					attacks.push_back(Action(ACT_ATTACK, p, mps));
+				}
 			}
 		}
 	}

@@ -51,7 +51,7 @@ unsigned int Apc::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int Apc::getAttackMod(basicUnitType_t basicType)
+unsigned int Apc::getAttackMod(basicUnitType_t basicType, bool reduced)
 {	
 	return UINT_MAX;
 }

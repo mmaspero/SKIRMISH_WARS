@@ -7,5 +7,5 @@ public:
 
 	virtual unsigned int restoreMPs();
 	virtual unsigned int getTerrainMod(terrain_t t);
-	virtual unsigned int getAttackMod(basicUnitType_t basicType);	//devuelve el mod, dependiendo de si la unit esta o no reducida
+	virtual unsigned int getAttackMod(basicUnitType_t basicType, bool reduced);	//devuelve el mod, dependiendo de si la unit esta o no reducida
 };

@@ -31,9 +31,9 @@ unsigned int Artillery::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int Artillery::getAttackMod(basicUnitType_t basicType)
+unsigned int Artillery::getAttackMod(basicUnitType_t basicType, bool reduced)
 {
-	if (isReduced()) {
+	if (reduced) {
 		switch (basicType) {
 		case WHEEL:
 			return AR_RFP_WHL;

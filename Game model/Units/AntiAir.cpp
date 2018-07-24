@@ -31,9 +31,9 @@ unsigned int AntiAir::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int AntiAir::getAttackMod(basicUnitType_t basicType)
+unsigned int AntiAir::getAttackMod(basicUnitType_t basicType, bool reduced)
 {
-	if (isReduced()) {
+	if (reduced) {
 		switch (basicType) {
 		case WHEEL:
 			return AA_RFP_WHL;

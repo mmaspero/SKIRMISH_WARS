@@ -31,9 +31,9 @@ unsigned int MedTank::getTerrainMod(terrain_t t)
 	}
 }
 
-unsigned int MedTank::getAttackMod(basicUnitType_t basicType)
+unsigned int MedTank::getAttackMod(basicUnitType_t basicType, bool reduced)
 {
-	if (isReduced()) {
+	if (reduced) {
 		switch (basicType) {
 		case WHEEL:
 			return MT_RFP_WHL;
