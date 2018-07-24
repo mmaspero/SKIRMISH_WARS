@@ -12,7 +12,7 @@ OpponentPurchasing::OpponentPurchasing() : GenericState(OPP_PURCHASING)
 
 GenericState * OpponentPurchasing::onTimeout(GenericEvent *)
 {
-	SkirmishEvent * ev = (SkirmishEvent *)e;
+	SkirmishEvent * ev = (SkirmishEvent *)ev;
 	ev->contr()->stopPlayTimer(); 
 	return new WaitingOpponentPass();
 }

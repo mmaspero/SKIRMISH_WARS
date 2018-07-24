@@ -16,7 +16,7 @@ OpponentMoving::OpponentMoving() : GenericState(OPP_MOVING)
 GenericState * OpponentMoving::onTimeout(GenericEvent * e)
 {
 	SkirmishEvent * ev = (SkirmishEvent *)e;
-	ev->contr()->stopPlayTimer(); ?
+	ev->contr()->stopPlayTimer(); 
 	return new WaitingOpponentPass();
 }
 

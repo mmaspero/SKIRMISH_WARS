@@ -34,7 +34,7 @@ GenericState * UnitSelected::onUserAttack(GenericEvent *e)
 	unsigned int die = rand() % 6 + 1;
 	ev->model()->registerAttack(selection, ev->target, die);
 	ev->contr()->sendAttack(die, selection.row, selection.col, ev->target.row, ev->target.col);
-	ev->contr()->resetPlayTimer;
+	ev->contr()->resetPlayTimer();
 	return new UserAttacking(selection, ev->target);
 }
 
