@@ -15,9 +15,7 @@
 
 #define	CONFIG_FILE "productButton.cfg"
 
-#define WHEEL_BG_COLOR	"thistle"		//TODO: todos los colores o con nombres o con rgb
-#define TREAD_BG_COLOR  "aquamarine"
-#define FOOT_BG_COLOR   "beige"
+
 
 #define FONT_NAME "Minecraft.ttf"
 #define	BIG_FONT_SIZE    30
@@ -288,8 +286,8 @@ bool productButton::setReducedBmp()
 	cost = Unit::getCost(unitSpecificType);
 	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 	{
-		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i);
-		firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
+		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, false);
+		firepowerReduced[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, true);
 	}
 	for (int i = 0; i < N_TERRAINS; i++)
 	{
@@ -446,7 +444,7 @@ bool productButton::setExpandedBmp()
 {
 
 	basicUnitType_t unitBasicType;
-	bool canBuy;
+	bool canBuy;		//TODO: como hago el canBuy?
 	unsigned int cost;
 	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
 	unsigned int firepowerReduced[N_BASIC_U_TYPES];
@@ -458,8 +456,8 @@ bool productButton::setExpandedBmp()
 	cost = Unit::getCost(unitSpecificType);
 	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
 	{
-		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i);
-		firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
+		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, false);
+		firepowerReduced[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i, true);
 	}
 	for (int i = 0; i < N_TERRAINS; i++)
 	{
@@ -519,7 +517,7 @@ bool productButton::setExpandedBmp()
 
 	if (expandedBmp != nullptr)
 	{
-		al_destroy_bitmap(expandedBmp);	
+		al_destroy_bitmap(expandedBmp);
 	}
 	expandedBmp = al_create_bitmap(eWidth, eHeight);
 
@@ -567,6 +565,10 @@ bool productButton::setExpandedBmp()
 		mpX += mpSpacing;
 	}
 
+	if (smallFont != nullptr)
+	{
+		al_destroy_font(smallFont);
+	}
 	al_set_target_bitmap(backupBmp);
 
 	return true;

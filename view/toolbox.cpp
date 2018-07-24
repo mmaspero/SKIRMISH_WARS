@@ -2,8 +2,13 @@
 
 #include <iostream>
 
+#include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_color.h>
+
 #include "simpleButton.h"
 #include "productButton.h"
+#include "HPbar.h"
+#include "paths.h"	
 
 #define BUTTONS_PER_ROW 3
 #define PRODUCT_SECTION_RELATIVE_H 0.9
@@ -130,6 +135,13 @@ button * toolbox::getButton(unsigned int xPixel, unsigned int yPixel)
 	return buttonSelected;
 }
 
+void toolbox::goToShowingUnitInfo(Unit * u)
+{
+	status = SHOWING_UNIT_INFO;
+
+	this->u = u;
+}
+
 void toolbox::goToStore()
 {
 	if (status == EMPTY_MY_TURN || status == SHOWING_ONE_PRODUCT)
@@ -242,59 +254,15 @@ void toolbox::drawContent()
 	switch (status)	//EMPTY_THEIR_TURN no tiene nada que dibujar
 	{
 	case EMPTY_MY_TURN:
-		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
-		{
-			if ((*it)->isValid())
-			{
-				button * b = (*it);
-				if (b->getType() == SIMPLE_BUTTON && 
-					(((simpleButton*)b)->isItStore() || ((simpleButton*)b)->isItPass()) )
-				{
-					b->draw();
-				}
-			}
-		}
+		drawEmptyMyTurn();
 		break;
 	case SHOWING_ALL_PRODUCTS:
-		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
-		{
-			if ((*it)->isValid())
-			{
-				button * b = (*it);
-				if (b->getType() == PRODUCT_BUTTON)
-				{
-					b->draw();
-				}
-				else if (b->getType() == SIMPLE_BUTTON && ((simpleButton*)b)->isItPass() )
-				{
-					b->draw();
-				}
-			}	
-		}
+		drawShowingAllProducts();
 		break;
 	case SHOWING_ONE_PRODUCT:
-		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
-		{
-			if ((*it)->isValid())
-			{
-				button * b = (*it);
-				if (b->getType() == PRODUCT_BUTTON)
-				{
-					if (b->isSelected())
-					{
-						b->draw();
-					}
-				}
-				else if (b->getType() == SIMPLE_BUTTON &&
-					(((simpleButton*)b)->isItBack() || ((simpleButton*)b)->isItBuy()))
-				{
-					b->draw();
-				}
-			}	//TODO: hacer mas compacto pero no croto
-		}
+		drawShowingOneProduct();
 		break;
-	case SHOWING_UNIT_INFO:
-		//TODO:
+	
 		break;
 	}
 }
@@ -337,4 +305,192 @@ void toolbox::resizeContent()
 	std::cout << "Cantidad de botones: " << buttonList.size() << " - ";
 	createSimpleButtons();
 	std::cout << buttonList.size() << std::endl; 
+}
+
+void toolbox::drawEmptyMyTurn()
+{
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->isValid())
+		{
+			button * b = (*it);
+			if (b->getType() == SIMPLE_BUTTON &&
+				(((simpleButton*)b)->isItStore() || ((simpleButton*)b)->isItPass()))
+			{
+				b->draw();
+			}
+		}
+	}
+}
+
+void toolbox::drawEmptyTheirTurn()
+{
+}
+
+void toolbox::drawShowingAllProducts()
+{
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->isValid())
+		{
+			button * b = (*it);
+			if (b->getType() == PRODUCT_BUTTON)
+			{
+				b->draw();
+			}
+			else if (b->getType() == SIMPLE_BUTTON && ((simpleButton*)b)->isItPass())
+			{
+				b->draw();
+			}
+		}
+	}
+}
+
+void toolbox::drawShowingOneProduct()
+{
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->isValid())
+		{
+			button * b = (*it);
+			if (b->getType() == PRODUCT_BUTTON)
+			{
+				if (b->isSelected())
+				{
+					b->draw();
+				}
+			}
+			else if (b->getType() == SIMPLE_BUTTON &&
+				(((simpleButton*)b)->isItBack() || ((simpleButton*)b)->isItBuy()))
+			{
+				b->draw();
+			}
+		}	//TODO: hacer mas compacto pero no croto
+	}
+}
+
+void toolbox::drawShowingUnitInfo()
+{
+	//switch (status)
+	//{
+	//case SHOWING_UNIT_INFO:
+	//	unit_t unitSpecificType = u->getType();
+	//	basicUnitType_t unitBasicType = u->getBasicType();
+	//	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
+	//	unsigned int firepowerReduced[N_BASIC_U_TYPES];
+	//	unsigned int movingPoints[N_TERRAINS];
+	//	unsigned int range[2];	//Maximo y minimo rango
+	//	unsigned int healthPoints;
+
+	//	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
+	//	{
+	//		firepower[i] = Unit::getAttackMod(unitSpecificType, (basicUnitType_t)i);
+	//		firepowerReduced[i] = firepower[i];	//TODO: de donde los saco?
+	//	}
+	//	for (int i = 0; i < N_TERRAINS; i++)
+	//	{
+	//		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
+	//	}
+	//	Unit::getRange(unitSpecificType, range[0], range[1]);
+
+	//	//HPbar hpBar();
+
+
+	//	//TODO: sacarlo de una funcion de Unit::
+	//	if (FIRST_W <= unitSpecificType && unitSpecificType < FIRST_F)
+	//		unitBasicType = WHEEL;
+
+	//	else if (FIRST_F <= unitSpecificType && unitSpecificType < FIRST_T)
+	//		unitBasicType = FOOT;
+
+	//	else if (FIRST_T <= unitSpecificType && unitSpecificType < N_UNIT_TYPES)
+	//		unitBasicType = TREAD;
+
+	//	//Cargo el color de fondo y el logo del basicType
+	//	switch (unitBasicType)
+	//	{
+	//	case WHEEL:
+	//		bgColor = al_color_name(WHEEL_BG_COLOR);
+	//		basicTypeLogo = al_load_bitmap(WHEEL_LOGO_BMP);
+	//		if (basicTypeLogo == nullptr)
+	//		{
+	//			cout << "No se cargo el logo de wheel" << endl;
+	//			valid = false;
+	//		}
+	//		break;
+	//	case TREAD:
+	//		bgColor = al_color_name(TREAD_BG_COLOR);
+	//		basicTypeLogo = al_load_bitmap(TREAD_LOGO_BMP);
+	//		if (basicTypeLogo == nullptr)
+	//		{
+	//			cout << "No se cargo el logo de tread" << endl;
+	//			valid = false;
+	//		}
+	//		break;
+	//	case FOOT:
+	//		bgColor = al_color_name(FOOT_BG_COLOR);
+	//		basicTypeLogo = al_load_bitmap(FOOT_LOGO_BMP);
+	//		if (basicTypeLogo == nullptr)
+	//		{
+	//			cout << "No se cargo el logo de foot" << endl;
+	//			valid = false;
+	//		}
+	//		break;
+	//	default:	//TODO: ???
+	//		break;
+	//	}
+
+	//	//hacer backup del target bitmap actual y dibujar el boton en expandedBmp
+	//	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
+	//	al_set_target_bitmap(expandedBmp);
+
+
+
+	//	al_draw_filled_rounded_rectangle(margin, margin,
+	//		eWidth - margin, eHeight - margin,
+	//		BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
+	//		bgColor);	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
+	//	al_draw_scaled_bitmap(unformattedBmp, 0, 0,
+	//		al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
+	//		margin * 2, margin * 2,
+	//		eHeight / 3.0 - margin * 2, eHeight / 3.0 - margin * 2,
+	//		0);
+
+	//	float smallFontHeight = eHeight / 15.0;	//TODO: sacar magic number
+	//	ALLEGRO_FONT * smallFont = al_load_font(FONT_PATH FONT_NAME, -smallFontHeight, 0);
+	//	if (smallFont == nullptr)
+	//	{
+	//		cout << "No se pudo crear el bitmap expandido del productButton de la unidad de tipo" << \
+	//			unitSpecificType << "porque no se pudo cargar la font " << FONT_PATH FONT_NAME << endl;
+	//	}
+
+	//	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0, 0, "FIREPOWER");	//TODO: sacar magic numbers
+	//	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "REDUCED FIREPOWER");
+	//	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 4 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
+
+	//	float fpSpacing = eWidth / N_BASIC_U_TYPES;	//Distancia entre los valores para firepower
+	//	float fpX = fpSpacing / 2.0;		//Donde escribo el fp (centrado)
+	//	for (int i = 0; i < N_BASIC_U_TYPES; i++)
+	//	{
+	//		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
+	//		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
+	//		fpX += fpSpacing;
+	//	}
+	//	float mpSpacing = eWidth / N_TERRAINS;	//Distancia entre los valores para movingPoints
+	//	float mpX = mpSpacing / 2.0;		//Donde escribo el mp (centrado)
+	//	for (int i = 0; i < N_TERRAINS; i++)
+	//	{
+	//		al_draw_textf(smallFont, { 1,1,1,1 }, mpX, eHeight / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
+	//		mpX += mpSpacing;
+	//	}
+
+	//	if (smallFont != nullptr)
+	//	{
+	//		al_destroy_font(smallFont);
+	//	}
+	//	al_set_target_bitmap(backupBmp);
+
+	//	return true;
+	//}
+
 }

@@ -5,7 +5,7 @@ typedef enum { WELCOME, INSERTING_NAME, TRYING_IP, RETRYING_IP, CHOOSING_MAP, WA
 #define PIPBOY_DEFAULT_W 1000
 #define PIPBOY_DEFAULT_H 400
 
-#define PIPBOY_FONT_NAME "runescape_chat_font.ttf"
+#define PIPBOY_FONT_NAME FONT_PATH "runescape_chat_font.ttf"
 #define PIPBOY_FONT_SIZE (PIPBOY_DEFAULT_H / 6.0)
 #define PIPBOY_FONT_COLOR {(float)0.45, (float)1, (float)0, (float)1}	//"lawngreen"
 

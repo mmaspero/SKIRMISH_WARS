@@ -46,6 +46,8 @@ void tileObserver::update()
 	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();
 	al_set_target_bitmap(buttonBmp);
 
+
+
 	if (t->status == FOG)
 	{
 		al_clear_to_color(al_color_name(FOG_COLOR));	//TODO: sacar magic number

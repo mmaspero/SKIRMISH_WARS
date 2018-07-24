@@ -18,6 +18,7 @@ public:
 	~pipBoy();
 
 	void setStatus(pipBoyStatus_t status);	
+	pipBoyStatus_t getStatus();
 	void setName(std::string name);	//recibe la parte ya escrita del nombre
 	void setIP(std::string ip);	//recibe la parte ya escrita del ip
 	void nextMap();
@@ -33,6 +34,8 @@ private:
 	std::vector<ALLEGRO_BITMAP *>::iterator currentMapBmp;
 
 	ALLEGRO_FONT * font;
+
+	ALLEGRO_BITMAP * getMapBmp(std::string mapPath);
 
 	void drawContent();
 	void resizeContent();
