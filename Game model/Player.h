@@ -13,7 +13,7 @@ public:
 
 	void nextState();
 	Unit * buy(unit_t type, Point p);
-	void collectIncome();
+	void collectIncome();	//IMPORTANTE! llamar antes de a nextState cuando se pasa 
 	bool registerCapture(bool won, building_t type); //devuelve false si perdio sus hq
 	//"won" es true si es un edificio que capture yo, y false si es uno que me capturaron
 	//si hay un error tambien devuelve false (igual hay que cerrar todo)

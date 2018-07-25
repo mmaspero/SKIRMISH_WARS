@@ -21,7 +21,7 @@ Player::Player(player_t who, bool iStart) : who(who)
 		status = MOV_AND_ATT;
 	}
 	else {
-		status = WAITING;
+		status = WAITING_FIRST;
 	}
 }
 
@@ -33,9 +33,9 @@ Player::~Player()
 void Player::nextState()
 {
 	switch (status) {
-	case MOV_AND_ATT:	{ status = PURCHASING; }	break;
-	case PURCHASING:	{ status = WAITING; }		break;
-	case WAITING:		{ status = MOV_AND_ATT; }	break;
+	case MOV_AND_ATT:				{ status = PURCHASING; }	break;
+	case PURCHASING:				{ status = WAITING; }		break;
+	case WAITING: WAITING_FIRST:	{ status = MOV_AND_ATT; }	break;
 	}
 
 	if (obs != nullptr) {
@@ -74,7 +74,7 @@ void Player::collectIncome()
 
 bool Player::registerCapture(bool won, building_t type)
 {
-	if (status == WAITING) {
+	if (status >= WAITING) {
 		switch (type) {
 		case CITY: { won ? nCities++ : nCities--; } break;
 		case FACTORY: {won ? nFactories++ : nFactories--; } break;
@@ -121,28 +121,28 @@ void Player::updateStats(unsigned int capturePointsHQ, unsigned int nFactories, 
 {
 	bool newStats = false;
 
-	if (status == WAITING) {
-		if (this->capturePointsHQ != capturePointsHQ) {
-			this->capturePointsHQ = capturePointsHQ;
-			newStats = true;
-		}
+	if (this->capturePointsHQ != capturePointsHQ) {
+		this->capturePointsHQ = capturePointsHQ;
+		newStats = true;
+	}
 
-		if (this->nFactories != nFactories) {
-			this->nFactories = nFactories;
-			newStats = true;
-		}
-		if (this->nCities != nCities) {
-			this->nCities = nCities;
-			newStats = true;
-		}
-		if (this->nUnits != nUnits) {
-			this->nUnits = nUnits;
-			newStats = true;
-		}
+	if (this->nFactories != nFactories) {
+		this->nFactories = nFactories;
+		newStats = true;
+	}
+	
+	if (this->nCities != nCities) {
+		this->nCities = nCities;
+		newStats = true;
+	}
+	
+	if (this->nUnits != nUnits) {
+		this->nUnits = nUnits;
+		newStats = true;
+	}
 
-		if (newStats && obs != nullptr) {
-			obs->update();
-		}
+	if (newStats && obs != nullptr) {
+		obs->update();
 	}
 }
 

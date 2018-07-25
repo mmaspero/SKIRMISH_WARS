@@ -6,7 +6,7 @@
 
 
 typedef enum players { NEUTRAL, USER, OPPONENT, N_PLAYERS } player_t;
-typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING } playerStatus_t;
+typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING, WAITING_FIRST } playerStatus_t;
 typedef enum tileStatus { VISIBLE, FOG, UNIT_REVEALED, SELECTED, CAN_ATTACK, CAN_MOVE } tileStatus_t;
 
 typedef enum actions { ACT_MOVE, ACT_LOAD, ACT_UNLOAD, ACT_ATTACK, ACT_CAPTURE, N_ACTIONS} action_t;
