@@ -98,6 +98,11 @@ unit_t toolbox::getSelectedProduct()
 	return N_UNIT_TYPES;
 }
 
+bool toolbox::isItShowingThisUnitInfo(Unit * u)
+{
+	return this->u == u;
+}
+
 toolboxStatus_t toolbox::getStatus()
 {
 	return status;
@@ -153,6 +158,7 @@ void toolbox::goToShowingUnitInfo(Unit * u)
 
 void toolbox::goToStore()
 {
+	u = nullptr;
 	if (status == EMPTY_MY_TURN || status == SHOWING_ONE_PRODUCT || status == SHOWING_UNIT_INFO)
 	{
 		status = SHOWING_ALL_PRODUCTS;
@@ -170,6 +176,7 @@ void toolbox::goToStore()
 void toolbox::goToMyTurn()
 {
 	status = EMPTY_MY_TURN;
+	u = nullptr;
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 	{
 		if ((*it)->getType() == PRODUCT_BUTTON)
@@ -183,6 +190,7 @@ void toolbox::goToMyTurn()
 void toolbox::goToTheirTurn()
 {
 	status = EMPTY_THEIR_TURN;
+	u = nullptr;
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 	{
 		if ((*it)->getType() == PRODUCT_BUTTON)

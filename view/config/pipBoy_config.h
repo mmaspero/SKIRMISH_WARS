@@ -9,6 +9,7 @@ typedef enum { WELCOME, INSERTING_NAME, TRYING_IP, RETRYING_IP, CHOOSING_MAP, WA
 #define PIPBOY_FONT_SIZE (PIPBOY_DEFAULT_H / 6.0)
 #define PIPBOY_FONT_COLOR {(float)0.45, (float)1, (float)0, (float)1}	//"lawngreen"
 
+#define MAX_USERNAME_LENGTH 255
 
 #define PIPBOY_WELCOME_MSG_LINE_1 "Bienvenido al pip-Boy"
 #define PIPBOY_WELCOME_MSG_LINE_2 "En EDA todo anda"

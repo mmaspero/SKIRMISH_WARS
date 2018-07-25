@@ -37,7 +37,7 @@ void playerObserver::update()
 		sB->getMyHQHPbar()->setCurrentHP(p->capturePointsHQ);
 		gs->setMoney(p->money);
 		gs->setUnitCount(p->nUnits);
-		gs->setCityCount(p->nCities);
+		gs->setCityCount(p->nCities + p->nFactories + (bool)p->capturePointsHQ);		//Ciudades mas fabricas mas hq
 		sB->draw();
 		gs->draw();
 

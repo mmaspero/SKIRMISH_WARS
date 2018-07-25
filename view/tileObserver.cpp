@@ -45,6 +45,15 @@ void tileObserver::update()
 		tBox->goToShowingUnitInfo(t->getUnit());
 		tBox->draw();
 	}
+	else if(tBox->getStatus() == SHOWING_UNIT_INFO)
+	{
+		if (tBox->isItShowingThisUnitInfo(t->u))
+		{
+			tBox->goToMyTurn();
+			tBox->draw();
+		}
+	}
+
 
 	int bmpW = tButton->getWidth(), bmpH = tButton->getHeight();
 

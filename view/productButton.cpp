@@ -13,12 +13,14 @@
 #include "paths.h"
 
 
+
+
 #define	CONFIG_FILE "productButton.cfg"
 
 #define FONT_NAME		"Minecraft.ttf"		//TODO: hacerlo con FONT_PATH aca, no en el codigo
 #define	BIG_FONT_SIZE	30
 #define SMALL_FONT_SIZE_IN_HEIGHT (1/15.0)	
-
+#define FONT_COLOR al_color_name("black")
 
 #define BUTTON_MARGIN(w, h)		(((w)>(h) ? h : w) / 20.0)
 #define BUTTON_CORNER_ROUNDNESS 10
@@ -523,23 +525,23 @@ bool productButton::setExpandedBmp()
 	}
 
 	//Dibujo todos los encabezados de la informacion:
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 0 * smallFontHeight, 0, "MAX HP");	
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "FIREPOWER");	
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 4 * smallFontHeight, 0, "REDUCED FIREPOWER");
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 6 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 8 * smallFontHeight, 0, "FIRING RANGE");	//TODO: no me entra la palabra completa 
+	al_draw_text(smallFont, FONT_COLOR, margin * 2, eHeight / 3.0 + 0 * smallFontHeight, 0, "DEFENSE");
+	al_draw_text(smallFont, FONT_COLOR, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "FIREPOWER");
+	al_draw_text(smallFont, FONT_COLOR, margin * 2, eHeight / 3.0 + 4 * smallFontHeight, 0, "REDUCED FIREPOWER");
+	al_draw_text(smallFont, FONT_COLOR, margin * 2, eHeight / 3.0 + 6 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
+	al_draw_text(smallFont, FONT_COLOR, margin * 2, eHeight / 3.0 + 8 * smallFontHeight, 0, "FIRING RANGE");	//TODO: no me entra la palabra completa 
 
 
 	//Dibujo HP
-	al_draw_textf(smallFont, { 1,1,1,1 }, eWidth / 2.0, eHeight / 3.0 + 1 * smallFontHeight, ALLEGRO_ALIGN_CENTER, "%d", Unit::getDefense(unitSpecificType));
+	al_draw_textf(smallFont, FONT_COLOR, eWidth / 2.0, eHeight / 3.0 + 1 * smallFontHeight, ALLEGRO_ALIGN_CENTER, "%d", Unit::getDefense(unitSpecificType));
 
 	//Dibujo FP y reduced FP
 	float fpSpacing = eWidth / N_BASIC_U_TYPES;		//Distancia entre los valores para firepower
 	float fpX = fpSpacing / 2.0;					//Donde escribo el fp (centrado)
 	for (int i = 0; i < N_BASIC_U_TYPES; i++)
 	{
-		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
-		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
+		al_draw_textf(smallFont, FONT_COLOR, fpX, eHeight / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
+		al_draw_textf(smallFont, FONT_COLOR, fpX, eHeight / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
 		fpX += fpSpacing;
 	}
 	
@@ -548,18 +550,18 @@ bool productButton::setExpandedBmp()
 	float mpX = mpSpacing / 2.0;			//Donde escribo el mp (centrado)
 	for (int i = 0; i < N_TERRAINS; i++)
 	{
-		al_draw_textf(smallFont, { 1,1,1,1 }, mpX, eHeight / 3.0 + 7 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
+		al_draw_textf(smallFont, FONT_COLOR, mpX, eHeight / 3.0 + 7 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
 		mpX += mpSpacing;
 	}
 
 	//Dibujo range
 	if (range[0] == range[1])
 	{
-		al_draw_textf(smallFont, { 1,1,1,1 }, eWidth / 2.0, eHeight / 3.0 + 9 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", range[0]);
+		al_draw_textf(smallFont, FONT_COLOR, eWidth / 2.0, eHeight / 3.0 + 9 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", range[0]);
 	}
 	else
 	{
-		al_draw_textf(smallFont, { 1,1,1,1 }, eWidth / 2.0, eHeight / 3.0 + 9 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d-%d", range[0], range[1]);
+		al_draw_textf(smallFont, FONT_COLOR, eWidth / 2.0, eHeight / 3.0 + 9 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d-%d", range[0], range[1]);
 	}
 
 	if (smallFont != nullptr)

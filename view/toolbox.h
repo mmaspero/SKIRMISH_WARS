@@ -22,6 +22,7 @@ public:
 	si no hay unidades seleccionadas, devuelve N_UNIT_TYPES
 	*/
 	unit_t getSelectedProduct();
+	bool isItShowingThisUnitInfo(Unit * u);
 	toolboxStatus_t getStatus();
 	virtual button * getButton(unsigned int xPixel, unsigned int yPixel);
 	void goToShowingUnitInfo(Unit * u);
