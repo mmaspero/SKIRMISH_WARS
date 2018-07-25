@@ -112,7 +112,7 @@ GenericEvent * Model::getTileEvent(Point p)
 	switch (fsm.state()) {
 
 	case USER_MOVING: {
-		if (m.hasUnit(p) && m.getUnit(p)->getPlayer() == USER && m.getUnit(p)->hasValidActions()) {
+		if (m.hasUnit(p) && m.getUnit(p)->getPlayer() == USER) {
 			e = new UnitSelection(p);
 		}
 	} break;
