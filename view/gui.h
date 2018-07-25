@@ -2,6 +2,11 @@
 
 #include "contentBox.h"
 #include "Board.h"
+#include "scoreBoard.h"
+#include "gameStatus.h"
+#include "toolbox.h"
+#include "textlog.h"
+
 #include "../Game model/Tile.h"
 #include "../Game model/FSM/GenericEvent.h"
 
@@ -134,6 +139,13 @@ public:
 	void appendToTextlog(std::string msg);
 
 	void setTimeLeft(unsigned int timeLeft);
+
+	gameStatus * getGameStatus();
+	Board * getBoard();
+	scoreBoard * getScoreboard();
+	toolbox * getToolbox();
+	textlog * getTextlog();
+
 
 private:
 

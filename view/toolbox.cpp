@@ -16,8 +16,9 @@
 #define BUTTON_MARGIN(w, h) (((w)>(h) ? h : w) / 20.0)
 #define BUTTON_CORNER_ROUNDNESS 10
 
-#define FONT_NAME "Minecraft.ttf"
+#define FONT_NAME FONT_PATH "Minecraft.ttf"
 #define	BIG_FONT_SIZE    30
+#define SMALL_FONT_SIZE_IN_HEIGHT (1/15.0)	
 
 
 using namespace std;
@@ -113,7 +114,7 @@ button * toolbox::getButton(unsigned int xPixel, unsigned int yPixel)
 		{
 			switch (status)
 			{
-			case EMPTY_MY_TURN:
+			case EMPTY_MY_TURN: case SHOWING_UNIT_INFO:
 				if ((*it)->getType() == SIMPLE_BUTTON && 
 					(((simpleButton *)(*it))->getSimpleType() == STORE_BUTTON || ((simpleButton *)(*it))->getSimpleType() == PASS_BUTTON))
 				{
@@ -134,7 +135,7 @@ button * toolbox::getButton(unsigned int xPixel, unsigned int yPixel)
 					buttonSelected = (*it);
 				}
 				break;
-			case SHOWING_UNIT_INFO:
+			default:
 				break;
 			}
 
@@ -152,7 +153,7 @@ void toolbox::goToShowingUnitInfo(Unit * u)
 
 void toolbox::goToStore()
 {
-	if (status == EMPTY_MY_TURN || status == SHOWING_ONE_PRODUCT)
+	if (status == EMPTY_MY_TURN || status == SHOWING_ONE_PRODUCT || status == SHOWING_UNIT_INFO)
 	{
 		status = SHOWING_ALL_PRODUCTS;
 		for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
@@ -259,7 +260,7 @@ bool toolbox::createSimpleButtons()
 
 void toolbox::drawContent()
 {
-	switch (status)	//EMPTY_THEIR_TURN no tiene nada que dibujar
+	switch (status)
 	{
 	case EMPTY_MY_TURN:
 		drawEmptyMyTurn();
@@ -380,15 +381,34 @@ void toolbox::drawShowingOneProduct()
 
 void toolbox::drawShowingUnitInfo()
 {
-	if (u != nullptr)
-	{
-		productButton * auxButton = new productButton(1, 1, 1, 1, 1, 1,
-			contentWidth, contentHeight * PRODUCT_SECTION_RELATIVE_H, u->getType());
+	if (u == nullptr || u->getType() == N_UNIT_TYPES) { return; }
 
-		ALLEGRO_BITMAP * unitInfoBmp = auxButton->getExpandedBmp();
-		al_draw_bitmap(unitInfoBmp, contentStartX, contentStartY, 0);
-		delete auxButton;
+	//Creo boton auxiliar para usar el expandedBmp para mostrar la unit info.
+	productButton auxButton(10, 10, 10, 10, 10, 10,	
+		contentWidth, contentHeight * PRODUCT_SECTION_RELATIVE_H, u->getType());
+
+	if (!auxButton.isValid()) { return; }
+	
+	ALLEGRO_BITMAP * unitInfoBmp = auxButton.getExpandedBmp();
+	//Hago backup del target bitmap actual para dibujar momentaneamente en el unitInfoBmp y no en la pantalla
+	ALLEGRO_BITMAP * backupBmp = al_get_target_bitmap();	
+	al_set_target_bitmap(unitInfoBmp);
+
+	//agrego HP:
+	unsigned int w = al_get_bitmap_width(unitInfoBmp), h = al_get_bitmap_height(unitInfoBmp);
+	float smallFontHeight = h * SMALL_FONT_SIZE_IN_HEIGHT;
+	ALLEGRO_FONT * smallFont = al_load_font(FONT_NAME, -smallFontHeight, 0);
+	if(smallFont != nullptr)
+	{
+		al_draw_textf(smallFont, { 1,1,1,1 }, w / 2.0, h / 5, 0, "%d/%d", u->getHP(), u->getDefense(u->getType()));
 	}
+
+	al_set_target_bitmap(backupBmp);
+	drawEmptyMyTurn();
+	al_draw_bitmap(unitInfoBmp, contentStartX, contentStartY, 0);
+	al_destroy_bitmap(unitInfoBmp);
+	
+	
 
 	//unit_t unitSpecificType = u->getType();
 	//basicUnitType_t unitBasicType = u->getBasicType();

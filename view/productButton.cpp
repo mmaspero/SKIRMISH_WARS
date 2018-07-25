@@ -15,14 +15,16 @@
 
 #define	CONFIG_FILE "productButton.cfg"
 
-#define FONT_NAME "Minecraft.ttf"
-#define	BIG_FONT_SIZE    30
+#define FONT_NAME		"Minecraft.ttf"		//TODO: hacerlo con FONT_PATH aca, no en el codigo
+#define	BIG_FONT_SIZE	30
+#define SMALL_FONT_SIZE_IN_HEIGHT (1/15.0)	
 
-#define BUTTON_MARGIN(w, h) (((w)>(h) ? h : w) / 20.0)
+
+#define BUTTON_MARGIN(w, h)		(((w)>(h) ? h : w) / 20.0)
 #define BUTTON_CORNER_ROUNDNESS 10
 
-#define COIN_HEIGHT_IN_MARGINS 6	//La moneda que indica plata tiene COIN_HEIGHT_IN_MARGIN veces la altura del margen
-#define LOGO_SIDE_IN_MARGINS 7
+#define COIN_HEIGHT_IN_MARGINS	6	//La moneda que indica plata tiene COIN_HEIGHT_IN_MARGIN veces la altura del margen
+#define LOGO_SIDE_IN_MARGINS	7
 
 #define COIN_IMG "coin.png"
 
@@ -160,10 +162,6 @@ productButton::productButton(float rLeftX, float rTopY, float rWidth, float rHei
 
 productButton::~productButton()
 {
-	if (unformattedBmp != nullptr)
-		al_destroy_bitmap(unformattedBmp);
-	if (resizedBmp != nullptr)
-		al_destroy_bitmap(resizedBmp);
 	if (reducedBmp != nullptr)
 		al_destroy_bitmap(reducedBmp);
 	if (expandedBmp != nullptr)
@@ -424,22 +422,22 @@ bool productButton::setReducedBmp()
 	}
 
 	al_set_target_bitmap(backupBmp);
-
 	return true;
 }
 
 bool productButton::setExpandedBmp()
 {
-
+	//Info que voy a necesitar:
 	basicUnitType_t unitBasicType;
 	bool canBuy;		//TODO: como hago el canBuy?
 	unsigned int cost;
-	unsigned int firepower[N_BASIC_U_TYPES];	//Cuantos HP le saca a cada tipo basico de unidad
+	unsigned int firepower[N_BASIC_U_TYPES];
 	unsigned int firepowerReduced[N_BASIC_U_TYPES];
 	unsigned int movingPoints[N_TERRAINS];
+	unsigned int range[2];	//Maximo y minimo rango
 
 
-	//TODO: copiar toda la info necesaria y borrar lo de abajo
+	//Obtengo la info:
 	cost = Unit::getCost(unitSpecificType);
 	unitBasicType = Unit::getBasicType(unitSpecificType);
 	for (int i = 0; i < N_BASIC_U_TYPES; i++)	//Cuantos HP le saca a cada tipo basico de unidad
@@ -451,9 +449,11 @@ bool productButton::setExpandedBmp()
 	{
 		movingPoints[i] = Unit::getTerrainMod(unitSpecificType, (terrain_t)i);
 	}
+	Unit::getRange(unitSpecificType, range[0], range[1]);
 
 
-	//Cargo el color de fondo y el logo del basicType
+
+	//Cargo el color de fondo y el logo del basicType:
 	switch (unitBasicType)
 	{
 	case WHEEL:
@@ -488,11 +488,6 @@ bool productButton::setExpandedBmp()
 	}
 
 
-
-
-
-
-
 	if (expandedBmp != nullptr)
 	{
 		al_destroy_bitmap(expandedBmp);
@@ -505,42 +500,66 @@ bool productButton::setExpandedBmp()
 
 
 
-	al_draw_filled_rounded_rectangle(margin, margin,
-		eWidth - margin, eHeight - margin,
-		BUTTON_CORNER_ROUNDNESS, BUTTON_CORNER_ROUNDNESS,
-		bgColor);	//Sacar el define de WHEEL COLOR y hacerlo para todos los basic types
-	al_draw_scaled_bitmap(unformattedBmp, 0, 0,
-		al_get_bitmap_width(unformattedBmp), al_get_bitmap_height(unformattedBmp),
-		margin * 2, margin * 2,
-		eHeight / 3.0 - margin * 2, eHeight / 3.0 - margin * 2,
+	al_draw_filled_rounded_rectangle(
+		margin,						margin,
+		eWidth - margin,			eHeight - margin,
+		BUTTON_CORNER_ROUNDNESS,	BUTTON_CORNER_ROUNDNESS,
+		bgColor);	
+	al_draw_scaled_bitmap(unformattedBmp, 
+		0,										0,
+		al_get_bitmap_width(unformattedBmp),	al_get_bitmap_height(unformattedBmp),
+		margin * 2,								margin * 2,
+		eHeight / 3.0 - margin * 2,				eHeight / 3.0 - margin * 2,
 		0);
 
-	float smallFontHeight = eHeight / 15.0;	//TODO: sacar magic number
+	float smallFontHeight = eHeight * SMALL_FONT_SIZE_IN_HEIGHT;
 	ALLEGRO_FONT * smallFont = al_load_font(FONT_PATH FONT_NAME, -smallFontHeight, 0);
 	if (smallFont == nullptr)
 	{
 		cout << "No se pudo crear el bitmap expandido del productButton de la unidad de tipo" << \
 			unitSpecificType << "porque no se pudo cargar la font " << FONT_PATH FONT_NAME << endl;
+		al_set_target_bitmap(backupBmp);
+		return false;
 	}
 
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0, 0, "FIREPOWER");	//TODO: sacar magic numbers
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "REDUCED FIREPOWER");
-	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 4 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
+	//Dibujo todos los encabezados de la informacion:
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 0 * smallFontHeight, 0, "MAX HP");	
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 2 * smallFontHeight, 0, "FIREPOWER");	
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 4 * smallFontHeight, 0, "REDUCED FIREPOWER");
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 6 * smallFontHeight, 0, "TERRAIN MOV COST");	//TODO: no me entra la palabra completa 
+	al_draw_text(smallFont, { 1,1,1,1 }, margin * 2, eHeight / 3.0 + 8 * smallFontHeight, 0, "FIRING RANGE");	//TODO: no me entra la palabra completa 
 
-	float fpSpacing = eWidth / N_BASIC_U_TYPES;	//Distancia entre los valores para firepower
-	float fpX = fpSpacing / 2.0;		//Donde escribo el fp (centrado)
-	for (int i = 0; i<N_BASIC_U_TYPES; i++)
+
+	//Dibujo HP
+	al_draw_textf(smallFont, { 1,1,1,1 }, eWidth / 2.0, eHeight / 3.0 + 1 * smallFontHeight, ALLEGRO_ALIGN_CENTER, "%d", Unit::getDefense(unitSpecificType));
+
+	//Dibujo FP y reduced FP
+	float fpSpacing = eWidth / N_BASIC_U_TYPES;		//Distancia entre los valores para firepower
+	float fpX = fpSpacing / 2.0;					//Donde escribo el fp (centrado)
+	for (int i = 0; i < N_BASIC_U_TYPES; i++)
 	{
-		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
-		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
+		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 3 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepower[i]);
+		al_draw_textf(smallFont, { 1,1,1,1 }, fpX, eHeight / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", firepowerReduced[i]);
 		fpX += fpSpacing;
 	}
+	
+	//Dibujo MP
 	float mpSpacing = eWidth / N_TERRAINS;	//Distancia entre los valores para movingPoints
-	float mpX = mpSpacing / 2.0;		//Donde escribo el mp (centrado)
-	for (int i = 0; i<N_TERRAINS; i++)
+	float mpX = mpSpacing / 2.0;			//Donde escribo el mp (centrado)
+	for (int i = 0; i < N_TERRAINS; i++)
 	{
-		al_draw_textf(smallFont, { 1,1,1,1 }, mpX, eHeight / 3.0 + 5 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
+		al_draw_textf(smallFont, { 1,1,1,1 }, mpX, eHeight / 3.0 + 7 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", movingPoints[i]);
 		mpX += mpSpacing;
+	}
+
+	//Dibujo range
+	if (range[0] == range[1])
+	{
+		al_draw_textf(smallFont, { 1,1,1,1 }, eWidth / 2.0, eHeight / 3.0 + 9 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d", range[0]);
+	}
+	else
+	{
+		al_draw_textf(smallFont, { 1,1,1,1 }, eWidth / 2.0, eHeight / 3.0 + 9 * smallFontHeight, ALLEGRO_ALIGN_CENTRE, "%d-%d", range[0], range[1]);
 	}
 
 	if (smallFont != nullptr)
@@ -548,6 +567,7 @@ bool productButton::setExpandedBmp()
 		al_destroy_font(smallFont);
 	}
 	al_set_target_bitmap(backupBmp);
+
 
 	return true;
 }
@@ -649,7 +669,7 @@ void productButton::setProductCost()
 
 ALLEGRO_BITMAP * productButton::getExpandedBmp()
 {
-	return al_clone_bitmap(expandedBmp);
+	return al_clone_bitmap(expandedBmp);	
 }
 
 void productButton::calculateCurrentDimensions()

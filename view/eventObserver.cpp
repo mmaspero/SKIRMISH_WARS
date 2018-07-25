@@ -195,32 +195,29 @@ void eventObserver::onButtonRelease()
 		{
 			toolboxP->selectProduct(((productButton *)b)->getUnitSpecificType());
 			toolboxP->draw();
-			g->appendToTextlog("Deberia estar el toolbox en SHOWING ONE PRODUCT");
 		}
 		g->getDisplaySection(TOOLBOX)->draw();
 	}
 	else if (b->getType() == SIMPLE_BUTTON)
 	{
-		g->appendToTextlog("Release de simple button");
-
 		switch (((simpleButton *)b)->getSimpleType())
 		{
 		case CANCEL_BUTTON:
 			break;
 		case BUY_BUTTON: case BACK_BUTTON:
-			if (((toolbox *)(g->getDisplaySection(TOOLBOX)))->getStatus() == SHOWING_ONE_PRODUCT)
+			if (g->getToolbox()->getStatus() == SHOWING_ONE_PRODUCT)
 			{
-				((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToStore();
+				g->getToolbox()->goToStore();
 			}
 			break;
 		case STORE_BUTTON:
-			if (((toolbox *)(g->getDisplaySection(TOOLBOX)))->getStatus() == EMPTY_MY_TURN)
+			if (g->getToolbox()->getStatus() == EMPTY_MY_TURN || g->getToolbox()->getStatus() == SHOWING_UNIT_INFO)
 			{
-				((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToStore();
+				g->getToolbox()->goToStore();
 			}
 			break;
 		case PASS_BUTTON:
-			((toolbox *)(g->getDisplaySection(TOOLBOX)))->goToTheirTurn();
+			g->getToolbox()->goToTheirTurn();
 			g->appendToTextlog(YOU_PASS_MSG);
 			break;
 		default:

@@ -445,6 +445,31 @@ void gui::setTimeLeft(unsigned int timeLeft)
 	((gameStatus *)getDisplaySection(GAMESTATUS))->setTime(timeLeft);
 }
 
+gameStatus * gui::getGameStatus()
+{
+	return (gameStatus *)getDisplaySection(GAMESTATUS);
+}
+
+Board * gui::getBoard()
+{
+	return (Board *)getDisplaySection(BOARD);
+}
+
+scoreBoard * gui::getScoreboard()
+{
+	return (scoreBoard *)getDisplaySection(SCOREBOARD);
+}
+
+toolbox * gui::getToolbox()
+{
+	return (toolbox *) getDisplaySection(TOOLBOX);
+}
+
+textlog * gui::getTextlog()
+{
+	return (textlog *)getDisplaySection(TEXTLOG);
+}
+
 
 
 /*

@@ -40,6 +40,12 @@ tileObserver::~tileObserver()
 
 void tileObserver::update()
 {
+	if (t->status == SELECTED)
+	{
+		tBox->goToShowingUnitInfo(t->getUnit());
+		tBox->draw();
+	}
+
 	int bmpW = tButton->getWidth(), bmpH = tButton->getHeight();
 
 	ALLEGRO_BITMAP * buttonBmp = al_create_bitmap(bmpW, bmpH);
@@ -47,10 +53,7 @@ void tileObserver::update()
 	al_set_target_bitmap(buttonBmp);
 
 
-	if (t->status == SELECTED)
-	{
-		tBox->goToShowingUnitInfo(t->getUnit());
-	}
+
 	if (t->status == FOG)
 	{
 		al_clear_to_color(al_color_name(FOG_COLOR));	//TODO: sacar magic number
