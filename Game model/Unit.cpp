@@ -59,6 +59,11 @@ unsigned int Unit::getCost()
 	return cost;
 }
 
+unsigned int Unit::getMps()
+{
+	return movingPoints;
+}
+
 int Unit::getHP()
 {
 	return healthPoints;

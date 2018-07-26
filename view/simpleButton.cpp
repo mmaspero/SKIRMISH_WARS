@@ -7,7 +7,7 @@
 
 #include "paths.h"
 
-#define FONT_NAME "PressStart2P.ttf"
+#define FONT_NAME "slkscr.ttf"
 #define DEFAULT_BG_COLOR "lawngreen"		//TODO: unificar palettes.
 #define DEFAULT_FONT_COLOR "black"
 

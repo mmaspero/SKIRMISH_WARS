@@ -35,11 +35,11 @@
 #define GAMESTATUS_H		0.1
 
 #define TEXTLOG_LEFT_X	0.75
-#define TEXTLOG_TOP_Y	0.6
+#define TEXTLOG_TOP_Y	0.75
 #define TEXTLOG_W		0.25
-#define TEXTLOG_H		0.4
+#define TEXTLOG_H		0.25
 
 #define TOOLBOX_LEFT_X	0.75
 #define TOOLBOX_TOP_Y	0.1
 #define TOOLBOX_W		0.25
-#define TOOLBOX_H		0.5
+#define TOOLBOX_H		0.65

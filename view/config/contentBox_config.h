@@ -9,7 +9,7 @@
 
 
 #define DEFAULT_BACKGROUND_COLOR {(float)0, (float)0, (float)0, (float)1}
-#define DEFAULT_FRAME_BASE_COLOR {(float)0.45, (float)1, (float)0, (float)1}	//"lawngreen"
+#define DEFAULT_FRAME_BASE_COLOR {(float)0.45, (float)0.45, (float)0.45, (float)1}	
 #define DEFAULT_FRAME_HIGHLIGHT_COLOR {(float)0, (float)0, (float)0, (float)1}
 
 #define FRAME_WIDTH 10

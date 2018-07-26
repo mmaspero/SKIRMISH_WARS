@@ -9,7 +9,7 @@
 #define COIN_BMP IMAGE_PATH "coin.png"
 #define CITY_BMP IMAGE_PATH "buildingSprite.png"
 
-#define DEFAULT_FONT FONT_PATH "PressStart2P.ttf"
+#define DEFAULT_FONT FONT_PATH "slkscr.ttf"
 #define FONT_COLOR "lawngreen"
 #define FONT_HEIGHT_IN_BITMAP_HEIGHT (3.0/4.0)
 

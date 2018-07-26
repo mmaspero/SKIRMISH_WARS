@@ -23,13 +23,6 @@
 #define ROCKET_SPRITE_B			SPRITE_PATH "rocket_b.png"
 #define TANK_SPRITE_B			SPRITE_PATH "tank_b.png"
 
-#define WHEEL_BG_COLOR	"thistle"		//TODO: todos los colores o con nombres o con rgb
-#define TREAD_BG_COLOR  "aquamarine"	//TODO: unificar con los defines de toolbox.cpp
-#define FOOT_BG_COLOR	"beige"
-
-#define TREAD_LOGO_BMP IMAGE_PATH "tread_logo.png"
-#define FOOT_LOGO_BMP TREAD_LOGO_BMP
-#define WHEEL_LOGO_BMP TREAD_LOGO_BMP
 
 #define GRASS_TEXTURE "grassTexture.png"
 #define RIVER_TEXTURE "riverTexture.png"
@@ -37,4 +30,4 @@
 #define FOREST_TEXTURE "forestTexture.jpg"
 #define HILL_TEXTURE "hillTexture.png"
 
-#define FOG_COLOR "hotpink"
+#define FOG_COLOR "black"
