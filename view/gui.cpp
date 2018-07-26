@@ -300,7 +300,7 @@ playerObserver * gui::playerObserverFactory(Player * p)
 	}
 }
 
-eventObserver * gui::eventObserverFactory(GenericEvent ** e)	//TODO: hacer puntero a puntero a evento
+eventObserver * gui::eventObserverFactory(GenericEvent ** e)
 {
 	eventObserver * eo = new eventObserver(e, this);
 	if (eo->isValid())
@@ -326,7 +326,7 @@ ALLEGRO_DISPLAY * gui::getDisplay()
 button * gui::getButton(unsigned int xPixel, unsigned int yPixel)
 {
 	contentBox * currentContentBox = getDisplaySection(xPixel, yPixel);
-	if (currentContentBox != nullptr)
+	if (currentContentBox != nullptr)	//Evito llamar a getButton si currentContentox es nullptr
 	{
 		return currentContentBox->getButton(xPixel, yPixel);
 	}
@@ -373,17 +373,17 @@ ALLEGRO_EVENT_SOURCE * gui::getMenuEventSource()
 
 unit_t gui::getSelectedProduct()
 {
-	return ((toolbox *)getDisplaySection(TOOLBOX))->getSelectedProduct();
+	return getToolbox()->getSelectedProduct();
 }
 
 void gui::setProductCosts()
 {
-	((toolbox *)getDisplaySection(TOOLBOX));
+	acknowledgeResize();
 }
 
 void gui::draw()
 {
-	al_clear_to_color(GUI_DEFAULT_BACKGROUND_COLOR);	//TODO: magic number
+	al_clear_to_color(GUI_DEFAULT_BACKGROUND_COLOR);	//TODO: poner fondo
 
 	for (list<contentBox *>::iterator it = displaySections.begin(); it != displaySections.end(); it++)
 	{
@@ -422,17 +422,8 @@ contentBox * gui::getDisplaySection(displaySection_t displaySection)
 
 void gui::appendToTextlog(const char * msg)
 {
-	list<contentBox *>::iterator it = displaySections.begin();
-
-	//Avanzar hasta que se halle el textlog * o hasta recorrer toda la lista.
-	for (it = displaySections.begin();
-		it != displaySections.end() && (*it)->getType() != TEXTLOG;
-		it++) {}
-	if (it != displaySections.end())	//Si se encontro el textlog
-	{
-		((textlog *)(*it))->append(msg);
-		((textlog *)(*it))->draw();
-	}
+	getTextlog()->append(msg);
+	getTextlog()->draw();
 }
 
 void gui::appendToTextlog(std::string msg)
@@ -442,7 +433,8 @@ void gui::appendToTextlog(std::string msg)
 
 void gui::setTimeLeft(unsigned int timeLeft)
 {
-	((gameStatus *)getDisplaySection(GAMESTATUS))->setTime(timeLeft);
+	getGameStatus()->setTime(timeLeft);
+	getGameStatus()->draw();
 }
 
 gameStatus * gui::getGameStatus()
@@ -468,6 +460,18 @@ toolbox * gui::getToolbox()
 textlog * gui::getTextlog()
 {
 	return (textlog *)getDisplaySection(TEXTLOG);
+}
+
+void gui::changeToolboxTurn()
+{
+	if (getToolbox()->getStatus() == EMPTY_THEIR_TURN)
+	{
+		getToolbox()->goToMyTurn();
+	}
+	else
+	{
+		getToolbox()->goToTheirTurn();
+	}
 }
 
 

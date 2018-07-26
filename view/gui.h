@@ -146,6 +146,7 @@ public:
 	toolbox * getToolbox();
 	textlog * getTextlog();
 
+	void changeToolboxTurn();
 
 private:
 

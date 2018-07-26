@@ -23,6 +23,8 @@
 #define YOU_PASS_MSG "Pasaste tu turno"
 #define THEY_PASS_MSG "Es tu turno"
 
+#define TIMEOUT_MSG "Timeout"
+
 
 using namespace std;
 
@@ -54,9 +56,6 @@ void eventObserver::update()
 {
 	if ((*event) != nullptr)
 	{
-		//TODO: debug
-		std::cout << "eventObserver recibio el evento " << (*event)->getType() << std::endl;
-
 		switch ((*event)->getType())
 		{
 		case EV_TIMEOUT:
@@ -133,6 +132,12 @@ void eventObserver::update()
 			break;
 		}
 	}
+}
+
+void eventObserver::onTimeout()
+{
+	g->appendToTextlog(TIMEOUT_MSG);
+	g->changeToolboxTurn();
 }
 
 void eventObserver::onOppPass()
@@ -249,6 +254,7 @@ void eventObserver::onButtonUnselect()
 void eventObserver::onTimeLeft()
 {
 	g->setTimeLeft(((timeLeft *)(*event))->getTime());
+
 }
 
 void eventObserver::onDisplayResize()

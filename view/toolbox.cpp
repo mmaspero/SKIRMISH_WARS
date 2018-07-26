@@ -168,6 +168,7 @@ void toolbox::goToStore()
 
 void toolbox::goToMyTurn()
 {
+
 	status = EMPTY_MY_TURN;
 	u = nullptr;
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
@@ -389,4 +390,3 @@ void toolbox::drawShowingUnitInfo()
 	al_destroy_bitmap(unitInfoBmp);
 
 	}
-
