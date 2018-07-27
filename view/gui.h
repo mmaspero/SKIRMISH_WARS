@@ -147,6 +147,7 @@ public:
 	textlog * getTextlog();
 
 	void changeToolboxTurn();
+	void scrollTextlog(signed int offset);
 
 private:
 

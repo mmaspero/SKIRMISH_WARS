@@ -88,6 +88,9 @@ private:
 	ALLEGRO_BITMAP * basicTypeLogo;	//Logo del basicType
 	ALLEGRO_COLOR bgColor;			//color de fondo, depende del basicType
 
+
+	bool canBuy;
+
 	bool setReducedBmp();	//Devuelve true si no hubieron errores
 	bool setExpandedBmp();	//Devuelve true si no hubieron errores
 	void calculateCurrentDimensions();	//con todas las dimensiones reducidas y expandidas y teniendo 

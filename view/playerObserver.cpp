@@ -36,20 +36,17 @@ void playerObserver::update()
 	{
 		sB->getMyHQHPbar()->setCurrentHP(p->capturePointsHQ);
 		gs->setMoney(p->money);
+		t->setMyMoney(p->money);
 		gs->setUnitCount(p->nUnits);
 		gs->setCityCount(p->nCities + p->nFactories + (bool)p->capturePointsHQ);		//Ciudades mas fabricas mas hq
 		sB->draw();
 		gs->draw();
 
-		if (p->status == WAITING)
+		if (p->status == WAITING || p->status == WAITING_FIRST)
 		{
-			
+			t->goToTheirTurn();
+			t->draw();
 
-			//TODO: !!!!!!!!!!!!!!!!!!!!!!! EN EL HEADER DE RO DECIA UNIT, NO UNIT *
-//			std::list<Unit *> possiblePurchases = p->getPossiblePurchases();
-			
-			
-			//draw(possiblePurchases);
 		}
 	}
 	else

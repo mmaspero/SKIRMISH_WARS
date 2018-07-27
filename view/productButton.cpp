@@ -152,13 +152,12 @@ productButton::~productButton()
 
 bool productButton::getCanBuy()
 {
-//	return canBuy;
-	return true;
+	return canBuy;
 }
 
 void productButton::setCanBuy(bool canBuy)
 {
-//	this->canBuy = canBuy;
+	this->canBuy = canBuy;
 }
 
 unit_t productButton::getUnitSpecificType()

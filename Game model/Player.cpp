@@ -35,7 +35,7 @@ void Player::nextState()
 	switch (status) {
 	case MOV_AND_ATT:				{ status = PURCHASING; }	break;
 	case PURCHASING:				{ status = WAITING; }		break;
-	case WAITING: WAITING_FIRST:	{ status = MOV_AND_ATT; }	break;
+	case WAITING: case WAITING_FIRST:	{ status = MOV_AND_ATT; }	break;
 	}
 
 	if (obs != nullptr) {

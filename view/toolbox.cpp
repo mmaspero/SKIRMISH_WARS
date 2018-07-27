@@ -200,6 +200,25 @@ void toolbox::setProductCosts()
 	acknowledgeResize();	//Para que se creen los bmps con el precio.
 }
 
+void toolbox::setMyMoney(unsigned int myMoney)
+{
+	this->myMoney = myMoney;
+	setCanBuy();
+}
+
+void toolbox::setCanBuy()
+{
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->isValid() && (*it)->getType() == PRODUCT_BUTTON)
+		{
+			productButton * b = ((productButton *)(*it));
+			b->setCanBuy(Unit::getCost(b->getUnitSpecificType()) <= myMoney);
+		}
+	}
+}
+
+
 bool toolbox::createSimpleButtons()
 {
 	bool buttonValid = true;		//indica si hubo un error en la creacion de alguno de los botones.
@@ -353,24 +372,33 @@ void toolbox::drawShowingAllProducts()
 
 void toolbox::drawShowingOneProduct()
 {
+	productButton * selectedProduct = nullptr;
 	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
 	{
-		if ((*it)->isValid())
+		if ((*it)->isValid() && (*it)->getType() == PRODUCT_BUTTON)
 		{
-			button * b = (*it);
-			if (b->getType() == PRODUCT_BUTTON)
+			if ((*it)->isSelected())
 			{
-				if (b->isSelected())
-				{
-					b->draw();
-				}
+				(*it)->draw();
+				selectedProduct = ((productButton *)(*it));
 			}
-			else if (b->getType() == SIMPLE_BUTTON &&
-				(((simpleButton*)b)->isItBack() || ((simpleButton*)b)->isItBuy()))
+		}	
+	}
+	if (selectedProduct == nullptr)
+	{
+		return;
+	}
+	for (std::list<button *>::iterator it = buttonList.begin(); it != buttonList.end(); it++)
+	{
+		if ((*it)->isValid() && (*it)->getType() == SIMPLE_BUTTON)
+		{
+			simpleButtonType_t simpleType = ((simpleButton *)(*it))->getSimpleType();
+			if (simpleType == BACK_BUTTON || (simpleType == BUY_BUTTON && selectedProduct->getCanBuy()))
 			{
-				b->draw();
+				(*it)->draw();
 			}
-		}	//TODO: hacer mas compacto pero no croto
+		}
+
 	}
 }
 

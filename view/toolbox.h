@@ -30,11 +30,15 @@ public:
 	void goToMyTurn();
 	void goToTheirTurn();
 	void setProductCosts();
+	void setMyMoney(unsigned int myMoney);
+
 
 private:
 	toolboxStatus_t status;
 	Unit * u;	//Para sacar info en SHOWING_ONE_PRODUCT
+	unsigned int myMoney;	//Para saber si se puede comprar una unidad o no
 
+	void setCanBuy();
 	bool createSimpleButtons();
 	
 	virtual void drawContent();

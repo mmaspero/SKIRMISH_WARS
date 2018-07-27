@@ -9,7 +9,7 @@
 using namespace std;
 
 Board::Board(ALLEGRO_DISPLAY * display, float startX, float startY, float width, float height)
-	:contentBox(display, startX, startY, width, height, true)
+	:contentBox(display, startX, startY, width, height, false)
 {
 	displaySectionType = BOARD;
 	if (valid)

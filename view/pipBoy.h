@@ -19,16 +19,25 @@ public:
 
 	void setStatus(pipBoyStatus_t status);	
 	pipBoyStatus_t getStatus();
-	void setName(std::string name);	//recibe la parte ya escrita del nombre
-	void setIP(std::string ip);	//recibe la parte ya escrita del ip
+	std::string getIP();
+	std::string getName();
 	void nextMap();
 	void previousMap();
 	std::string getCurrentMapPath();
+	bool dispatch(int allegroKeycode);
 	
 private:
+
+	bool dispatchTryingIP(int allegroKeycode);
+	bool dispatchInsertingName(int allegroKeycode);
+
 	pipBoyStatus_t status;
-	std::string ip;
+	std::string myIP[4];
+	int currentByte = 0;	//Proximo byte en el que se tiene que escribir (de 0 a 3)
+	int currentChar = 0;	//Proximo caracter en el que se tiene que escribir dentro del byte (0 a 2)
+
 	std::string name;
+
 	std::vector<std::string> mapPaths;
 	std::vector<ALLEGRO_BITMAP *> mapBmps;
 	std::vector<ALLEGRO_BITMAP *>::iterator currentMapBmp;

@@ -474,6 +474,11 @@ void gui::changeToolboxTurn()
 	}
 }
 
+void gui::scrollTextlog(signed int offset)
+{
+	getTextlog()->scroll(offset);
+}
+
 
 
 /*
