@@ -1,6 +1,7 @@
 #include "controller.h"
 #include "../Game model/FSM/SkirmishEvent.h"
 #define TURN_TIME_SECONDS 60
+#define SAMPLE_TIME_SEC 1	
 Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGenerator * generadorDeEventos)
 {
 	this->net = net;
@@ -10,6 +11,7 @@ Controller::Controller(network * net, gui * usserInterface, Model * mod, eventGe
 	SkirmishEvent::setController(this);
 	SkirmishEvent::setModel(mod);
 	this->gameTimer.setTime(TURN_TIME_SECONDS);
+	gameTimer.onClock(SAMPLE_TIME_SEC);
 
 
 }
@@ -118,6 +120,7 @@ void Controller::run()
 {
 	GenericEvent * recivedEvent = NULL;
 	eventObserver * evOb=  (this->getGui())->eventObserverFactory(&recivedEvent);
+	this->gameTimer.startTimer();
 	do
 	{
 		if (recivedEvent != NULL)

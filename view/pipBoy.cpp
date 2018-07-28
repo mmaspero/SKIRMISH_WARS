@@ -122,6 +122,8 @@ bool pipBoy::dispatch(int allegroKeycode)
 		return dispatchInsertingName(allegroKeycode);
 	}
 	draw();
+	return true;
+	
 }
 
 bool pipBoy::dispatchTryingIP(int allegroKeycode)
@@ -162,7 +164,7 @@ bool pipBoy::dispatchTryingIP(int allegroKeycode)
 				currentByte++;
 				currentChar = 0;
 			}
-			else if (currentByte == 3 && currentChar > 0)
+			else if (currentByte >= 3 && currentChar >= 0)
 			{
 				ipDone = true;
 			}
