@@ -28,6 +28,6 @@
 #define RIVER_TEXTURE "riverTexture.png"
 #define ROAD_TEXTURE  "roadTexture.png"
 #define FOREST_TEXTURE "forestTexture.jpg"
-#define HILL_TEXTURE "hillTexture.png"
+#define HILL_TEXTURE "hill.png"
 
 #define FOG_COLOR "black"
