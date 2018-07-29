@@ -12,7 +12,7 @@
 void main(void)
 {
 	initGame setUp;
-	gui g;
+	gui * g=NULL;
 	eventGenerator eg;
 	network * net = NULL;
 	std::string namePlayer;
@@ -22,26 +22,28 @@ void main(void)
 	networkEventSource * nes = NULL;
 	if (setUp.startGame())
 	{
-		g.draw();
+		
 		net = setUp.getNet();
 		namePlayer = setUp.getName();
 		setUp.~initGame();
-		m=new Model("Maps/WaterWorld.csv", USER, &(eg.eventQueue), &g);
-		c = new Controller(net, &g, m, &eg);
-		uis = new userInputEvSource(g.getDisplay(), &g, m);
+		g = new gui();
+		g->draw();
+		m=new Model("Maps/WaterWorld.csv", USER, &(eg.eventQueue), g);
+		c = new Controller(net, g, m, &eg);
+		uis = new userInputEvSource(g->getDisplay(), g, m);
 		nes = new networkEventSource(net, m);
 		eg.addEventSource((eventSource *)uis);
 		eg.addEventSource((eventSource *)nes);
 		eg.addEventSource((eventSource *)c->getTurnTimer());
-		g.appendToTextlog("Conexion establecida");
+		g->appendToTextlog("Conexion establecida");
 		if (net->imClient())
 		{
-			g.appendToTextlog("Soy cliente");
+			g->appendToTextlog("Soy cliente");
 
 		}
 		else
 		{
-			g.appendToTextlog("Soy Server");
+			g->appendToTextlog("Soy Server");
 		}
 		c->run();
 	}
