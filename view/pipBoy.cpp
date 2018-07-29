@@ -63,14 +63,10 @@ std::string pipBoy::getIP()
 	for (int i = 0; i < 4; i++)
 	{
 		ipFinal += myIP[i];
-		if (myIP[i + 1].length())
+		if ( i < 3 && myIP[i + 1].length())
 		{
 			ipFinal += '.';
 		}
-	}
-	if (ipFinal.length())
-	{
-		ipFinal.pop_back();
 	}
 	return ipFinal;
 }
@@ -164,7 +160,7 @@ bool pipBoy::dispatchTryingIP(int allegroKeycode)
 				currentByte++;
 				currentChar = 0;
 			}
-			else if (currentByte >= 3 && currentChar >= 0)
+			else if (currentByte >= 3 && currentChar > 0)
 			{
 				ipDone = true;
 			}
@@ -189,6 +185,8 @@ bool pipBoy::dispatchTryingIP(int allegroKeycode)
 		}
 		break;
 	}
+	draw();
+
 	return ipDone;
 }
 
@@ -209,6 +207,8 @@ bool pipBoy::dispatchInsertingName(int allegroKeycode)
 	{
 		nameDone = true;;
 	}
+
+	draw();
 
 	return nameDone;
 }
