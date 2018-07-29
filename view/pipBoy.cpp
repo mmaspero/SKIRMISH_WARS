@@ -160,7 +160,7 @@ bool pipBoy::dispatchTryingIP(int allegroKeycode)
 				currentByte++;
 				currentChar = 0;
 			}
-			else if (currentByte >= 3 && currentChar > 0)
+			else if ((currentByte == 3 && currentChar > 0) || (currentByte == 4))
 			{
 				ipDone = true;
 			}
