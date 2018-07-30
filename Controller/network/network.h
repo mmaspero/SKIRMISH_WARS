@@ -45,6 +45,7 @@ public:
 
 private:
 	myTimer timer;
+	myTimer connectionDelay;
 	bool imclient;
 	ip ipNumber;
 	port portNumber;

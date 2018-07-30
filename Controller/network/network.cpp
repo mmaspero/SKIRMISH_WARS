@@ -2,6 +2,7 @@
 #include <stdlib.h> 
 #define MIN_WAIT_CONECTION_MS 2000
 #define MAX_WAIT_CONECTION_MS 3000
+#define DELAY_CONNECTION 150
 
 network::network(ip ipNumber, port portNumber)
 {
@@ -13,6 +14,7 @@ network::network(ip ipNumber, port portNumber)
 	client = new cliente();
 	srand(time(NULL));
 	timer.setNewTime((rand() % MAX_WAIT_CONECTION_MS) + MIN_WAIT_CONECTION_MS);
+	connectionDelay.setNewTime(DELAY_CONNECTION);
 }
 
 void network::tryToConect()
@@ -37,31 +39,35 @@ void network::tryToConect()
 
 	}
 
-	switch (currentState)//se intenta lograr la coneccion 
+	if(connectionDelay.timeOut())
 	{
-	case IN_CONECTION_STAGE_CLIENT://se intenta lograr la coneccion como cliente
-
-		if (client->ConectToServer(ipNumber.getIp().c_str(), portNumber.getPortAsString().c_str()))
+		switch (currentState)//se intenta lograr la coneccion 
 		{
-			imclient = true;
-			currentState = CONNECTED;
+		case IN_CONECTION_STAGE_CLIENT://se intenta lograr la coneccion como cliente
+
+			if (client->ConectToServer(ipNumber.getIp().c_str(), portNumber.getPortAsString().c_str()))
+			{
+				imclient = true;
+				currentState = CONNECTED;
+			}
+
+
+
+			break;
+		case IN_CONECTION_STAGE_SERVER://se intenta lograr la coneccion como servidor
+
+			if (server->ClientIsConected())//alguien se conecto al servidor
+			{
+				imclient = false;
+				currentState = CONNECTED;
+			}
+
+			break;
+		default:
+			break;
+
 		}
-
-
-
-		break;
-	case IN_CONECTION_STAGE_SERVER://se intenta lograr la coneccion como servidor
-
-		if (server->ClientIsConected())//alguien se conecto al servidor
-		{
-			imclient = false;
-			currentState = CONNECTED;
-		}
-
-		break;
-	default:
-		break;
-
+		connectionDelay.restTime();
 	}
 
 }
