@@ -9,10 +9,12 @@
 #include"initGame.h"
 #include "Controller\eventSource\timerEvSource.h"
 #include"getNameMap.h"
+#include<ctime>
 
 void main(void)
 {
-	initGame setUp;
+	
+	initGame * setUp = new initGame();
 	gui * g=NULL;
 	eventGenerator eg;
 	network * net = NULL;
@@ -25,15 +27,15 @@ void main(void)
 	networkEventSource * nes = NULL;
 	bool CorrectData = false;
 	bool first = false;
-	if (setUp.startGame())
+	if (setUp->startGame())
 	{
 		
-		net = setUp.getNet();
-		namePlayer = setUp.getName();
-		setUp.~initGame();
+		net = setUp->getNet();
+		namePlayer = setUp->getName();
+		delete setUp;
 		g = new gui();
 		g->draw();
-		if (net->imClient())
+	/*	if (net->imClient())
 		{
 			g->appendToTextlog("Soy cliente");
 			CorrectData = getServerInfo(*net,namePlayer,opponentPlayer, pathMap, first);
@@ -43,18 +45,20 @@ void main(void)
 		{
 			g->appendToTextlog("Soy Server");
 			CorrectData = getClientInfo(*net, namePlayer, opponentPlayer, pathMap, first);
-		}
+		}*/
 
 		if (CorrectData)
 		{
 			m = new Model(pathMap.c_str(), (first ? USER : OPPONENT), &(eg.eventQueue), g);
+			if (first){ g->appendToTextlog("ES TU TURNO"); }
+			
 			//	m=new Model("Maps/WaterWorld.csv", OPPONENT, &(eg.eventQueue), g);
 			c = new Controller(net, g, m, &eg);
 			uis = new userInputEvSource(g->getDisplay(), g, m);
 			nes = new networkEventSource(net, m);
 			eg.addEventSource((eventSource *)uis);
 			eg.addEventSource((eventSource *)nes);
-			eg.addEventSource((eventSource *)c->getTurnTimer());
+//			eg.addEventSource((eventSource *)c->getTurnTimer());
 			g->appendToTextlog("Conexion establecida");
 
 			c->run();
