@@ -54,7 +54,7 @@ bool getClientInfo(network& n, std::string myName, std::string& clientName, std:
 
 					if (pckg != nullptr) {
 						delete pckg;
-						mapPath = maps[(rand() % maps.size()) - 1];//elijo un mapa cualquiera
+						mapPath = maps[(rand() % maps.size())];//elijo un mapa cualquiera
 						unsigned char mapSum;
 						if (checksum(mapPath, mapSum)) {
 							pckg = new mapIs (((boost::filesystem::path(mapPath)).stem()).string(), mapSum);
