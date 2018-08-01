@@ -177,7 +177,8 @@ void Model::showAvailableFactories()
 	for (unsigned int i = 0; i < B_H; i++) {
 		for (unsigned int j = 0; j < B_W; j++) {
 			Point p(i, j);
-			if (m.getBuildingPlayer(p) == turn && m.getBuilding(p)->getType() == FACTORY) {
+			if (m.getBuildingPlayer(p) == turn && m.getBuilding(p)->getType() == FACTORY 
+				&& m.getUnit(p) == nullptr ) {
 				m.showAction(p, ACT_MOVE);
 				actions.push_back(Action(ACT_MOVE, p)); //para registrarlo y borrarlo despues
 			}
