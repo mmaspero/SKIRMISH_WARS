@@ -355,19 +355,6 @@ void Unit::getPossibleActions(std::list<Action>& actions)
 		if (type == APC && ((Apc *)this)->canUnload()) {
 			actions.push_back(Action(ACT_UNLOAD, position));
 		}
-		
-		if (maxRange == 1) {
-			std::list<Action> attacks;
-			for (std::list<Action>::iterator it = actions.begin(); it != actions.end(); it++) {
-				if (it->type == ACT_MOVE) {
-					getPossibleAttacks(attacks, position, it->mps);
-				}
-			}	
-			while (!attacks.empty()) {
-				actions.push_back(attacks.front());
-				attacks.pop_front();
-			}
-		}
 	}
 	
 	if (state == IDLE || (state == MOVING && maxRange == 1)) {
@@ -468,22 +455,7 @@ void Unit::getPossibleAttacks(std::list<Action>& attacks, Point curr, unsigned i
 
 			if (minRange <= dist && dist <= maxRange && map->hasUnit(p)
 				&& (isMine ^ (map->getUnitPlayer(p) == USER)) && map->canSeeUnit(p, getPlayer())) {
-
-				bool newAttack = true;
-
-				for (std::list<Action>::iterator it = attacks.begin(); newAttack == true && it != attacks.end(); it++) {
-					//me fijo si esta casilla la puedo atacar con menos MPs desde otro lugar o no
-					if (it->type == ACT_ATTACK && it->whereTo == p) {
-						newAttack = false;
-						if (it->mps > mps) {
-							attacks.erase(it);
-							attacks.push_back(Action(ACT_ATTACK, p, mps));
-						}
-					}
-				}
-				if (newAttack == true) {
-					attacks.push_back(Action(ACT_ATTACK, p, mps));
-				}
+				attacks.push_back(Action(ACT_ATTACK, p, mps));
 			}
 		}
 	}
