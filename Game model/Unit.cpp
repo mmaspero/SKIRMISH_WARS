@@ -357,12 +357,8 @@ void Unit::getPossibleActions(std::list<Action>& actions)
 		}
 	}
 
-	if (state == IDLE) {
-		getPossibleAttacks(actions, position, 0); 
-	}
-	else if (state <= MOVING && maxRange == 1) {
+	if (state <= MOVING && maxRange == 1) {
 		std::list<Action> attacks;
-		getPossibleAttacks(attacks, position, 0);
 		for (std::list<Action>::iterator it = actions.begin(); it != actions.end(); it++) {
 			if (it->type == ACT_MOVE) {
 				getPossibleAttacks(attacks, position, it->mps);
@@ -373,7 +369,11 @@ void Unit::getPossibleActions(std::list<Action>& actions)
 			attacks.pop_front();
 		}
 	}
-
+	
+	if (state == IDLE) {
+		getPossibleAttacks(actions, position, 0); 
+	}
+	
 	if (state == UNLOADING) {
 		((Apc *)this)->getPossibleUnloads(actions);
 	}		
@@ -434,7 +434,7 @@ void Unit::getPossibleMoves(std::list<Action>& moves, Point start, Point curr, u
 			}
 		}
 
-		if (newTile == true && actionType != N_ACTIONS) { //solo añado un item a la lista si es una tile nueva
+		if (newTile == true && actionType != N_ACTIONS) { //solo aÃ±ado un item a la lista si es una tile nueva
 			moves.push_back(action);
 		}
 
